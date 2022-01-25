@@ -1,3 +1,4 @@
+/* Messages. */
 .definition {
   margin-bottom: var(--ifm-paragraph-margin-bottom);
 }
@@ -11,4 +12,46 @@
 
 .definition-title span {
   color: var(--ifm-color-gray-600);
+}
+
+/* Services. */
+.rpc-definition {
+  margin-bottom: var(--ifm-paragraph-margin-bottom);
+  border-top: none;
+  border: 1px solid var(--ifm-toc-border-color);
+  border-radius: 4px;
+}
+
+.rpc-definition-title {
+  border-bottom: 1px solid var(--ifm-toc-border-color);
+  padding: 8px;
+}
+
+.rpc-definition-title > div {
+  display: inline;
+}
+
+.rpc-definition-title > div:not(:first-of-type)::before {
+  content: " ";
+}
+
+.rpc-definition-name h3 {
+  display: inline;
+  font-size: 1rem;
+}
+
+.rpc-definition-name h3 a {
+  display: none;
+}
+
+.rpc-definition-title span {
+  color: var(--ifm-color-gray-600);
+}
+
+.rpc-definition-description {
+  padding: 8px;
+}
+
+.rpc-definition-description > p:last-child {
+  margin-bottom: 0;
 }
