@@ -1,0 +1,13 @@
+# Copyright 2022 Protosaurus Authors
+# Licensed under the Apache License, Version 2.0 (the "License")
+
+version: v1
+name: buf.build/protosaurus/protosaurus
+lint:
+  use:
+    - BASIC
+
+deps:
+  - buf.build/googleapis/googleapis
+  - buf.build/grpc-ecosystem/grpc-gateway
+  - buf.build/envoyproxy/protoc-gen-validate
