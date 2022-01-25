@@ -1,0 +1,5 @@
+.wrapper h2 {
+  border-bottom: 1px solid var(--ifm-toc-border-color);
+  padding-bottom: 1rem;
+  scroll-margin-top: calc(var(--ifm-navbar-height) + 2.5rem);
+}

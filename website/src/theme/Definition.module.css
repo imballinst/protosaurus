@@ -1,0 +1,14 @@
+.definition {
+  margin-bottom: var(--ifm-paragraph-margin-bottom);
+}
+
+.definition-title {
+  margin-bottom: calc(
+    var(--ifm-heading-vertical-rhythm-bottom) * var(--ifm-leading)
+  );
+  margin-top: calc(var(--ifm-h2-vertical-rhythm-top) * var(--ifm-leading));
+}
+
+.definition-title span {
+  color: var(--ifm-color-gray-600);
+}

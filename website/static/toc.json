@@ -5,11 +5,11 @@
     "children": [
       {
         "title": "Getting Started",
-        "href": "#getting-started",
+        "href": "#clusters",
         "children": [
           {
             "title": "Getting Started",
-            "href": "#getting-started",
+            "href": "#clusters-service",
             "children": []
           }
         ]
