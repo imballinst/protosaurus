@@ -1,8 +1,7 @@
 import mdx from "@mdx-js/mdx";
+import fs from "fs";
 
-const md = `Hello world!
-
-> Test`;
+const md = fs.readFileSync("./file.md", "utf-8");
 
 main();
 
