@@ -53,24 +53,24 @@ b_black            := $(shell printf "\33[40m")
 f_white            := $(shell printf "\33[97m")
 f_gray             := $(shell printf "\33[37m")
 f_dark_gray        := $(shell printf "\33[90m")
-f_bright_cyan      := $(shell printf "\33[96m")
-b_bright_cyan      := $(shell printf "\33[106m")
+f_bright_green     := $(shell printf "\33[92m")
+b_bright_green     := $(shell printf "\33[102m")
 ansi_reset         := $(shell printf "\33[0m")
-ansi_protosaurus   := $(b_black)$(f_black)$(b_bright_cyan)protosaurus$(ansi_reset)
-ansi_format_dark   := $(f_gray)$(f_bright_cyan)%-10s$(ansi_reset) $(f_dark_gray)%s$(ansi_reset)\n
-ansi_format_bright := $(f_white)$(f_bright_cyan)%-10s$(ansi_reset) $(f_black)$(b_bright_cyan)%s$(ansi_reset)\n
+ansi_protosaurus   := $(b_black)$(f_black)$(b_bright_green)protosaurus$(ansi_reset)
+ansi_format_dark   := $(f_gray)$(f_bright_green)%-10s$(ansi_reset) $(f_dark_gray)%s$(ansi_reset)\n
+ansi_format_bright := $(f_white)$(f_bright_green)%-10s$(ansi_reset) $(f_black)$(b_bright_green)%s$(ansi_reset)\n
 
 # This formats help statements in ANSI colors. To hide a target from help, don't comment it with a trailing '##'.
 help: ## Describe how to use each target
 	@printf "$(ansi_protosaurus)$(f_white)\n"
 	@awk 'BEGIN {FS = ":.*?## "} /^[0-9a-zA-Z_-]+:.*?## / {sub("\\\\n",sprintf("\n%22c"," "), $$2);printf "$(ansi_format_dark)", $$1, $$2}' $(MAKEFILE_LIST)
 
-gen: $(BUF_V1_MODULE_DATA) $(yarn)
+gen: $(BUF_V1_MODULE_DATA) $(yarn) ## Generate files from proto files
 	@printf "$(ansi_format_dark)" $@ "generating files..."
 	@$(buf) generate
 	@printf "$(ansi_format_bright)" $@ "ok"
 
-format-protos: $(buf) $(clang-format)
+format: $(buf) $(clang-format) ## Format all proto files
 	@$(clang-format) -i $(shell $(buf) ls-files)
 
 # We cache the deps fetched by buf locally (in-situ) by setting BUF_CACHE_DIR
