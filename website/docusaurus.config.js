@@ -4,7 +4,9 @@
 const lightCodeTheme = require("prism-react-renderer/themes/github");
 const darkCodeTheme = require("prism-react-renderer/themes/dracula");
 
-/** @type {import('@docusaurus/types').Config} */
+const protoMessageRemarkPlugin = require("./plugins/proto-messages");
+
+/** @type {import('@docusaurus/core').Config} */
 const config = {
   title: "My Site",
   tagline: "Dinosaurs are cool",
@@ -26,12 +28,7 @@ const config = {
           // Please change this to your repo.
           editUrl:
             "https://github.com/facebook/docusaurus/tree/main/packages/create-docusaurus/templates/shared/",
-        },
-        blog: {
-          showReadingTime: true,
-          // Please change this to your repo.
-          editUrl:
-            "https://github.com/facebook/docusaurus/tree/main/packages/create-docusaurus/templates/shared/",
+          rehypePlugins: [protoMessageRemarkPlugin],
         },
         theme: {
           customCss: require.resolve("./src/css/custom.css"),
@@ -56,7 +53,6 @@ const config = {
             position: "left",
             label: "Tutorial",
           },
-          { to: "/blog", label: "Blog", position: "left" },
           {
             href: "https://github.com/facebook/docusaurus",
             label: "GitHub",

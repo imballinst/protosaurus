@@ -31,6 +31,36 @@ import Json from "@site/static/toc.json";
 
 test 1234
 
+hello
+
+```proto-spc
+message Person {
+  string name = 1;
+  int32 id = 2;  // Unique ID number for this person.
+  string email = 3;
+
+  enum PhoneType {
+    MOBILE = 0;
+    HOME = 1;
+    WORK = 2;
+  }
+
+  message PhoneNumber {
+    string number = 1;
+    PhoneType type = 2;
+  }
+
+  repeated PhoneNumber phones = 4;
+
+  google.protobuf.Timestamp last_updated = 5;
+}
+
+// Our address book file is just one of these.
+message AddressBook {
+  repeated Person people = 1;
+}
+```
+
 </Definition>
 
 <Definition name="Clusters Service">
@@ -85,38 +115,6 @@ This is a description of Check.
 
 </Definition>
 
----
-
-Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum
-
-Let's discover **Docusaurus in less than 5 minutes**.
-
-## Getting Started
-
-Get started by **creating a new site**.
-
-Or **try Docusaurus immediately** with **[docusaurus.new](https://docusaurus.new)**.
-
-## Generate a new site
-
-Generate a new Docusaurus site using the **classic template**:
-
-```shell
-npm init docusaurus@latest my-website classic
-```
-
-## Start your site
-
-Run the development server:
-
-```shell
-cd my-website
-
-npx docusaurus start
-```
-
-Your site starts at `http://localhost:3000`.
-
-Open `docs/intro.md` and edit some lines: the site **reloads automatically** and displays your changes.
+[./hello](hello)
 
 </ReferenceWrapper>

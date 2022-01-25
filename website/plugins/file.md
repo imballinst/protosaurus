@@ -1,34 +1,6 @@
-```
-// See README.txt for information and build instructions.
-//
-// Note: START and END tags are used in comments to define sections used in
-// tutorials.  They are not part of the syntax for Protocol Buffers.
-//
-// To get an in-depth walkthrough of this file and the related examples, see:
-// https://developers.google.com/protocol-buffers/docs/tutorials
+hello world [./test](test)
 
-// [START declaration]
-syntax = "proto3";
-package tutorial;
-
-import "google/protobuf/timestamp.proto";
-// [END declaration]
-
-// [START java_declaration]
-option java_multiple_files = true;
-option java_package = "com.example.tutorial.protos";
-option java_outer_classname = "AddressBookProtos";
-// [END java_declaration]
-
-// [START csharp_declaration]
-option csharp_namespace = "Google.Protobuf.Examples.AddressBook";
-// [END csharp_declaration]
-
-// [START go_declaration]
-option go_package = "github.com/protocolbuffers/protobuf/examples/go/tutorialpb";
-// [END go_declaration]
-
-// [START messages]
+```proto-spc
 message Person {
   string name = 1;
   int32 id = 2;  // Unique ID number for this person.
@@ -54,5 +26,4 @@ message Person {
 message AddressBook {
   repeated Person people = 1;
 }
-// [END messages]
 ```
