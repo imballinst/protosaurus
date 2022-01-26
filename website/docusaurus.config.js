@@ -4,7 +4,7 @@
 const lightCodeTheme = require("prism-react-renderer/themes/github");
 const darkCodeTheme = require("prism-react-renderer/themes/dracula");
 
-const protoMessageRemarkPlugin = require("./plugins/proto-messages");
+const protoMessageRehypePlugin = require("./plugins/proto-messages");
 
 /** @type {import('@docusaurus/core').Config} */
 const config = {
@@ -28,7 +28,7 @@ const config = {
           // Please change this to your repo.
           editUrl:
             "https://github.com/facebook/docusaurus/tree/main/packages/create-docusaurus/templates/shared/",
-          rehypePlugins: [protoMessageRemarkPlugin],
+          rehypePlugins: [protoMessageRehypePlugin],
         },
         theme: {
           customCss: require.resolve("./src/css/custom.css"),

@@ -1,3 +1,6 @@
+// Copyright 2022 Protosaurus Authors
+// Licensed under the Apache License, Version 2.0 (the "License")
+
 const mdx = require("@mdx-js/mdx");
 const fs = require("fs");
 const remarkProtoMessagePlugin = require("./proto-messages");
