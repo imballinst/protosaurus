@@ -20,6 +20,7 @@ module.exports = () => {
         const code = pre.children[0];
         const codeArray = code.children[0].value.split("\n");
 
+        // TODO(imballinst): specify a better language code.
         if (!code.properties?.className?.includes("language-protosaurus")) {
           continue;
         }
