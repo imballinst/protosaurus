@@ -45,3 +45,8 @@ jobs:
           key: protosaurus-${{ runner.os }}-buf-${{ hashFiles('testdata/buf.lock') }}
           restore-keys: protosaurus-${{ runner.os }}-buf-
       - run: make gen
+      - run: make docs
+      - uses: peaceiris/actions-gh-pages@v3
+        with:
+          github_token: ${{ github.token }}
+          publish_dir: website/build
