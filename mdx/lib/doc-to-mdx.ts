@@ -64,53 +64,6 @@ interface ProtoService {
   };
 }
 
-const x = [
-  {
-    name: "BookingService",
-    longName: "BookingService",
-    fullName: "booking.v1.BookingService",
-    description: "Service for handling vehicle bookings.",
-    methods: [
-      {
-        name: "BookVehicle",
-        description:
-          "Used to book a vehicle. Pass in a Booking and a BookingStatus will be\nreturned.",
-        requestType: "Booking",
-        requestLongType: "Booking",
-        requestFullType: "booking.v1.Booking",
-        requestStreaming: false,
-        responseType: "BookingStatus",
-        responseLongType: "BookingStatus",
-        responseFullType: "booking.v1.BookingStatus",
-        responseStreaming: false,
-        options: {
-          "google.api.http": {
-            rules: [
-              {
-                method: "POST",
-                pattern: "/api/bookings/vehicle/{vehicle_id}",
-                body: "*",
-              },
-            ],
-          },
-        },
-      },
-      {
-        name: "BookingUpdates",
-        description: "Used to subscribe to updates of the BookingStatus.",
-        requestType: "BookingStatusID",
-        requestLongType: "BookingStatusID",
-        requestFullType: "booking.v1.BookingStatusID",
-        requestStreaming: false,
-        responseType: "BookingStatus",
-        responseLongType: "BookingStatus",
-        responseFullType: "booking.v1.BookingStatus",
-        responseStreaming: true,
-      },
-    ],
-  },
-];
-
 export async function convertPackageToMdx(packagePath: string) {
   const content = await fs.readFile(packagePath, "utf-8");
   const json: {
