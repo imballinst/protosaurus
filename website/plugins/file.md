@@ -6,7 +6,7 @@ hello
 hello2
 ```
 
-```proto-spc
+```protosaurus
 message Person {
   string name = 1;
   int32 id = 2;  // Unique ID number for this person.

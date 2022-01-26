@@ -1,6 +1,9 @@
 // Copyright 2022 Protosaurus Authors
 // Licensed under the Apache License, Version 2.0 (the "License")
 
+// TODO(imballinst): convert to TypeScript.
+// If Docusaurus can't support TypeScript plugin files, then we need
+// to convert to JavaScript files first in the `prebuild` hook.
 const DICTIONARY = {
   Person: "#person",
 };
@@ -17,7 +20,7 @@ module.exports = () => {
         const code = pre.children[0];
         const codeArray = code.children[0].value.split("\n");
 
-        if (!code.properties?.className?.includes("language-proto-spc")) {
+        if (!code.properties?.className?.includes("language-protosaurus")) {
           continue;
         }
 
