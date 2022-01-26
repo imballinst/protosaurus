@@ -72,7 +72,7 @@ module.exports = () => {
                   val = "​\n";
                 }
               }
-              console.log(val);
+
               // Not found.
               children.push({
                 type: "text",
