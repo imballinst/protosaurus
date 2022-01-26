@@ -1,7 +1,11 @@
-const visit = require("unist-util-visit");
+// Copyright 2022 Protosaurus Authors
+// Licensed under the Apache License, Version 2.0 (the "License")
 
+// TODO(imballinst): convert to TypeScript.
+// If Docusaurus can't support TypeScript plugin files, then we need
+// to convert to JavaScript files first in the `prebuild` hook.
 const DICTIONARY = {
-  Person: "https://google.com",
+  Person: "#person",
 };
 
 module.exports = () => {
@@ -10,15 +14,21 @@ module.exports = () => {
     // to get the directory containing the intermediary JSON.
     // console.log(process.env);
 
-    console.log(JSON.stringify(tree, null, 2));
-
     for (const child of tree.children) {
       if (child.tagName === "pre") {
         const pre = child;
-        const code = pre.children[0].children[0].value.split("\n");
+        const code = pre.children[0];
+        const codeArray = code.children[0].value.split("\n");
+
+        // TODO(imballinst): specify a better language code.
+        if (!code.properties?.className?.includes("language-protosaurus")) {
+          continue;
+        }
 
         const children = [];
-        for (const line of code) {
+        for (let i = 0, length = codeArray.length - 1; i < length; i++) {
+          const line = codeArray[i];
+
           for (const key in DICTIONARY) {
             const idx = line.indexOf(key);
 
@@ -47,51 +57,38 @@ module.exports = () => {
                 },
                 {
                   type: "text",
-                  value: secondSlice,
+                  value: `${secondSlice}\n`,
                 }
               );
             } else {
+              const isNotLast = i + 1 < length;
+              let val = `${line}`;
+
+              // Add newline if not the last line.
+              if (isNotLast) {
+                val += "\n";
+
+                // In case of double space, we need to
+                // add another (as a result of .split()).
+                // We need to add this "zero-width space" otherwise
+                // the MDX renderer will remove the second newline.
+                if (line === "") {
+                  val = "​\n";
+                }
+              }
+
               // Not found.
               children.push({
                 type: "text",
-                value: line,
+                value: val,
               });
             }
           }
         }
-        console.log(JSON.stringify(children, null, 2));
-        pre.children[0].children = children;
+
+        pre.children = children;
+        pre.tagName = "precustom";
       }
     }
-    // visit(tree, "pre", (node) => {
-    //   console.log(node);
-    //   // if (node.type === "code" && node.lang === "proto-spc") {
-    //   //   // Original node value:
-    //   //   // {
-    //   //   //   type: 'code',
-    //   //   //   lang: 'proto-spc',
-    //   //   //   meta: null,
-    //   //   //   value: 'message CheckResponse {\n' +
-    //   //   //     '\t// Status `OK` allows the request. Any other status indicates the request should be denied.\n' +
-    //   //   //     '\tgoogle.rpc.Status status = 1;\n' +
-    //   //   //     '\toneof http_response {\n' +
-    //   //   //     '\t\t// Supplies http attributes for a denied response.\n' +
-    //   //   //     '\t\tDeniedHttpResponse denied_response = 2;\n' +
-    //   //   //     '\t\t// Supplies http attributes for an ok response.\n' +
-    //   //   //     '\t\tOkHttpResponse ok_response = 3;\n' +
-    //   //   //     '\t}\n' +
-    //   //   //     '}',
-    //   //   //   position: [Position]
-    //   //   // }
-    //   //   const array = node.value.split("\n");
-
-    //   //   node.type = "html";
-    //   //   node.value = array
-    //   //     .map((line) => {
-    //   //       return `<p>${line}</p>`;
-    //   //     })
-    //   //     .join("");
-    //   // }
-    // });
   };
 };

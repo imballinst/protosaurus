@@ -1,6 +1,12 @@
 hello world [./test](test)
 
-```proto-spc
+```
+hello
+
+hello2
+```
+
+```protosaurus
 message Person {
   string name = 1;
   int32 id = 2;  // Unique ID number for this person.
