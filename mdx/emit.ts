@@ -57,7 +57,7 @@ async function recursivelyReadDirectory(
       const packageName = pathToEntry.slice(PATH_TO_GENERATED.length);
 
       allMessages.push({
-        name: `${path.dirname(packageName).slice(1).replace(/\//g, "-")}`,
+        name: `${path.dirname(packageName).slice(1).replace(/\//g, ".")}`,
         messages: packageMessages,
       });
       continue;
