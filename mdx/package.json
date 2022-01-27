@@ -15,6 +15,7 @@
   },
   "scripts": {
     "build": "tsc",
-    "test": "mocha"
+    "test": "mocha",
+    "emit": "node dist/emit.js"
   }
 }

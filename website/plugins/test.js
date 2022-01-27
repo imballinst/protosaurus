@@ -3,20 +3,21 @@
 
 const mdx = require("@mdx-js/mdx");
 const fs = require("fs");
-const remarkProtoMessagePlugin = require("./proto-messages");
+const path = require("path");
+const rehypeProtoPlugin = require("./proto-messages");
 
-const md = fs.readFileSync("./file.md", "utf-8");
+const md = fs.readFileSync(path.join(__dirname, "./file.mdx"), "utf-8");
 
 main();
 
 async function main() {
   // MDX v1, reference: https://github.com/mdx-js/mdx/blob/v1/docs/advanced/plugins.mdx.
   // mdx.sync(md, {
-  //   rehypePlugins: [remarkProtoMessagePlugin],
+  //   rehypePlugins: [rehypeProtoPlugin],
   // });
   console.log(
     mdx.sync(md, {
-      rehypePlugins: [remarkProtoMessagePlugin],
+      rehypePlugins: [rehypeProtoPlugin],
     })
   );
 }

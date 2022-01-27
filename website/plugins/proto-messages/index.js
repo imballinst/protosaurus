@@ -4,9 +4,11 @@
 // TODO(imballinst): convert to TypeScript.
 // If Docusaurus can't support TypeScript plugin files, then we need
 // to convert to JavaScript files first in the `prebuild` hook.
-const DICTIONARY = {
-  Person: "#person",
-};
+// TODO(imballinst): this plugin has 2 known weaknesses:
+// 1. if there is a message with the same name with another "local message",
+// then it will link to a wrong link.
+// 2. there is no way yet to recognize common know messages (e.g. from Google protobuf).
+const DICTIONARY = require("./booking-v1.json");
 
 module.exports = () => {
   return (tree) => {
@@ -26,6 +28,7 @@ module.exports = () => {
         }
 
         const children = [];
+        // Discard the last line from the code block (pure newline).
         for (let i = 0, length = codeArray.length - 1; i < length; i++) {
           const line = codeArray[i];
           let match = undefined;
@@ -51,7 +54,7 @@ module.exports = () => {
             const { position, name } = match;
 
             const firstSlice = line.slice(0, position);
-            const secondSlice = line.slice(position + key.length);
+            const secondSlice = line.slice(position + name.length);
 
             children.push(
               {

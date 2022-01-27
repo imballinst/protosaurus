@@ -1,5 +1,6 @@
-import fs from "fs-extra";
+import fs, { writeFile } from "fs-extra";
 
+// Types.
 interface Protofile {
   name: string;
   title: string;
@@ -64,12 +65,18 @@ interface ProtoService {
   };
 }
 
+export interface MessageData {
+  name: string;
+  messageStrings: string;
+}
+
+// Main exported functions.
 export async function convertPackageToMdx(packagePath: string) {
   const content = await fs.readFile(packagePath, "utf-8");
   const json: {
     files: Protofile[];
   } = JSON.parse(content);
-  const messageStrings: string[] = [];
+  const messageData: MessageData[] = [];
 
   for (const file of json.files) {
     if (!file.messages) {
@@ -80,12 +87,48 @@ export async function convertPackageToMdx(packagePath: string) {
 
     for (let i = 0; i < length; i++) {
       const message = file.messages[i];
-      messageStrings.push(getMessageString(message));
+      messageData.push({
+        name: message.name,
+        messageStrings: getMessageString(message),
+      });
     }
   }
 
+  return messageData;
+}
+
+export async function emitMessagesJson(
+  filePath: string,
+  messages: MessageData[]
+) {
+  const map: { [index: string]: string } = {};
+  for (const message of messages) {
+    map[message.name] = `#${message.name.toLowerCase()}`;
+  }
+
+  return writeFile(`${filePath}.json`, JSON.stringify(map));
+}
+
+export async function emitMdx(filePath: string, messages: MessageData[]) {
   // Separate each message with double new lines.
-  return messageStrings.join("\n\n");
+  const messageStrings = messages.map((m) => m.messageStrings).join("\n\n");
+  return writeFile(
+    `${filePath}.mdx`,
+    `
+---
+---
+
+import ReferenceWrapper from "@theme/ReferenceWrapper";
+import DefinitionHeader from "@theme/DefinitionHeader";
+import Definition from "@theme/Definition";
+import RpcDefinition from "@theme/RpcDefinition";
+import RpcDefinitionHeader from "@theme/RpcDefinitionHeader";
+import RpcDefinitionDescription from "@theme/RpcDefinitionDescription";
+import Description from "@theme/Description";
+import Json from "@site/static/toc.json";
+
+${messageStrings}`.trim()
+  );
 }
 
 function getMessageString(message: ProtoMessage) {
