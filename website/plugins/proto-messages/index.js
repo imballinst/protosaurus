@@ -35,7 +35,7 @@ module.exports = () => {
 
           // Find the matching type.
           for (const type in DICTIONARY) {
-            const regex = new RegExp(`\\b${type}\\b`);
+            const regex = new RegExp(`^\\s+\\b${type}\\b`);
             const isIncluded = regex.test(line);
 
             if (isIncluded) {

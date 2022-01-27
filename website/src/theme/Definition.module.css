@@ -15,6 +15,10 @@
   margin-top: calc(var(--ifm-h2-vertical-rhythm-top) * var(--ifm-leading));
 }
 
+.definition-title h2 {
+  scroll-margin-top: calc(var(--ifm-navbar-height) + 2rem);
+}
+
 .definition-title span {
   color: var(--ifm-color-gray-600);
 }
