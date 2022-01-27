@@ -17,6 +17,10 @@ defaults:
   run:  # use bash for all operating systems unless overridden
     shell: bash
 
+env:
+  # Reference: https://docusaurus.io/docs/api/docusaurus-config#baseurl.
+  WEBSITE_BASE_URL: "/protosaurus/"
+
 jobs:
   gen:
     name: "gen" # TODO(dio): We should do check instead.
@@ -45,3 +49,12 @@ jobs:
           key: protosaurus-${{ runner.os }}-buf-${{ hashFiles('testdata/buf.lock') }}
           restore-keys: protosaurus-${{ runner.os }}-buf-
       - run: make gen
+      - run: make docs
+      - uses: peaceiris/actions-gh-pages@v3
+        if: ${{ github.ref == 'refs/heads/main' }}
+        with:
+          github_token: ${{ github.token }}
+          publish_dir: website/build
+          # This allows you to make your publish branch with only the latest commit.
+          # https://github.com/peaceiris/actions-gh-pages#%EF%B8%8F-force-orphan-force_orphan.
+          force_orphan: true
