@@ -5,8 +5,6 @@
 // e.g. set options via environment variables 'process.env'.
 // Otherwise, JSON or YAML is recommended.
 
-process.env.TS_NODE_COMPILER_OPTIONS = '{"module":"commonjs"}';
-
 module.exports = {
   diff: true,
   // For some reasons we cannot use `global` field for `test` etc.
