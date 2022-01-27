@@ -71,10 +71,17 @@ help: ## Describe how to use each target
 	@printf "$(ansi_protosaurus)$(f_white)\n"
 	@awk 'BEGIN {FS = ":.*?## "} /^[0-9a-zA-Z_-]+:.*?## / {sub("\\\\n",sprintf("\n%22c"," "), $$2);printf "$(ansi_format_dark)", $$1, $$2}' $(MAKEFILE_LIST)
 
-gen: $(BUF_V1_MODULE_DATA) $(yarn) ## Generate files from proto files
+gen: $(BUF_V1_MODULE_DATA) $(yarn) $(gen-wkt) ## Generate files from proto files
 	@printf "$(ansi_format_dark)" $@ "generating files..."
 	@$(buf) generate
 	@printf "$(ansi_format_bright)" $@ "ok"
+
+generated_dir := website/generated
+gen-wkt: $(protoc) $(protoc-gen-doc)
+	@mkdir -p $(generated_dir)
+	@for proto in $(shell find $(prepackaged_tools_dir)/include -name "*.proto"); do \
+		protoc --doc_out=$(generated_dir) --doc_opt=json,$$proto.json,source_relative $$proto; \
+	done
 
 format: $(buf) $(clang-format) ## Format all proto files
 	@$(clang-format) -i $(shell $(buf) ls-files)
