@@ -18,6 +18,7 @@ defaults:
     shell: bash
 
 env:
+  # Reference: https://docusaurus.io/docs/api/docusaurus-config#baseurl.
   WEBSITE_BASE_URL: "/protosaurus/"
 
 jobs:
