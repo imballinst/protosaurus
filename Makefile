@@ -71,9 +71,10 @@ help: ## Describe how to use each target
 	@printf "$(ansi_protosaurus)$(f_white)\n"
 	@awk 'BEGIN {FS = ":.*?## "} /^[0-9a-zA-Z_-]+:.*?## / {sub("\\\\n",sprintf("\n%22c"," "), $$2);printf "$(ansi_format_dark)", $$1, $$2}' $(MAKEFILE_LIST)
 
-gen: $(BUF_V1_MODULE_DATA) $(yarn) $(gen-wkt) ## Generate files from proto files
+gen: $(BUF_V1_MODULE_DATA) $(yarn) ## Generate files from proto files
 	@printf "$(ansi_format_dark)" $@ "generating files..."
 	@$(buf) generate
+	@$(MAKE) gen-wkt
 	@printf "$(ansi_format_bright)" $@ "ok"
 
 generated_dir := website/generated
