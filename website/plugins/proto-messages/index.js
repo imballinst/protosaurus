@@ -35,13 +35,14 @@ module.exports = () => {
 
           // Find the matching type.
           for (const type in DICTIONARY) {
-            const idx = line.indexOf(type);
+            const regex = new RegExp(`\\b${type}\\b`);
+            const isIncluded = regex.test(line);
 
-            if (idx > -1 && line.startsWith(" ")) {
+            if (isIncluded) {
               // When found, we get the index of the type word in the line,
               // and store the type name as well.
               match = {
-                position: idx,
+                position: line.indexOf(type),
                 name: type,
               };
               break;
