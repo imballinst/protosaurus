@@ -74,7 +74,15 @@ help: ## Describe how to use each target
 gen: $(BUF_V1_MODULE_DATA) $(yarn) ## Generate files from proto files
 	@printf "$(ansi_format_dark)" $@ "generating files..."
 	@$(buf) generate
+	@$(MAKE) gen-wkt
 	@printf "$(ansi_format_bright)" $@ "ok"
+
+generated_dir := website/generated
+gen-wkt: $(protoc) $(protoc-gen-doc)
+	@mkdir -p $(generated_dir)
+	@for proto in $(shell find $(prepackaged_tools_dir)/include -name "*.proto"); do \
+		$(protoc) --doc_out=$(generated_dir) --doc_opt=json,$$proto.json,source_relative $$proto; \
+	done
 
 format: $(buf) $(clang-format) ## Format all proto files
 	@$(clang-format) -i $(shell $(buf) ls-files)

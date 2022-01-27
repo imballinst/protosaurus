@@ -21,6 +21,7 @@ syntax = "proto3";
 
 import "google/api/annotations.proto";
 import "google/api/field_behavior.proto";
+import "google/protobuf/duration.proto";
 import "validate/validate.proto";
 
 package booking.v1;
@@ -37,6 +38,8 @@ message BookingStatus {
   int32 id = 1;
   // Booking status description. E.g. "Active".
   string description = 2 [(google.api.field_behavior) = REQUIRED, (validate.rules).string.min_len = 1];
+  // Duration.
+  google.protobuf.Duration duration = 3;
 }
 
 // Represents the booking of a vehicle.
