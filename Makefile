@@ -81,7 +81,7 @@ generated_dir := website/generated
 gen-wkt: $(protoc) $(protoc-gen-doc)
 	@mkdir -p $(generated_dir)
 	@for proto in $(shell find $(prepackaged_tools_dir)/include -name "*.proto"); do \
-		protoc --doc_out=$(generated_dir) --doc_opt=json,$$proto.json,source_relative $$proto; \
+		$(protoc) --doc_out=$(generated_dir) --doc_opt=json,$$proto.json,source_relative $$proto; \
 	done
 
 format: $(buf) $(clang-format) ## Format all proto files
