@@ -83,7 +83,7 @@ docs: $(yarn) ## Build the docs site
 	$(yarn) --cwd website
 	$(yarn) --cwd website build
 
-license_files := website/plugins testdata .github Makefile *.mk buf.*.yaml
+license_files := website testdata .github Makefile *.mk buf.*.yaml
 license: $(addlicense) ## Add license to files
 	@$(addlicense) $(license_ignore) -c "Protosaurus Authors"  $(license_files) 1>/dev/null 2>&1
 
