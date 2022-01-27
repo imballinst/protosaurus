@@ -69,29 +69,52 @@ export async function convertPackageToMdx(packagePath: string) {
   const json: {
     files: Protofile[];
   } = JSON.parse(content);
-  let text = "";
+  const messageStrings: string[] = [];
 
   for (const file of json.files) {
     if (!file.messages) {
       continue;
     }
 
-    for (const message of file.messages) {
-      text += getMessageString(message);
-      text += "\n\n";
+    const length = file.messages.length;
+
+    for (let i = 0; i < length; i++) {
+      const message = file.messages[i];
+      messageStrings.push(getMessageString(message));
     }
   }
 
-  return text;
+  // Separate each message with double new lines.
+  return messageStrings.join("\n\n");
 }
 
 function getMessageString(message: ProtoMessage) {
-  return `
-${getCommentString(message.description)}
-message BookingStatus {
-${message.fields.map((field, idx) => getField(field, idx + 1)).join("\n")}
-}
-  `.trim();
+  const fields = message.fields
+    .map((field, idx) => getField(field, idx + 1))
+    .join("\n");
+  let messageBlock = "";
+
+  if (fields === "") {
+    messageBlock = "{}";
+  } else {
+    messageBlock = `{\n${fields}\n}`;
+  }
+
+  return `<Definition>
+
+<DefinitionHeader name="message">
+
+## ${message.name}
+
+</DefinitionHeader>
+
+${message.description}
+
+\`\`\`protosaurus
+message ${message.name} ${messageBlock}
+\`\`\`
+
+</Definition>`;
 }
 
 function getField(field: Field, num: number) {
