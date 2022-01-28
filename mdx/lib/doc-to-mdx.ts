@@ -168,7 +168,7 @@ import RpcDefinitionDescription from "@theme/RpcDefinitionDescription";
 import Description from "@theme/Description";
 import Json from "@site/static/toc.json";
 
-${messageStrings}`.trim()
+${messageStrings}\n`.trimStart()
   );
 }
 
