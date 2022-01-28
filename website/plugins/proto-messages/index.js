@@ -83,7 +83,7 @@ module.exports = () => {
           if (match !== undefined) {
             // When found, we split the line into 3 parts.
             // The text before the type, the type, and the text after the type.
-            const { position, name } = match;
+            const { position, href, name } = match;
 
             const firstSlice = line.slice(0, position);
             const secondSlice = line.slice(position + name.length);
@@ -97,7 +97,7 @@ module.exports = () => {
                 type: "element",
                 tagName: "a",
                 properties: {
-                  href: dictionary[name],
+                  href: href,
                 },
                 children: [
                   {
@@ -165,6 +165,7 @@ function getMatchingType(sourceDictionary, line) {
       // and store the type name as well.
       match = {
         position: line.indexOf(type),
+        href: sourceDictionary[type],
         name: type,
       };
       break;
