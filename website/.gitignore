@@ -4,7 +4,8 @@
 # Production
 /build
 # All docs are generated, so we don't need to store them.
-docs/
+docs/*
+!docs/intro.mdx
 
 # Generated files
 .docusaurus
