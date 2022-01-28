@@ -19,7 +19,7 @@ const PATH_TO_GENERATED = path.join(process.env.PWD!, "../website/generated");
 const PATH_TO_MDX_FOLDER = path.join(process.env.PWD!, "../website/docs");
 const PATH_TO_PLUGIN_FOLDER = path.join(
   process.env.PWD!,
-  "../website/plugins/proto-messages"
+  "../website/plugins/proto-messages/json"
 );
 
 (async () => {

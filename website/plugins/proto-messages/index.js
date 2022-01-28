@@ -14,6 +14,11 @@
  * limitations under the License.
  */
 
+const fs = require("fs");
+const path = require("path");
+
+const PATH_TO_DICTIONARY_FOLDER = path.join(__dirname, "dictionary");
+
 // TODO(imballinst): convert to TypeScript.
 // If Docusaurus can't support TypeScript plugin files, then we need
 // to convert to JavaScript files first in the `prebuild` hook.
@@ -21,7 +26,24 @@
 // 1. if there is a message with the same name with another "local message",
 // then it will link to a wrong link.
 // 2. there is no way yet to recognize common know messages (e.g. from Google protobuf).
-const DICTIONARY = require("./booking-v1.json");
+const dictionary = {};
+const entries = fs.readdirSync(PATH_TO_DICTIONARY_FOLDER, {
+  encoding: "utf-8",
+  withFileTypes: true,
+});
+
+for (const entry of entries) {
+  const ext = path.extname(entry);
+
+  if (ext === ".json") {
+    const file = fs.readFileSync(
+      path.join(PATH_TO_DICTIONARY_FOLDER, entry.name)
+    );
+    const json = JSON.parse(file);
+
+    dictionary[entry.name] = json;
+  }
+}
 
 module.exports = () => {
   return (tree) => {
@@ -47,7 +69,11 @@ module.exports = () => {
           let match = undefined;
 
           // Find the matching type.
-          for (const type in DICTIONARY) {
+          for (const type in dictionary) {
+            // Since fields in a message usually indented,
+            // so we want to find lines that start with whitespace, then the full type name.
+            // the "\b" here marks the "word boundary". So, for example, "Booking" won't
+            // match for "BookingStatus".
             const regex = new RegExp(`^\\s+\\b${type}\\b`);
             const isIncluded = regex.test(line);
 
@@ -79,7 +105,7 @@ module.exports = () => {
                 type: "element",
                 tagName: "a",
                 properties: {
-                  href: DICTIONARY[name],
+                  href: dictionary[name],
                 },
                 children: [
                   {

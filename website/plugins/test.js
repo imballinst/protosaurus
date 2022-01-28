@@ -19,7 +19,10 @@ const fs = require("fs");
 const path = require("path");
 const rehypeProtoPlugin = require("./proto-messages");
 
-const md = fs.readFileSync(path.join(__dirname, "./file.mdx"), "utf-8");
+const md = fs.readFileSync(
+  path.join(__dirname, "../docs/booking.v1.mdx"),
+  "utf-8"
+);
 
 main();
 
