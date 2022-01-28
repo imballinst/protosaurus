@@ -22,8 +22,6 @@ const PATH_TO_PLUGIN_FOLDER = path.join(
   "../website/plugins/proto-messages"
 );
 
-console.log(PATH_TO_GENERATED, PATH_TO_MDX_FOLDER);
-
 (async () => {
   const packageMessages = await recursivelyReadDirectory(PATH_TO_GENERATED);
   const promises = [];

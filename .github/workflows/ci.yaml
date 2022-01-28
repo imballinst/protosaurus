@@ -14,7 +14,7 @@ on:
   workflow_dispatch:
 
 defaults:
-  run:  # use bash for all operating systems unless overridden
+  run: # use bash for all operating systems unless overridden
     shell: bash
 
 env:
@@ -25,7 +25,7 @@ jobs:
   gen:
     name: "gen" # TODO(dio): We should do check instead.
     runs-on: ubuntu-20.04
-    timeout-minutes: 90  # instead of 360 by default.
+    timeout-minutes: 90 # instead of 360 by default.
     steps:
       - uses: styfle/cancel-workflow-action@0.4.1
         with:
@@ -49,6 +49,8 @@ jobs:
           key: protosaurus-${{ runner.os }}-buf-${{ hashFiles('testdata/buf.lock') }}
           restore-keys: protosaurus-${{ runner.os }}-buf-
       - run: make gen
+      # TODO(imballinst): not sure whether to put this test here or to create a new job.
+      - run: make test
       - run: make docs
       - uses: peaceiris/actions-gh-pages@v3
         if: ${{ github.ref == 'refs/heads/main' }}

@@ -1,0 +1,55 @@
+---
+---
+
+import ReferenceWrapper from "@theme/ReferenceWrapper";
+import DefinitionHeader from "@theme/DefinitionHeader";
+import Definition from "@theme/Definition";
+import RpcDefinition from "@theme/RpcDefinition";
+import RpcDefinitionHeader from "@theme/RpcDefinitionHeader";
+import RpcDefinitionDescription from "@theme/RpcDefinitionDescription";
+import Description from "@theme/Description";
+import Json from "@site/static/toc.json";
+
+<Definition>
+
+<DefinitionHeader name="message">
+
+## Location
+
+</DefinitionHeader>
+
+
+
+```protosaurus
+message Location {
+  // Latitude of the location.
+  int32 latitude = 1;
+  // Longitude of the location.
+  int32 longitude = 2;
+  // Address (human-friendly string) of the location.
+  string address = 3;
+  // 
+  InnerMessage inner_message = 4;
+}
+```
+
+</Definition>
+
+<Definition>
+
+<DefinitionHeader name="message">
+
+## InnerMessage
+
+</DefinitionHeader>
+
+
+
+```protosaurus
+message InnerMessage {
+  // 
+  int32 hello = 1;
+}
+```
+
+</Definition>

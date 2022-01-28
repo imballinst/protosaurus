@@ -24,6 +24,10 @@ message Booking {
   bool payment_received = 5;
   // Color preference of the customer.
   string color_preference = 6;
+  // Pick-up location.
+  Location pickup_location = 7;
+  // Destination location.
+  Location destination_location = 8;
 }
 ```
 
@@ -45,6 +49,8 @@ message BookingStatus {
   int32 id = 1;
   // Booking status description. E.g. "Active".
   string description = 2;
+  // Duration.
+  Duration duration = 3;
 }
 ```
 

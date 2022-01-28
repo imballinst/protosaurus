@@ -23,6 +23,7 @@ import "google/api/annotations.proto";
 import "google/api/field_behavior.proto";
 import "google/protobuf/duration.proto";
 import "validate/validate.proto";
+import "location/v1/location.proto";
 
 package booking.v1;
 
@@ -61,6 +62,12 @@ message Booking {
 
   // Color preference of the customer.
   string color_preference = 6 [deprecated = true];
+
+  // Pick-up location.
+  location.v1.Location pickup_location = 7;
+
+  // Destination location.
+  location.v1.Location destination_location = 8;
 }
 
 // An empty message for testing
