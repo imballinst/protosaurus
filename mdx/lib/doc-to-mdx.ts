@@ -1,4 +1,5 @@
 import fs, { writeFile } from "fs-extra";
+import path from "path";
 
 // Types.
 interface Protofile {
@@ -67,7 +68,14 @@ interface ProtoService {
 
 export interface MessageData {
   name: string;
+  packageName: string;
+  hash: string;
   messageStrings: string;
+}
+
+export interface PackageData {
+  name: string;
+  messagesData: MessageData[];
 }
 
 // Main exported functions.
@@ -76,7 +84,7 @@ export async function convertPackageToMdx(packagePath: string) {
   const json: {
     files: Protofile[];
   } = JSON.parse(content);
-  const messageData: MessageData[] = [];
+  const packageData: PackageData[] = [];
 
   for (const file of json.files) {
     if (!file.messages) {
@@ -84,27 +92,56 @@ export async function convertPackageToMdx(packagePath: string) {
     }
 
     const length = file.messages.length;
+    const messagesData: MessageData[] = [];
 
     for (let i = 0; i < length; i++) {
       const message = file.messages[i];
-      messageData.push({
-        name: message.name,
-        messageStrings: getMessageString(message),
+      // When a `longName` has a "dot" separator, then it's a submessage.
+      const messageNameArray = message.longName.split(".");
+
+      messagesData.push({
+        name: message.longName,
+        packageName: file.package,
+        hash: message.longName.toLowerCase().replace(".", ""),
+        messageStrings: getMessageString({
+          message,
+          parentMessage:
+            messageNameArray.length > 1 ? messageNameArray[0] : undefined,
+          packageName: file.package,
+        }),
       });
     }
+
+    packageData.push({
+      name: file.package,
+      messagesData,
+    });
   }
 
-  return messageData;
+  return packageData;
 }
 
-export async function emitMessagesJson(
-  filePath: string,
-  messages: MessageData[]
-) {
+export async function emitMessagesJson({
+  filePath,
+  messages,
+  isWkt,
+}: {
+  filePath: string;
+  messages: MessageData[];
+  isWkt?: boolean;
+}) {
   const map: { [index: string]: string } = {};
+
   for (const message of messages) {
-    map[message.name] = `#${message.name.toLowerCase()}`;
+    const { name, packageName, hash } = message;
+    // For example:
+    // If it's not WKT, then it's /docs/booking.v1#Booking.
+    // If it's WKT, then it's /docs/wkt/google.protobuf#Int32.
+    map[name] = `/docs/${isWkt ? "wkt/" : ""}${packageName}#${hash}`;
   }
+
+  // Check for existence and create parent directories, if not exist.
+  await createParentDirectoriesIfNotExist(filePath);
 
   return writeFile(`${filePath}.json`, JSON.stringify(map));
 }
@@ -112,6 +149,10 @@ export async function emitMessagesJson(
 export async function emitMdx(filePath: string, messages: MessageData[]) {
   // Separate each message with double new lines.
   const messageStrings = messages.map((m) => m.messageStrings).join("\n\n");
+
+  // Check for existence and create parent directories, if not exist.
+  await createParentDirectoriesIfNotExist(filePath);
+
   return writeFile(
     `${filePath}.mdx`,
     `
@@ -125,16 +166,36 @@ import RpcDefinition from "@theme/RpcDefinition";
 import RpcDefinitionHeader from "@theme/RpcDefinitionHeader";
 import RpcDefinitionDescription from "@theme/RpcDefinitionDescription";
 import Description from "@theme/Description";
-import Json from "@site/static/toc.json";
 
-${messageStrings}`.trim()
+${messageStrings}\n`.trimStart()
   );
 }
 
-function getMessageString(message: ProtoMessage) {
+// Helper functions.
+async function createParentDirectoriesIfNotExist(filePath: string) {
+  const parentDirectory = path.dirname(filePath);
+
+  try {
+    await fs.stat(parentDirectory);
+  } catch (err) {
+    // Not found.
+    await fs.mkdirp(parentDirectory);
+  }
+}
+
+function getMessageString({
+  message,
+  parentMessage,
+  packageName,
+}: {
+  message: ProtoMessage;
+  parentMessage?: string;
+  packageName: string;
+}) {
   const fields = message.fields
     .map((field, idx) => getField(field, idx + 1))
     .join("\n");
+  let heading = "";
   let messageBlock = "";
 
   if (fields === "") {
@@ -143,17 +204,25 @@ function getMessageString(message: ProtoMessage) {
     messageBlock = `{\n${fields}\n}`;
   }
 
+  if (parentMessage) {
+    // Set heading 3 for submessages.
+    heading = `### ${parentMessage}.${message.name}`;
+  } else {
+    // Otherwise, heading 2.
+    heading = `## ${message.name}`;
+  }
+
   return `<Definition>
 
 <DefinitionHeader name="message">
 
-## ${message.name}
+${heading}
 
 </DefinitionHeader>
 
-${message.description}
+${message.description.replace(/\//g, "\\/")}
 
-\`\`\`protosaurus
+\`\`\`protosaurus--${packageName}.${message.name}
 message ${message.name} ${messageBlock}
 \`\`\`
 

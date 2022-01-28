@@ -14,7 +14,15 @@ const BOOKING_MDX_EXPECTED_RESULT_PATH = path.join(
 );
 
 test("convertPackageToMdx", async () => {
-  const result = await convertPackageToMdx(BOOKING_DOC_JSON_PATH);
+  const packages = await convertPackageToMdx(BOOKING_DOC_JSON_PATH);
+  const allMessages: string[] = [];
+
+  for (const pkg of packages) {
+    for (const msgData of pkg.messagesData) {
+      allMessages.push(msgData.messageStrings);
+    }
+  }
+  const result = allMessages.join("\n\n");
   const expected = await readFile(BOOKING_MDX_EXPECTED_RESULT_PATH, "utf-8");
 
   // Slice the last trailing CRLF from the `expected` variable.

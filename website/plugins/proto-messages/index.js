@@ -17,11 +17,59 @@
 // TODO(imballinst): convert to TypeScript.
 // If Docusaurus can't support TypeScript plugin files, then we need
 // to convert to JavaScript files first in the `prebuild` hook.
-// TODO(imballinst): this plugin has 2 known weaknesses:
-// 1. if there is a message with the same name with another "local message",
-// then it will link to a wrong link.
-// 2. there is no way yet to recognize common know messages (e.g. from Google protobuf).
-const DICTIONARY = require("./booking-v1.json");
+const fs = require("fs");
+const path = require("path");
+
+const PATH_TO_DICTIONARY_FOLDER = path.join(__dirname, "dictionary");
+
+// This contains all "local" messages.
+const dictionary = {};
+// This contains all submessages. Submessages are messages inside a message.
+// This object is a key-value of `packageName`-`dictionary`.
+const subMessagesDictionary = {};
+let wkt = {};
+
+const entries = fs.readdirSync(PATH_TO_DICTIONARY_FOLDER, {
+  encoding: "utf-8",
+  withFileTypes: true,
+});
+
+for (const entry of entries) {
+  const ext = path.extname(entry.name);
+  const basename = path.basename(entry.name, ext);
+
+  if (ext === ".json") {
+    const file = fs.readFileSync(
+      path.join(PATH_TO_DICTIONARY_FOLDER, entry.name)
+    );
+    const json = JSON.parse(file);
+
+    if (basename === "wkt") {
+      // For well known types, we assume that they will never intersect (perhaps).
+      // TODO(imballinst): consider if there is a possibility of intersecting well-known types.
+      wkt = json;
+    } else {
+      // Whereas, for local types, there are chances that "local" messages inside a message
+      // can be a conflict to another. Hence, we need to group them by
+      for (const key in json) {
+        if (key.indexOf(".") > -1) {
+          const [parentMessage, name] = key.split(".");
+          const subMessagesDictionaryKey = `${basename}.${parentMessage}`;
+
+          // Sub message.
+          if (subMessagesDictionary[subMessagesDictionaryKey] === undefined) {
+            subMessagesDictionary[subMessagesDictionaryKey] = {};
+          }
+
+          subMessagesDictionary[subMessagesDictionaryKey][name] = json[key];
+        } else {
+          // Local message.
+          dictionary[key] = json[key];
+        }
+      }
+    }
+  }
+}
 
 module.exports = () => {
   return (tree) => {
@@ -35,37 +83,44 @@ module.exports = () => {
         const code = pre.children[0];
         const codeArray = code.children[0].value.split("\n");
 
-        // TODO(imballinst): specify a better language code.
-        if (!code.properties?.className?.includes("language-protosaurus")) {
+        const matchingLanguage = code.properties?.className?.find((c) =>
+          // TODO(imballinst): specify a better language code, if this is unfit.
+          c.startsWith("language-protosaurus")
+        );
+
+        if (!matchingLanguage) {
           continue;
         }
 
+        // For example: the format is `language-protosaurus--booking.v1.Booking`.
+        // This has the purpose to "detect" submessages.
+        // With the "booking.v1.Booking" namespace information, we can lookup to the
+        // `subMessagesDictionary` variable.
+        const [, namespace] = matchingLanguage.split("--");
         const children = [];
+
         // Discard the last line from the code block (pure newline).
         for (let i = 0, length = codeArray.length - 1; i < length; i++) {
           const line = codeArray[i];
-          let match = undefined;
 
           // Find the matching type.
-          for (const type in DICTIONARY) {
-            const regex = new RegExp(`^\\s+\\b${type}\\b`);
-            const isIncluded = regex.test(line);
+          // First of all, we search by the submessage.
+          let match = getMatchingType(subMessagesDictionary[namespace], line);
 
-            if (isIncluded) {
-              // When found, we get the index of the type word in the line,
-              // and store the type name as well.
-              match = {
-                position: line.indexOf(type),
-                name: type,
-              };
-              break;
-            }
+          // If no submessage found, test against dictionary.
+          if (match === undefined) {
+            match = getMatchingType(dictionary, line);
+          }
+
+          // If still undefined, then match against wkt.
+          if (match === undefined) {
+            match = getMatchingType(wkt, line);
           }
 
           if (match !== undefined) {
             // When found, we split the line into 3 parts.
             // The text before the type, the type, and the text after the type.
-            const { position, name } = match;
+            const { position, href, name } = match;
 
             const firstSlice = line.slice(0, position);
             const secondSlice = line.slice(position + name.length);
@@ -79,7 +134,7 @@ module.exports = () => {
                 type: "element",
                 tagName: "a",
                 properties: {
-                  href: DICTIONARY[name],
+                  href: href,
                 },
                 children: [
                   {
@@ -129,3 +184,30 @@ module.exports = () => {
     }
   };
 };
+
+// Helper functions.
+function getMatchingType(sourceDictionary, line) {
+  let match;
+
+  for (const type in sourceDictionary) {
+    // Since fields in a message usually indented,
+    // so we want to find lines that start with whitespace, then the full type name.
+    // the "\b" here marks the "word boundary". So, for example, "Booking" won't
+    // match for "BookingStatus".
+    const regex = new RegExp(`^\\s+\\b${type}\\b`);
+    const isIncluded = regex.test(line);
+
+    if (isIncluded) {
+      // When found, we get the index of the type word in the line,
+      // and store the type name as well.
+      match = {
+        position: line.indexOf(type),
+        href: sourceDictionary[type],
+        name: type,
+      };
+      break;
+    }
+  }
+
+  return match;
+}
