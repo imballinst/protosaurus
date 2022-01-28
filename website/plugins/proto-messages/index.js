@@ -24,7 +24,7 @@ const PATH_TO_DICTIONARY_FOLDER = path.join(__dirname, "dictionary");
 
 // This contains all "local" messages.
 const dictionary = {};
-// This contains all "sub" messages. Sub messages are messages inside a message.
+// This contains all submessages. Submessages are messages inside a message.
 // This object is a key-value of `packageName`-`dictionary`.
 const subMessagesDictionary = {};
 let wkt = {};
@@ -92,6 +92,10 @@ module.exports = () => {
           continue;
         }
 
+        // For example: the format is `language-protosaurus--booking.v1.Booking`.
+        // This has the purpose to "detect" submessages.
+        // With the "booking.v1.Booking" namespace information, we can lookup to the
+        // `subMessagesDictionary` variable.
         const [, namespace] = matchingLanguage.split("--");
         const children = [];
 
@@ -100,10 +104,10 @@ module.exports = () => {
           const line = codeArray[i];
 
           // Find the matching type.
-          // First of all, we search by the "sub" message.
+          // First of all, we search by the submessage.
           let match = getMatchingType(subMessagesDictionary[namespace], line);
 
-          // If no "sub" message found, test against dictionary.
+          // If no submessage found, test against dictionary.
           if (match === undefined) {
             match = getMatchingType(dictionary, line);
           }

@@ -96,7 +96,7 @@ export async function convertPackageToMdx(packagePath: string) {
 
     for (let i = 0; i < length; i++) {
       const message = file.messages[i];
-      // When a `longName` has a "dot" separator, then it's a sub message.
+      // When a `longName` has a "dot" separator, then it's a submessage.
       const messageNameArray = message.longName.split(".");
 
       messagesData.push({
@@ -206,8 +206,10 @@ function getMessageString({
   }
 
   if (parentMessage) {
+    // Set heading 3 for submessages.
     heading = `### ${parentMessage}.${message.name}`;
   } else {
+    // Otherwise, heading 2.
     heading = `## ${message.name}`;
   }
 

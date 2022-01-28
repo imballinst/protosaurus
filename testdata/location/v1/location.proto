@@ -32,7 +32,7 @@ message Location {
   // Address (human-friendly string) of the location.
   string address = 3 [(google.api.field_behavior) = REQUIRED, (validate.rules).string.min_len = 1];
 
-  // Sample InnerMessage to test sub messages.
+  // Sample InnerMessage to test submessages.
   message InnerMessage {
     // Sample integer.
     int32 hello = 1;
