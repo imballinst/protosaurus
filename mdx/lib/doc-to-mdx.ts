@@ -1,4 +1,5 @@
 import fs, { writeFile } from "fs-extra";
+import path from "path";
 
 // Types.
 interface Protofile {
@@ -67,6 +68,7 @@ interface ProtoService {
 
 export interface MessageData {
   name: string;
+  fullName: string;
   messageStrings: string;
 }
 
@@ -89,6 +91,7 @@ export async function convertPackageToMdx(packagePath: string) {
       const message = file.messages[i];
       messageData.push({
         name: message.name,
+        fullName: message.fullName,
         messageStrings: getMessageString(message),
       });
     }
@@ -97,14 +100,35 @@ export async function convertPackageToMdx(packagePath: string) {
   return messageData;
 }
 
-export async function emitMessagesJson(
-  filePath: string,
-  messages: MessageData[]
-) {
+export async function emitMessagesJson({
+  filePath,
+  messages,
+  isWkt,
+}: {
+  filePath: string;
+  messages: MessageData[];
+  isWkt?: boolean;
+}) {
   const map: { [index: string]: string } = {};
+
   for (const message of messages) {
-    map[message.name] = `#${message.name.toLowerCase()}`;
+    const lastPeriod = message.fullName.lastIndexOf(".");
+    let packageName = message.fullName;
+
+    if (lastPeriod > -1) {
+      packageName = packageName.slice(0, lastPeriod);
+    }
+
+    // For example:
+    // If it's not WKT, then it's /docs/booking.v1#Booking.
+    // If it's WKT, then it's /docs/wkt/google.protobuf#Int32.
+    map[message.name] = `/docs/${
+      isWkt ? "wkt/" : ""
+    }${packageName}#${message.name.toLowerCase()}`;
   }
+
+  // Check for existence and create parent directories, if not exist.
+  await createParentDirectoriesIfNotExist(filePath);
 
   return writeFile(`${filePath}.json`, JSON.stringify(map));
 }
@@ -112,6 +136,10 @@ export async function emitMessagesJson(
 export async function emitMdx(filePath: string, messages: MessageData[]) {
   // Separate each message with double new lines.
   const messageStrings = messages.map((m) => m.messageStrings).join("\n\n");
+
+  // Check for existence and create parent directories, if not exist.
+  await createParentDirectoriesIfNotExist(filePath);
+
   return writeFile(
     `${filePath}.mdx`,
     `
@@ -129,6 +157,17 @@ import Json from "@site/static/toc.json";
 
 ${messageStrings}`.trim()
   );
+}
+
+async function createParentDirectoriesIfNotExist(filePath: string) {
+  const parentDirectory = path.dirname(filePath);
+
+  try {
+    await fs.stat(parentDirectory);
+  } catch (err) {
+    // Not found.
+    await fs.mkdirp(parentDirectory);
+  }
 }
 
 function getMessageString(message: ProtoMessage) {
@@ -151,7 +190,7 @@ function getMessageString(message: ProtoMessage) {
 
 </DefinitionHeader>
 
-${message.description}
+${message.description.replace(/\//g, "\\/")}
 
 \`\`\`protosaurus
 message ${message.name} ${messageBlock}

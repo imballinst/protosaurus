@@ -22,18 +22,16 @@ const PATH_TO_DICTIONARY_FOLDER = path.join(__dirname, "dictionary");
 // TODO(imballinst): convert to TypeScript.
 // If Docusaurus can't support TypeScript plugin files, then we need
 // to convert to JavaScript files first in the `prebuild` hook.
-// TODO(imballinst): this plugin has 2 known weaknesses:
-// 1. if there is a message with the same name with another "local message",
-// then it will link to a wrong link.
-// 2. there is no way yet to recognize common know messages (e.g. from Google protobuf).
 const dictionary = {};
+let wkt = {};
 const entries = fs.readdirSync(PATH_TO_DICTIONARY_FOLDER, {
   encoding: "utf-8",
   withFileTypes: true,
 });
 
 for (const entry of entries) {
-  const ext = path.extname(entry);
+  const ext = path.extname(entry.name);
+  const basename = path.basename(entry.name, ext);
 
   if (ext === ".json") {
     const file = fs.readFileSync(
@@ -41,7 +39,13 @@ for (const entry of entries) {
     );
     const json = JSON.parse(file);
 
-    dictionary[entry.name] = json;
+    if (basename === "wkt") {
+      wkt = json;
+    } else {
+      for (const key in json) {
+        dictionary[key] = json[key];
+      }
+    }
   }
 }
 
@@ -66,26 +70,14 @@ module.exports = () => {
         // Discard the last line from the code block (pure newline).
         for (let i = 0, length = codeArray.length - 1; i < length; i++) {
           const line = codeArray[i];
-          let match = undefined;
 
           // Find the matching type.
-          for (const type in dictionary) {
-            // Since fields in a message usually indented,
-            // so we want to find lines that start with whitespace, then the full type name.
-            // the "\b" here marks the "word boundary". So, for example, "Booking" won't
-            // match for "BookingStatus".
-            const regex = new RegExp(`^\\s+\\b${type}\\b`);
-            const isIncluded = regex.test(line);
+          // Test against dictionary.
+          let match = getMatchingType(dictionary, line);
 
-            if (isIncluded) {
-              // When found, we get the index of the type word in the line,
-              // and store the type name as well.
-              match = {
-                position: line.indexOf(type),
-                name: type,
-              };
-              break;
-            }
+          // If still undefined, then match against wkt.
+          if (match === undefined) {
+            match = getMatchingType(wkt, line);
           }
 
           if (match !== undefined) {
@@ -155,3 +147,29 @@ module.exports = () => {
     }
   };
 };
+
+// Helper functions.
+function getMatchingType(sourceDictionary, line) {
+  let match;
+
+  for (const type in sourceDictionary) {
+    // Since fields in a message usually indented,
+    // so we want to find lines that start with whitespace, then the full type name.
+    // the "\b" here marks the "word boundary". So, for example, "Booking" won't
+    // match for "BookingStatus".
+    const regex = new RegExp(`^\\s+\\b${type}\\b`);
+    const isIncluded = regex.test(line);
+
+    if (isIncluded) {
+      // When found, we get the index of the type word in the line,
+      // and store the type name as well.
+      match = {
+        position: line.indexOf(type),
+        name: type,
+      };
+      break;
+    }
+  }
+
+  return match;
+}

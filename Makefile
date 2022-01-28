@@ -77,7 +77,7 @@ gen: $(BUF_V1_MODULE_DATA) $(yarn) ## Generate files from proto files
 	@$(MAKE) gen-wkt
 	@printf "$(ansi_format_bright)" $@ "ok"
 
-generated_dir := website/generated
+generated_dir := website/generated/wkt
 gen-wkt: $(protoc) $(protoc-gen-doc)
 	@mkdir -p $(generated_dir)
 	@for proto in $(shell find $(prepackaged_tools_dir)/include -name "*.proto"); do \
