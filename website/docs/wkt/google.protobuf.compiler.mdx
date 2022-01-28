@@ -20,7 +20,7 @@ import Json from "@site/static/toc.json";
 
 An encoded CodeGeneratorRequest is written to the plugin's stdin.
 
-```protosaurus
+```protosaurus--google.protobuf.compiler.CodeGeneratorRequest
 message CodeGeneratorRequest {
   // The .proto files that were explicitly listed on the command-line.  The
 // code generator should generate code only for these files.  Each file's
@@ -60,7 +60,7 @@ message CodeGeneratorRequest {
 
 The plugin writes an encoded CodeGeneratorResponse to stdout.
 
-```protosaurus
+```protosaurus--google.protobuf.compiler.CodeGeneratorResponse
 message CodeGeneratorResponse {
   // Error message.  If non-empty, code generation failed.  The plugin process
 // should exit with status code zero even if it reports an error in this way.
@@ -82,13 +82,13 @@ message CodeGeneratorResponse {
 
 <DefinitionHeader name="message">
 
-## File
+### CodeGeneratorResponse.File
 
 </DefinitionHeader>
 
 Represents a single generated file.
 
-```protosaurus
+```protosaurus--google.protobuf.compiler.File
 message File {
   // The file name, relative to the output directory.  The name must not
 // contain "." or ".." components and must be relative, not be absolute (so,
@@ -157,7 +157,7 @@ message File {
 
 The version number of protocol compiler.
 
-```protosaurus
+```protosaurus--google.protobuf.compiler.Version
 message Version {
   // 
   int32 major = 1;

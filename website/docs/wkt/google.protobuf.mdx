@@ -98,7 +98,7 @@ field. Example (for message [google.protobuf.Duration][]):
       "value": "1.212s"
     }
 
-```protosaurus
+```protosaurus--google.protobuf.Any
 message Any {
   // A URL/resource name that uniquely identifies the type of the serialized
 // protocol buffer message. This string must contain at least
@@ -153,7 +153,7 @@ sometimes simply referred to as "APIs" in other contexts, such as the name of
 this message itself. See https:\/\/cloud.google.com\/apis\/design\/glossary for
 detailed terminology.
 
-```protosaurus
+```protosaurus--google.protobuf.Api
 message Api {
   // The fully qualified name of this interface, including package name
 // followed by the interface's simple name.
@@ -204,7 +204,7 @@ message Api {
 
 Method represents a method of an API interface.
 
-```protosaurus
+```protosaurus--google.protobuf.Method
 message Method {
   // The simple name of this method.
   string name = 1;
@@ -312,7 +312,7 @@ This implies the following inherited HTTP annotation:
       ...
     }
 
-```protosaurus
+```protosaurus--google.protobuf.Mixin
 message Mixin {
   // The fully qualified name of the interface which is included.
   string name = 1;
@@ -334,7 +334,7 @@ message Mixin {
 
 Describes a message type.
 
-```protosaurus
+```protosaurus--google.protobuf.DescriptorProto
 message DescriptorProto {
   // 
   string name = 1;
@@ -366,13 +366,13 @@ message DescriptorProto {
 
 <DefinitionHeader name="message">
 
-## ExtensionRange
+### DescriptorProto.ExtensionRange
 
 </DefinitionHeader>
 
 
 
-```protosaurus
+```protosaurus--google.protobuf.ExtensionRange
 message ExtensionRange {
   // Inclusive.
   int32 start = 1;
@@ -389,7 +389,7 @@ message ExtensionRange {
 
 <DefinitionHeader name="message">
 
-## ReservedRange
+### DescriptorProto.ReservedRange
 
 </DefinitionHeader>
 
@@ -397,7 +397,7 @@ Range of reserved tag numbers. Reserved tag numbers may not be used by
 fields or extension ranges in the same message. Reserved ranges may
 not overlap.
 
-```protosaurus
+```protosaurus--google.protobuf.ReservedRange
 message ReservedRange {
   // Inclusive.
   int32 start = 1;
@@ -418,7 +418,7 @@ message ReservedRange {
 
 Describes an enum type.
 
-```protosaurus
+```protosaurus--google.protobuf.EnumDescriptorProto
 message EnumDescriptorProto {
   // 
   string name = 1;
@@ -442,7 +442,7 @@ message EnumDescriptorProto {
 
 <DefinitionHeader name="message">
 
-## EnumReservedRange
+### EnumDescriptorProto.EnumReservedRange
 
 </DefinitionHeader>
 
@@ -453,7 +453,7 @@ Note that this is distinct from DescriptorProto.ReservedRange in that it
 is inclusive such that it can appropriately represent the entire int32
 domain.
 
-```protosaurus
+```protosaurus--google.protobuf.EnumReservedRange
 message EnumReservedRange {
   // Inclusive.
   int32 start = 1;
@@ -474,7 +474,7 @@ message EnumReservedRange {
 
 
 
-```protosaurus
+```protosaurus--google.protobuf.EnumOptions
 message EnumOptions {
   // Set this option to true to allow mapping different tag names to the same
 // value.
@@ -501,7 +501,7 @@ message EnumOptions {
 
 Describes a value within an enum.
 
-```protosaurus
+```protosaurus--google.protobuf.EnumValueDescriptorProto
 message EnumValueDescriptorProto {
   // 
   string name = 1;
@@ -524,7 +524,7 @@ message EnumValueDescriptorProto {
 
 
 
-```protosaurus
+```protosaurus--google.protobuf.EnumValueOptions
 message EnumValueOptions {
   // Is this enum value deprecated?
 // Depending on the target platform, this can emit Deprecated annotations
@@ -548,7 +548,7 @@ message EnumValueOptions {
 
 
 
-```protosaurus
+```protosaurus--google.protobuf.ExtensionRangeOptions
 message ExtensionRangeOptions {
   // The parser stores options it doesn't recognize here. See above.
   UninterpretedOption uninterpreted_option = 1;
@@ -567,7 +567,7 @@ message ExtensionRangeOptions {
 
 Describes a field within a message.
 
-```protosaurus
+```protosaurus--google.protobuf.FieldDescriptorProto
 message FieldDescriptorProto {
   // 
   string name = 1;
@@ -618,7 +618,7 @@ message FieldDescriptorProto {
 
 
 
-```protosaurus
+```protosaurus--google.protobuf.FieldOptions
 message FieldOptions {
   // The ctype option instructs the C++ code generator to use a different
 // representation of the field than it normally would.  See the specific
@@ -696,7 +696,7 @@ message FieldOptions {
 
 Describes a complete .proto file.
 
-```protosaurus
+```protosaurus--google.protobuf.FileDescriptorProto
 message FileDescriptorProto {
   // file name, relative to root of source tree
   string name = 1;
@@ -743,7 +743,7 @@ message FileDescriptorProto {
 The protocol compiler can output a FileDescriptorSet containing the .proto
 files it parses.
 
-```protosaurus
+```protosaurus--google.protobuf.FileDescriptorSet
 message FileDescriptorSet {
   // 
   FileDescriptorProto file = 1;
@@ -762,7 +762,7 @@ message FileDescriptorSet {
 
 
 
-```protosaurus
+```protosaurus--google.protobuf.FileOptions
 message FileOptions {
   // Sets the Java package where classes generated from this .proto will be
 // placed.  By default, the proto package is used, but this is often
@@ -869,7 +869,7 @@ Describes the relationship between generated code and its original source
 file. A GeneratedCodeInfo message is associated with only one generated
 source file, but may contain references to different source .proto files.
 
-```protosaurus
+```protosaurus--google.protobuf.GeneratedCodeInfo
 message GeneratedCodeInfo {
   // An Annotation connects some span of text in generated code to an element
 // of its generating .proto file.
@@ -883,13 +883,13 @@ message GeneratedCodeInfo {
 
 <DefinitionHeader name="message">
 
-## Annotation
+### GeneratedCodeInfo.Annotation
 
 </DefinitionHeader>
 
 
 
-```protosaurus
+```protosaurus--google.protobuf.Annotation
 message Annotation {
   // Identifies the element in the original source .proto file. This field
 // is formatted the same as SourceCodeInfo.Location.path.
@@ -918,7 +918,7 @@ message Annotation {
 
 
 
-```protosaurus
+```protosaurus--google.protobuf.MessageOptions
 message MessageOptions {
   // Set true to use the old proto1 MessageSet wire format for extensions.
 // This is provided for backwards-compatibility with the MessageSet wire
@@ -987,7 +987,7 @@ message MessageOptions {
 
 Describes a method of a service.
 
-```protosaurus
+```protosaurus--google.protobuf.MethodDescriptorProto
 message MethodDescriptorProto {
   // 
   string name = 1;
@@ -1017,7 +1017,7 @@ message MethodDescriptorProto {
 
 
 
-```protosaurus
+```protosaurus--google.protobuf.MethodOptions
 message MethodOptions {
   // Is this method deprecated?
 // Depending on the target platform, this can emit Deprecated annotations
@@ -1043,7 +1043,7 @@ message MethodOptions {
 
 Describes a oneof.
 
-```protosaurus
+```protosaurus--google.protobuf.OneofDescriptorProto
 message OneofDescriptorProto {
   // 
   string name = 1;
@@ -1064,7 +1064,7 @@ message OneofDescriptorProto {
 
 
 
-```protosaurus
+```protosaurus--google.protobuf.OneofOptions
 message OneofOptions {
   // The parser stores options it doesn't recognize here. See above.
   UninterpretedOption uninterpreted_option = 1;
@@ -1083,7 +1083,7 @@ message OneofOptions {
 
 Describes a service.
 
-```protosaurus
+```protosaurus--google.protobuf.ServiceDescriptorProto
 message ServiceDescriptorProto {
   // 
   string name = 1;
@@ -1106,7 +1106,7 @@ message ServiceDescriptorProto {
 
 
 
-```protosaurus
+```protosaurus--google.protobuf.ServiceOptions
 message ServiceOptions {
   // Is this service deprecated?
 // Depending on the target platform, this can emit Deprecated annotations
@@ -1131,7 +1131,7 @@ message ServiceOptions {
 Encapsulates information about the original source file from which a
 FileDescriptorProto was generated.
 
-```protosaurus
+```protosaurus--google.protobuf.SourceCodeInfo
 message SourceCodeInfo {
   // A Location identifies a piece of source code in a .proto file which
 // corresponds to a particular definition.  This information is intended
@@ -1186,13 +1186,13 @@ message SourceCodeInfo {
 
 <DefinitionHeader name="message">
 
-## Location
+### SourceCodeInfo.Location
 
 </DefinitionHeader>
 
 
 
-```protosaurus
+```protosaurus--google.protobuf.Location
 message Location {
   // Identifies which part of the FileDescriptorProto was defined at this
 // location.
@@ -1296,7 +1296,7 @@ options protos in descriptor objects (e.g. returned by Descriptor::options(),
 or produced by Descriptor::CopyTo()) will never have UninterpretedOptions
 in them.
 
-```protosaurus
+```protosaurus--google.protobuf.UninterpretedOption
 message UninterpretedOption {
   // 
   NamePart name = 1;
@@ -1322,7 +1322,7 @@ message UninterpretedOption {
 
 <DefinitionHeader name="message">
 
-## NamePart
+### UninterpretedOption.NamePart
 
 </DefinitionHeader>
 
@@ -1332,7 +1332,7 @@ extension (denoted with parentheses in options specs in .proto files).
 E.g.,{ ["foo", false], ["bar.baz", true], ["qux", false] } represents
 "foo.(bar.baz).qux".
 
-```protosaurus
+```protosaurus--google.protobuf.NamePart
 message NamePart {
   // 
   string name_part = 1;
@@ -1410,7 +1410,7 @@ encoded in JSON format as "3s", while 3 seconds and 1 nanosecond should
 be expressed in JSON format as "3.000000001s", and 3 seconds and 1
 microsecond should be expressed in JSON format as "3.000001s".
 
-```protosaurus
+```protosaurus--google.protobuf.Duration
 message Duration {
   // Signed seconds of the span of time. Must be from -315,576,000,000
 // to +315,576,000,000 inclusive. Note: these bounds are computed from:
@@ -1446,7 +1446,7 @@ or the response type of an API method. For instance:
 
 The JSON representation for `Empty` is empty JSON object `{}`.
 
-```protosaurus
+```protosaurus--google.protobuf.Empty
 message Empty {}
 ```
 
@@ -1660,7 +1660,7 @@ The implementation of any API method which has a FieldMask type field in the
 request should verify the included field paths, and return an
 `INVALID_ARGUMENT` error if any path is duplicated or unmappable.
 
-```protosaurus
+```protosaurus--google.protobuf.FieldMask
 message FieldMask {
   // The set of field mask paths.
   string paths = 1;
@@ -1680,7 +1680,7 @@ message FieldMask {
 `SourceContext` represents information about the source of a
 protobuf element, like the file in which it is defined.
 
-```protosaurus
+```protosaurus--google.protobuf.SourceContext
 message SourceContext {
   // The path-qualified name of the .proto file that contained the associated
 // protobuf element.  For example: `"google/protobuf/source_context.proto"`.
@@ -1702,7 +1702,7 @@ message SourceContext {
 
 The JSON representation for `ListValue` is JSON array.
 
-```protosaurus
+```protosaurus--google.protobuf.ListValue
 message ListValue {
   // Repeated field of dynamically typed values.
   Value values = 1;
@@ -1728,7 +1728,7 @@ with the proto support for the language.
 
 The JSON representation for `Struct` is JSON object.
 
-```protosaurus
+```protosaurus--google.protobuf.Struct
 message Struct {
   // Unordered map of dynamically typed values.
   FieldsEntry fields = 1;
@@ -1741,13 +1741,13 @@ message Struct {
 
 <DefinitionHeader name="message">
 
-## FieldsEntry
+### Struct.FieldsEntry
 
 </DefinitionHeader>
 
 
 
-```protosaurus
+```protosaurus--google.protobuf.FieldsEntry
 message FieldsEntry {
   // 
   string key = 1;
@@ -1773,7 +1773,7 @@ variants, absence of any variant indicates an error.
 
 The JSON representation for `Value` is JSON value.
 
-```protosaurus
+```protosaurus--google.protobuf.Value
 message Value {
   // Represents a null value.
   NullValue null_value = 1;
@@ -1883,7 +1883,7 @@ the Joda Time's [`ISODateTimeFormat.dateTime()`](
 http:\/\/www.joda.org\/joda-time\/apidocs\/org\/joda\/time\/format\/ISODateTimeFormat.html#dateTime%2D%2D
 ) to obtain a formatter capable of generating timestamps in this format.
 
-```protosaurus
+```protosaurus--google.protobuf.Timestamp
 message Timestamp {
   // Represents seconds of UTC time since Unix epoch
 // 1970-01-01T00:00:00Z. Must be from 0001-01-01T00:00:00Z to
@@ -1909,7 +1909,7 @@ message Timestamp {
 
 Enum type definition.
 
-```protosaurus
+```protosaurus--google.protobuf.Enum
 message Enum {
   // Enum type name.
   string name = 1;
@@ -1936,7 +1936,7 @@ message Enum {
 
 Enum value definition.
 
-```protosaurus
+```protosaurus--google.protobuf.EnumValue
 message EnumValue {
   // Enum value name.
   string name = 1;
@@ -1959,7 +1959,7 @@ message EnumValue {
 
 A single field of a message type.
 
-```protosaurus
+```protosaurus--google.protobuf.Field
 message Field {
   // The field type.
   Kind kind = 1;
@@ -1999,7 +1999,7 @@ message Field {
 A protocol buffer option, which can be attached to a message, field,
 enumeration, etc.
 
-```protosaurus
+```protosaurus--google.protobuf.Option
 message Option {
   // The option's name. For protobuf built-in options (options defined in
 // descriptor.proto), this is the short name. For example, `"map_entry"`.
@@ -2026,7 +2026,7 @@ message Option {
 
 A protocol buffer message type.
 
-```protosaurus
+```protosaurus--google.protobuf.Type
 message Type {
   // The fully qualified message name.
   string name = 1;
@@ -2057,7 +2057,7 @@ Wrapper message for `bool`.
 
 The JSON representation for `BoolValue` is JSON `true` and `false`.
 
-```protosaurus
+```protosaurus--google.protobuf.BoolValue
 message BoolValue {
   // The bool value.
   bool value = 1;
@@ -2078,7 +2078,7 @@ Wrapper message for `bytes`.
 
 The JSON representation for `BytesValue` is JSON string.
 
-```protosaurus
+```protosaurus--google.protobuf.BytesValue
 message BytesValue {
   // The bytes value.
   bytes value = 1;
@@ -2099,7 +2099,7 @@ Wrapper message for `double`.
 
 The JSON representation for `DoubleValue` is JSON number.
 
-```protosaurus
+```protosaurus--google.protobuf.DoubleValue
 message DoubleValue {
   // The double value.
   double value = 1;
@@ -2120,7 +2120,7 @@ Wrapper message for `float`.
 
 The JSON representation for `FloatValue` is JSON number.
 
-```protosaurus
+```protosaurus--google.protobuf.FloatValue
 message FloatValue {
   // The float value.
   float value = 1;
@@ -2141,7 +2141,7 @@ Wrapper message for `int32`.
 
 The JSON representation for `Int32Value` is JSON number.
 
-```protosaurus
+```protosaurus--google.protobuf.Int32Value
 message Int32Value {
   // The int32 value.
   int32 value = 1;
@@ -2162,7 +2162,7 @@ Wrapper message for `int64`.
 
 The JSON representation for `Int64Value` is JSON string.
 
-```protosaurus
+```protosaurus--google.protobuf.Int64Value
 message Int64Value {
   // The int64 value.
   int64 value = 1;
@@ -2183,7 +2183,7 @@ Wrapper message for `string`.
 
 The JSON representation for `StringValue` is JSON string.
 
-```protosaurus
+```protosaurus--google.protobuf.StringValue
 message StringValue {
   // The string value.
   string value = 1;
@@ -2204,7 +2204,7 @@ Wrapper message for `uint32`.
 
 The JSON representation for `UInt32Value` is JSON number.
 
-```protosaurus
+```protosaurus--google.protobuf.UInt32Value
 message UInt32Value {
   // The uint32 value.
   uint32 value = 1;
@@ -2225,7 +2225,7 @@ Wrapper message for `uint64`.
 
 The JSON representation for `UInt64Value` is JSON string.
 
-```protosaurus
+```protosaurus--google.protobuf.UInt64Value
 message UInt64Value {
   // The uint64 value.
   uint64 value = 1;

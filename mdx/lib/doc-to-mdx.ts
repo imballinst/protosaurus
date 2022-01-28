@@ -68,7 +68,8 @@ interface ProtoService {
 
 export interface MessageData {
   name: string;
-  fullName: string;
+  hash: string;
+  packageName: string;
   messageStrings: string;
 }
 
@@ -89,10 +90,19 @@ export async function convertPackageToMdx(packagePath: string) {
 
     for (let i = 0; i < length; i++) {
       const message = file.messages[i];
+      // When a `longName` has a "dot" separator, then it's a sub message.
+      const messageNameArray = message.longName.split(".");
+
       messageData.push({
-        name: message.name,
-        fullName: message.fullName,
-        messageStrings: getMessageString(message),
+        name: message.longName,
+        hash: message.longName.toLowerCase().replace(".", ""),
+        packageName: file.package,
+        messageStrings: getMessageString({
+          message,
+          parentMessage:
+            messageNameArray.length > 1 ? messageNameArray[0] : undefined,
+          packageName: file.package,
+        }),
       });
     }
   }
@@ -112,19 +122,11 @@ export async function emitMessagesJson({
   const map: { [index: string]: string } = {};
 
   for (const message of messages) {
-    const lastPeriod = message.fullName.lastIndexOf(".");
-    let packageName = message.fullName;
-
-    if (lastPeriod > -1) {
-      packageName = packageName.slice(0, lastPeriod);
-    }
-
+    const { name, hash, packageName } = message;
     // For example:
     // If it's not WKT, then it's /docs/booking.v1#Booking.
     // If it's WKT, then it's /docs/wkt/google.protobuf#Int32.
-    map[message.name] = `/docs/${
-      isWkt ? "wkt/" : ""
-    }${packageName}#${message.name.toLowerCase()}`;
+    map[name] = `/docs/${isWkt ? "wkt/" : ""}${packageName}#${hash}`;
   }
 
   // Check for existence and create parent directories, if not exist.
@@ -159,6 +161,7 @@ ${messageStrings}`.trim()
   );
 }
 
+// Helper functions.
 async function createParentDirectoriesIfNotExist(filePath: string) {
   const parentDirectory = path.dirname(filePath);
 
@@ -170,10 +173,19 @@ async function createParentDirectoriesIfNotExist(filePath: string) {
   }
 }
 
-function getMessageString(message: ProtoMessage) {
+function getMessageString({
+  message,
+  parentMessage,
+  packageName,
+}: {
+  message: ProtoMessage;
+  parentMessage?: string;
+  packageName: string;
+}) {
   const fields = message.fields
     .map((field, idx) => getField(field, idx + 1))
     .join("\n");
+  let heading = "";
   let messageBlock = "";
 
   if (fields === "") {
@@ -182,17 +194,23 @@ function getMessageString(message: ProtoMessage) {
     messageBlock = `{\n${fields}\n}`;
   }
 
+  if (parentMessage) {
+    heading = `### ${parentMessage}.${message.name}`;
+  } else {
+    heading = `## ${message.name}`;
+  }
+
   return `<Definition>
 
 <DefinitionHeader name="message">
 
-## ${message.name}
+${heading}
 
 </DefinitionHeader>
 
 ${message.description.replace(/\//g, "\\/")}
 
-\`\`\`protosaurus
+\`\`\`protosaurus--${packageName}.${message.name}
 message ${message.name} ${messageBlock}
 \`\`\`
 

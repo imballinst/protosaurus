@@ -18,9 +18,9 @@ import Json from "@site/static/toc.json";
 
 </DefinitionHeader>
 
+Sample location.
 
-
-```protosaurus
+```protosaurus--location.v1.Location
 message Location {
   // Latitude of the location.
   int32 latitude = 1;
@@ -28,7 +28,7 @@ message Location {
   int32 longitude = 2;
   // Address (human-friendly string) of the location.
   string address = 3;
-  // 
+  // Sample message.
   InnerMessage inner_message = 4;
 }
 ```
@@ -39,15 +39,15 @@ message Location {
 
 <DefinitionHeader name="message">
 
-## InnerMessage
+### Location.InnerMessage
 
 </DefinitionHeader>
 
+Sample InnerMessage to test sub messages.
 
-
-```protosaurus
+```protosaurus--location.v1.InnerMessage
 message InnerMessage {
-  // 
+  // Sample integer.
   int32 hello = 1;
 }
 ```

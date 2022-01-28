@@ -14,16 +14,21 @@
  * limitations under the License.
  */
 
+// TODO(imballinst): convert to TypeScript.
+// If Docusaurus can't support TypeScript plugin files, then we need
+// to convert to JavaScript files first in the `prebuild` hook.
 const fs = require("fs");
 const path = require("path");
 
 const PATH_TO_DICTIONARY_FOLDER = path.join(__dirname, "dictionary");
 
-// TODO(imballinst): convert to TypeScript.
-// If Docusaurus can't support TypeScript plugin files, then we need
-// to convert to JavaScript files first in the `prebuild` hook.
+// This contains all "local" messages.
 const dictionary = {};
+// This contains all "sub" messages. Sub messages are messages inside a message.
+// This object is a key-value of `packageName`-`dictionary`.
+const subMessagesDictionary = {};
 let wkt = {};
+
 const entries = fs.readdirSync(PATH_TO_DICTIONARY_FOLDER, {
   encoding: "utf-8",
   withFileTypes: true,
@@ -40,10 +45,27 @@ for (const entry of entries) {
     const json = JSON.parse(file);
 
     if (basename === "wkt") {
+      // For well known types, we assume that they will never intersect (perhaps).
+      // TODO(imballinst): consider if there is a possibility of intersecting well-known types.
       wkt = json;
     } else {
+      // Whereas, for local types, there are chances that "local" messages inside a message
+      // can be a conflict to another. Hence, we need to group them by
       for (const key in json) {
-        dictionary[key] = json[key];
+        if (key.indexOf(".") > -1) {
+          const [parentMessage, name] = key.split(".");
+          const subMessagesDictionaryKey = `${basename}.${parentMessage}`;
+
+          // Sub message.
+          if (subMessagesDictionary[subMessagesDictionaryKey] === undefined) {
+            subMessagesDictionary[subMessagesDictionaryKey] = {};
+          }
+
+          subMessagesDictionary[subMessagesDictionaryKey][name] = json[key];
+        } else {
+          // Local message.
+          dictionary[key] = json[key];
+        }
       }
     }
   }
@@ -61,19 +83,30 @@ module.exports = () => {
         const code = pre.children[0];
         const codeArray = code.children[0].value.split("\n");
 
-        // TODO(imballinst): specify a better language code.
-        if (!code.properties?.className?.includes("language-protosaurus")) {
+        const matchingLanguage = code.properties?.className?.find((c) =>
+          // TODO(imballinst): specify a better language code, if this is unfit.
+          c.startsWith("language-protosaurus")
+        );
+
+        if (!matchingLanguage) {
           continue;
         }
 
+        const [, namespace] = matchingLanguage.split("--");
         const children = [];
+
         // Discard the last line from the code block (pure newline).
         for (let i = 0, length = codeArray.length - 1; i < length; i++) {
           const line = codeArray[i];
 
           // Find the matching type.
-          // Test against dictionary.
-          let match = getMatchingType(dictionary, line);
+          // First of all, we search by the "sub" message.
+          let match = getMatchingType(subMessagesDictionary[namespace], line);
+
+          // If no "sub" message found, test against dictionary.
+          if (match === undefined) {
+            match = getMatchingType(dictionary, line);
+          }
 
           // If still undefined, then match against wkt.
           if (match === undefined) {

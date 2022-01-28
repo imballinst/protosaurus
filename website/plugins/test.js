@@ -28,12 +28,12 @@ main();
 
 async function main() {
   // MDX v1, reference: https://github.com/mdx-js/mdx/blob/v1/docs/advanced/plugins.mdx.
-  // mdx.sync(md, {
-  //   rehypePlugins: [rehypeProtoPlugin],
-  // });
-  console.log(
-    mdx.sync(md, {
-      rehypePlugins: [rehypeProtoPlugin],
-    })
-  );
+  mdx.sync(md, {
+    rehypePlugins: [rehypeProtoPlugin],
+  });
+  // console.log(
+  //   mdx.sync(md, {
+  //     rehypePlugins: [rehypeProtoPlugin],
+  //   })
+  // );
 }

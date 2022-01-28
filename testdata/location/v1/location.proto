@@ -22,6 +22,7 @@ import "validate/validate.proto";
 
 package location.v1;
 
+// Sample location.
 message Location {
   // Latitude of the location.
   int32 latitude = 1 [(google.api.field_behavior) = REQUIRED];
@@ -31,9 +32,12 @@ message Location {
   // Address (human-friendly string) of the location.
   string address = 3 [(google.api.field_behavior) = REQUIRED, (validate.rules).string.min_len = 1];
 
+  // Sample InnerMessage to test sub messages.
   message InnerMessage {
+    // Sample integer.
     int32 hello = 1;
   }
 
+  // Sample message.
   InnerMessage inner_message = 4;
 }
