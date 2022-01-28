@@ -31,9 +31,4 @@ async function main() {
   mdx.sync(md, {
     rehypePlugins: [rehypeProtoPlugin],
   });
-  // console.log(
-  //   mdx.sync(md, {
-  //     rehypePlugins: [rehypeProtoPlugin],
-  //   })
-  // );
 }

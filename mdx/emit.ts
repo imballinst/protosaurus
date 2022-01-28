@@ -38,7 +38,6 @@ const PATH_TO_PLUGIN_FOLDER = path.join(
     promises.push(
       emitMessagesJson({
         filePath: pathToPlugin,
-        packageName: pkg.name,
         messages: pkg.messagesData,
       })
     );
@@ -47,7 +46,6 @@ const PATH_TO_PLUGIN_FOLDER = path.join(
   // Generate MDX and dictionary for well known types (WKT).
   const packages = await recursivelyReadDirectory({
     pathToDirectory: PATH_TO_GENERATED_WKT,
-    prefixToStrip: "wkt.",
   });
   const allWktMessageData: {
     [index: string]: MessageData[];
@@ -89,15 +87,12 @@ const PATH_TO_PLUGIN_FOLDER = path.join(
 async function recursivelyReadDirectory({
   pathToDirectory,
   excludedDirectories,
-  prefixToStrip,
 }: {
   // Path to the directory to read.
   pathToDirectory: string;
   // Directories to exclude. Mostly this is to stop reading WKT JSONs
   // when we want to just read the non-WKT JSONs.
   excludedDirectories?: string[];
-  // Since we are transforming dire
-  prefixToStrip?: string;
 }): Promise<PackageData[]> {
   const allPackages: PackageData[] = [];
 
@@ -118,11 +113,6 @@ async function recursivelyReadDirectory({
       const packageMessages = await convertPackageToMdx(pathToEntry);
       const packageName = pathToEntry.slice(PATH_TO_GENERATED.length);
 
-      let name = `${path.dirname(packageName).slice(1).replace(/\//g, ".")}`;
-      if (prefixToStrip) {
-        name = name.slice(prefixToStrip.length);
-      }
-
       allPackages.push(...packageMessages);
       continue;
     }
@@ -131,7 +121,6 @@ async function recursivelyReadDirectory({
     const packageMessages = await recursivelyReadDirectory({
       pathToDirectory: pathToEntry,
       excludedDirectories,
-      prefixToStrip,
     });
     allPackages.push(...packageMessages);
   }

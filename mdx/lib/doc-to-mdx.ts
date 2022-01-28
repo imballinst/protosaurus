@@ -68,6 +68,7 @@ interface ProtoService {
 
 export interface MessageData {
   name: string;
+  packageName: string;
   hash: string;
   messageStrings: string;
 }
@@ -100,6 +101,7 @@ export async function convertPackageToMdx(packagePath: string) {
 
       messagesData.push({
         name: message.longName,
+        packageName: file.package,
         hash: message.longName.toLowerCase().replace(".", ""),
         messageStrings: getMessageString({
           message,
@@ -122,18 +124,16 @@ export async function convertPackageToMdx(packagePath: string) {
 export async function emitMessagesJson({
   filePath,
   messages,
-  packageName,
   isWkt,
 }: {
   filePath: string;
   messages: MessageData[];
-  packageName?: string;
   isWkt?: boolean;
 }) {
   const map: { [index: string]: string } = {};
 
   for (const message of messages) {
-    const { name, hash } = message;
+    const { name, packageName, hash } = message;
     // For example:
     // If it's not WKT, then it's /docs/booking.v1#Booking.
     // If it's WKT, then it's /docs/wkt/google.protobuf#Int32.
