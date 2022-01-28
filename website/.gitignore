@@ -3,6 +3,8 @@
 
 # Production
 /build
+# All docs are generated, so we don't need to store them.
+docs/
 
 # Generated files
 .docusaurus
