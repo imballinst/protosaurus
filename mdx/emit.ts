@@ -5,12 +5,8 @@ import {
   emitMdx,
   emitMessagesJson,
   MessageData,
+  PackageData,
 } from "./lib/doc-to-mdx";
-
-interface PackageData {
-  name: string;
-  messages: MessageData[];
-}
 
 // These are meant only to be ran from the Makefile to take effect of the PWD environment variable.
 // This is because, after being compiled to `.js` files, they go into a deeper nested directories,
@@ -28,27 +24,28 @@ const PATH_TO_PLUGIN_FOLDER = path.join(
 
 (async () => {
   // Generate MDX and dictionary for local types.
-  const packageMessages = await recursivelyReadDirectory({
+  const localPackages = await recursivelyReadDirectory({
     pathToDirectory: PATH_TO_GENERATED,
     excludedDirectories: [PATH_TO_GENERATED_WKT],
   });
   const promises = [];
 
-  for (const p of packageMessages) {
-    const pathToMdx = `${PATH_TO_MDX_FOLDER}/${p.name}`;
-    const pathToPlugin = `${PATH_TO_PLUGIN_FOLDER}/${p.name}`;
+  for (const pkg of localPackages) {
+    const pathToMdx = `${PATH_TO_MDX_FOLDER}/${pkg.name}`;
+    const pathToPlugin = `${PATH_TO_PLUGIN_FOLDER}/${pkg.name}`;
 
-    promises.push(emitMdx(pathToMdx, p.messages));
+    promises.push(emitMdx(pathToMdx, pkg.messagesData));
     promises.push(
       emitMessagesJson({
         filePath: pathToPlugin,
-        messages: p.messages,
+        packageName: pkg.name,
+        messages: pkg.messagesData,
       })
     );
   }
 
   // Generate MDX and dictionary for well known types (WKT).
-  const wktMessages = await recursivelyReadDirectory({
+  const packages = await recursivelyReadDirectory({
     pathToDirectory: PATH_TO_GENERATED_WKT,
     prefixToStrip: "wkt.",
   });
@@ -56,15 +53,16 @@ const PATH_TO_PLUGIN_FOLDER = path.join(
     [index: string]: MessageData[];
   } = {};
 
-  for (const p of wktMessages) {
-    if (allWktMessageData[p.name] === undefined) {
-      allWktMessageData[p.name] = [];
+  for (const pkg of packages) {
+    if (allWktMessageData[pkg.name] === undefined) {
+      allWktMessageData[pkg.name] = [];
     }
 
-    allWktMessageData[p.name].push(...p.messages);
+    allWktMessageData[pkg.name].push(...pkg.messagesData);
   }
 
   // Render MDX one-by-one.
+  // While doing so, we also merge all well known types in an array.
   const allWktMessages: MessageData[] = [];
 
   for (const key in allWktMessageData) {
@@ -93,14 +91,18 @@ async function recursivelyReadDirectory({
   excludedDirectories,
   prefixToStrip,
 }: {
+  // Path to the directory to read.
   pathToDirectory: string;
+  // Directories to exclude. Mostly this is to stop reading WKT JSONs
+  // when we want to just read the non-WKT JSONs.
   excludedDirectories?: string[];
+  // Since we are transforming dire
   prefixToStrip?: string;
 }): Promise<PackageData[]> {
-  const allMessages: PackageData[] = [];
+  const allPackages: PackageData[] = [];
 
   if (excludedDirectories && excludedDirectories.includes(pathToDirectory)) {
-    return allMessages;
+    return allPackages;
   }
 
   const entries = await readdir(pathToDirectory, {
@@ -121,10 +123,7 @@ async function recursivelyReadDirectory({
         name = name.slice(prefixToStrip.length);
       }
 
-      allMessages.push({
-        name,
-        messages: packageMessages,
-      });
+      allPackages.push(...packageMessages);
       continue;
     }
 
@@ -134,8 +133,8 @@ async function recursivelyReadDirectory({
       excludedDirectories,
       prefixToStrip,
     });
-    allMessages.push(...packageMessages);
+    allPackages.push(...packageMessages);
   }
 
-  return allMessages;
+  return allPackages;
 }

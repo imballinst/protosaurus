@@ -69,8 +69,12 @@ interface ProtoService {
 export interface MessageData {
   name: string;
   hash: string;
-  packageName: string;
   messageStrings: string;
+}
+
+export interface PackageData {
+  name: string;
+  messagesData: MessageData[];
 }
 
 // Main exported functions.
@@ -79,7 +83,7 @@ export async function convertPackageToMdx(packagePath: string) {
   const json: {
     files: Protofile[];
   } = JSON.parse(content);
-  const messageData: MessageData[] = [];
+  const packageData: PackageData[] = [];
 
   for (const file of json.files) {
     if (!file.messages) {
@@ -87,16 +91,16 @@ export async function convertPackageToMdx(packagePath: string) {
     }
 
     const length = file.messages.length;
+    const messagesData: MessageData[] = [];
 
     for (let i = 0; i < length; i++) {
       const message = file.messages[i];
       // When a `longName` has a "dot" separator, then it's a sub message.
       const messageNameArray = message.longName.split(".");
 
-      messageData.push({
+      messagesData.push({
         name: message.longName,
         hash: message.longName.toLowerCase().replace(".", ""),
-        packageName: file.package,
         messageStrings: getMessageString({
           message,
           parentMessage:
@@ -105,24 +109,31 @@ export async function convertPackageToMdx(packagePath: string) {
         }),
       });
     }
+
+    packageData.push({
+      name: file.package,
+      messagesData,
+    });
   }
 
-  return messageData;
+  return packageData;
 }
 
 export async function emitMessagesJson({
   filePath,
   messages,
+  packageName,
   isWkt,
 }: {
   filePath: string;
   messages: MessageData[];
+  packageName?: string;
   isWkt?: boolean;
 }) {
   const map: { [index: string]: string } = {};
 
   for (const message of messages) {
-    const { name, hash, packageName } = message;
+    const { name, hash } = message;
     // For example:
     // If it's not WKT, then it's /docs/booking.v1#Booking.
     // If it's WKT, then it's /docs/wkt/google.protobuf#Int32.
