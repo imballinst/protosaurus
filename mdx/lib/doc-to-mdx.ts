@@ -142,9 +142,6 @@ export async function emitMessagesJson({
     map[name] = `/docs/${isWkt ? "wkt/" : ""}${packageName}#${hash}`;
   }
 
-  // Check for existence and create parent directories, if not exist.
-  await createDirectoryIfNotExist(filePath);
-
   return writeFile(`${filePath}.json`, JSON.stringify(map));
 }
 
