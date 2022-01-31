@@ -1,10 +1,11 @@
-import { readdir } from "fs-extra";
+import { readdir, rm, stat } from "fs-extra";
 import path from "path";
 import {
   convertPackageToMdx,
+  createDirectoryIfNotExist,
+  emitCategoryMetadata,
   emitMdx,
   emitMessagesJson,
-  MessageData,
   PackageData,
 } from "./lib/doc-to-mdx";
 
@@ -17,12 +18,35 @@ const PATH_TO_GENERATED_WKT = path.join(
   "../website/generated/wkt"
 );
 const PATH_TO_MDX_FOLDER = path.join(process.env.PWD!, "../website/docs");
-const PATH_TO_PLUGIN_FOLDER = path.join(
+const PATH_TO_PLUGIN_DICTIONARY_FOLDER = path.join(
   process.env.PWD!,
   "../website/plugins/proto-messages/dictionary"
 );
+const PATH_TO_WKT_MDX_FOLDER = `${PATH_TO_MDX_FOLDER}/wkt`;
+
+const PRESERVED_DOCS_FILES = ["intro.mdx"];
+
+// Labels for the local types and the well-known types.
+const CATEGORY_LABELS = {
+  wkt: "Well Known Types",
+};
 
 (async () => {
+  // This does 2 things:
+  // 1. Delete all files except intro.mdx in `PATH_TO_MDX_FOLDER`.
+  // 2. Delete the dictionary folder `PATH_TO_PLUGIN_DICTIONARY_FOLDER`.
+  await Promise.all([
+    deleteDirectoryEntries(PATH_TO_MDX_FOLDER, PRESERVED_DOCS_FILES),
+    deleteDirectoryEntries(PATH_TO_PLUGIN_DICTIONARY_FOLDER),
+  ]);
+
+  // Re-create the folders.
+  await Promise.all([
+    createDirectoryIfNotExist(PATH_TO_PLUGIN_DICTIONARY_FOLDER),
+    createDirectoryIfNotExist(PATH_TO_MDX_FOLDER),
+    createDirectoryIfNotExist(PATH_TO_WKT_MDX_FOLDER),
+  ]);
+
   // Generate MDX and dictionary for local types.
   const localPackages = await recursivelyReadDirectory({
     pathToDirectory: PATH_TO_GENERATED,
@@ -32,9 +56,9 @@ const PATH_TO_PLUGIN_FOLDER = path.join(
 
   for (const pkg of localPackages) {
     const pathToMdx = `${PATH_TO_MDX_FOLDER}/${pkg.name}`;
-    const pathToPlugin = `${PATH_TO_PLUGIN_FOLDER}/${pkg.name}`;
+    const pathToPlugin = `${PATH_TO_PLUGIN_DICTIONARY_FOLDER}/${pkg.name}`;
 
-    promises.push(emitMdx(pathToMdx, pkg.messagesData));
+    promises.push(emitMdx(pathToMdx, pkg));
     promises.push(
       emitMessagesJson({
         filePath: pathToPlugin,
@@ -44,35 +68,34 @@ const PATH_TO_PLUGIN_FOLDER = path.join(
   }
 
   // Generate MDX and dictionary for well known types (WKT).
-  const packages = await recursivelyReadDirectory({
+  const wktPackages = await recursivelyReadDirectory({
     pathToDirectory: PATH_TO_GENERATED_WKT,
   });
-  const allWktMessageData: {
-    [index: string]: MessageData[];
-  } = {};
+  const wktPackagesDictionary: Record<string, PackageData> = {};
 
-  for (const pkg of packages) {
-    if (allWktMessageData[pkg.name] === undefined) {
-      allWktMessageData[pkg.name] = [];
+  for (const pkg of wktPackages) {
+    if (wktPackagesDictionary[pkg.name] === undefined) {
+      wktPackagesDictionary[pkg.name] = {
+        ...pkg,
+        messagesData: [],
+      };
     }
 
-    allWktMessageData[pkg.name].push(...pkg.messagesData);
+    wktPackagesDictionary[pkg.name].messagesData.push(...pkg.messagesData);
   }
 
   // Render MDX one-by-one.
-  // While doing so, we also merge all well known types in an array.
-  const allWktMessages: MessageData[] = [];
+  const allWktPackages = Object.values(wktPackagesDictionary);
+  const allMdxPromises = allWktPackages.map((pkg) => {
+    const pathToMdx = `${PATH_TO_WKT_MDX_FOLDER}/${pkg.name}`;
+    return emitMdx(pathToMdx, pkg);
+  });
 
-  for (const key in allWktMessageData) {
-    // We want to merge all WKTs in one file so it's not scattered.
-    const pathToMdx = `${PATH_TO_MDX_FOLDER}/wkt/${key}`;
-
-    allWktMessages.push(...allWktMessageData[key]);
-    promises.push(emitMdx(pathToMdx, allWktMessageData[key]));
-  }
+  promises.push(...allMdxPromises);
 
   // Render all WKT JSON in one file.
-  const pathToWktFile = `${PATH_TO_PLUGIN_FOLDER}/wkt`;
+  const allWktMessages = allWktPackages.map((p) => p.messagesData).flat();
+  const pathToWktFile = `${PATH_TO_PLUGIN_DICTIONARY_FOLDER}/wkt`;
   promises.push(
     emitMessagesJson({
       filePath: pathToWktFile,
@@ -81,9 +104,16 @@ const PATH_TO_PLUGIN_FOLDER = path.join(
     })
   );
 
+  // Create the metadata file.
+  // Add more to this array as needed later.
+  promises.push([
+    emitCategoryMetadata(PATH_TO_WKT_MDX_FOLDER, CATEGORY_LABELS.wkt),
+  ]);
+
   await Promise.all(promises);
 })();
 
+// Helper functions.
 async function recursivelyReadDirectory({
   pathToDirectory,
   excludedDirectories,
@@ -110,20 +140,48 @@ async function recursivelyReadDirectory({
 
     // If file, read its contents.
     if (entry.isFile()) {
-      const packageMessages = await convertPackageToMdx(pathToEntry);
-      const packageName = pathToEntry.slice(PATH_TO_GENERATED.length);
+      const packages = await convertPackageToMdx(pathToEntry);
 
-      allPackages.push(...packageMessages);
+      allPackages.push(...packages);
       continue;
     }
 
     // Otherwise, keep reading recursively.
-    const packageMessages = await recursivelyReadDirectory({
+    const packages = await recursivelyReadDirectory({
       pathToDirectory: pathToEntry,
       excludedDirectories,
     });
-    allPackages.push(...packageMessages);
+    allPackages.push(...packages);
   }
 
   return allPackages;
+}
+
+async function deleteDirectoryEntries(dir: string, exception?: string[]) {
+  try {
+    // Check for directory existence.
+    // If it doesn't exist, this will throw an error.
+    await stat(dir);
+
+    // If directory exists, proceed.
+    const entries = await readdir(dir, {
+      encoding: "utf-8",
+      withFileTypes: true,
+    });
+
+    // Delete without exception.
+    if (exception === undefined) {
+      return entries.map((entry) =>
+        rm(`${dir}/${entry.name}`, { recursive: true })
+      );
+    }
+
+    // Delete with exceptions.
+    const deletedEntries = entries.filter(
+      (entry) => !exception.includes(entry.name)
+    );
+    return deletedEntries.map((entry) =>
+      rm(`${dir}/${entry.name}`, { recursive: true })
+    );
+  } catch (err) {}
 }

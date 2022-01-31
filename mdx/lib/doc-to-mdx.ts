@@ -75,6 +75,7 @@ export interface MessageData {
 
 export interface PackageData {
   name: string;
+  description: string;
   messagesData: MessageData[];
 }
 
@@ -114,6 +115,7 @@ export async function convertPackageToMdx(packagePath: string) {
 
     packageData.push({
       name: file.package,
+      description: file.description,
       messagesData,
     });
   }
@@ -141,17 +143,16 @@ export async function emitMessagesJson({
   }
 
   // Check for existence and create parent directories, if not exist.
-  await createParentDirectoriesIfNotExist(filePath);
+  await createDirectoryIfNotExist(filePath);
 
   return writeFile(`${filePath}.json`, JSON.stringify(map));
 }
 
-export async function emitMdx(filePath: string, messages: MessageData[]) {
+export async function emitMdx(filePath: string, pkg: PackageData) {
   // Separate each message with double new lines.
-  const messageStrings = messages.map((m) => m.messageStrings).join("\n\n");
-
-  // Check for existence and create parent directories, if not exist.
-  await createParentDirectoriesIfNotExist(filePath);
+  const messageStrings = pkg.messagesData
+    .map((m) => m.messageStrings)
+    .join("\n\n");
 
   return writeFile(
     `${filePath}.mdx`,
@@ -160,27 +161,50 @@ export async function emitMdx(filePath: string, messages: MessageData[]) {
 ---
 
 import ReferenceWrapper from "@theme/ReferenceWrapper";
-import DefinitionHeader from "@theme/DefinitionHeader";
+import Description from "@theme/Description";
 import Definition from "@theme/Definition";
+import DefinitionHeader from "@theme/DefinitionHeader";
 import RpcDefinition from "@theme/RpcDefinition";
 import RpcDefinitionHeader from "@theme/RpcDefinitionHeader";
 import RpcDefinitionDescription from "@theme/RpcDefinitionDescription";
-import Description from "@theme/Description";
+
+${getPackageDescription(pkg)}
 
 ${messageStrings}\n`.trimStart()
   );
 }
 
-// Helper functions.
-async function createParentDirectoriesIfNotExist(filePath: string) {
-  const parentDirectory = path.dirname(filePath);
+export async function emitCategoryMetadata(directory: string, label: string) {
+  const metadata = `
+label: ${label}
+  `.trim();
 
+  return writeFile(`${directory}/_category_.yml`, metadata);
+}
+
+export async function createDirectoryIfNotExist(directory: string) {
   try {
-    await fs.stat(parentDirectory);
+    await fs.stat(directory);
   } catch (err) {
     // Not found.
-    await fs.mkdirp(parentDirectory);
+    await fs.mkdirp(directory);
   }
+}
+
+// Helper functions.
+
+function getPackageDescription(pkg: PackageData) {
+  if (pkg.description === "") {
+    return "";
+  }
+
+  return `
+<Description>
+
+${pkg.description}
+
+</Description>
+  `.trim();
 }
 
 function getMessageString({
