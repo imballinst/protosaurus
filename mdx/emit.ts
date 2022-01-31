@@ -33,6 +33,8 @@ const PRESERVED_DOCS_FILES = ["intro.mdx"];
 // Labels for the local types and the well-known types.
 const CATEGORY_LABELS = {
   wkt: "Well Known Types",
+  messages: "Messages",
+  services: "Services",
 };
 
 (async () => {
@@ -138,6 +140,8 @@ const CATEGORY_LABELS = {
   // Add more to this array as needed later.
   promises.push([
     emitCategoryMetadata(PATH_TO_WKT_MDX_FOLDER, CATEGORY_LABELS.wkt),
+    emitCategoryMetadata(PATH_TO_MESSAGES_MDX_FOLDER, CATEGORY_LABELS.messages),
+    emitCategoryMetadata(PATH_TO_SERVICES_MDX_FOLDER, CATEGORY_LABELS.services),
   ]);
 
   await Promise.all(promises);
