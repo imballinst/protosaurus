@@ -143,7 +143,7 @@ export async function emitMessagesJson({
   }
 
   // Check for existence and create parent directories, if not exist.
-  await createParentDirectoriesIfNotExist(filePath);
+  await createDirectoryIfNotExist(filePath);
 
   return writeFile(`${filePath}.json`, JSON.stringify(map));
 }
@@ -153,9 +153,6 @@ export async function emitMdx(filePath: string, pkg: PackageData) {
   const messageStrings = pkg.messagesData
     .map((m) => m.messageStrings)
     .join("\n\n");
-
-  // Check for existence and create parent directories, if not exist.
-  await createParentDirectoriesIfNotExist(filePath);
 
   return writeFile(
     `${filePath}.mdx`,
@@ -177,17 +174,24 @@ ${messageStrings}\n`.trimStart()
   );
 }
 
-// Helper functions.
-async function createParentDirectoriesIfNotExist(filePath: string) {
-  const parentDirectory = path.dirname(filePath);
+export async function emitCategoryMetadata(directory: string, label: string) {
+  const metadata = `
+label: ${label}
+  `.trim();
 
+  return writeFile(`${directory}/_category_.yml`, metadata);
+}
+
+export async function createDirectoryIfNotExist(directory: string) {
   try {
-    await fs.stat(parentDirectory);
+    await fs.stat(directory);
   } catch (err) {
     // Not found.
-    await fs.mkdirp(parentDirectory);
+    await fs.mkdirp(directory);
   }
 }
+
+// Helper functions.
 
 function getPackageDescription(pkg: PackageData) {
   if (pkg.description === "") {

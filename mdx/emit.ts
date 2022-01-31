@@ -2,9 +2,10 @@ import { readdir, rm, stat } from "fs-extra";
 import path from "path";
 import {
   convertPackageToMdx,
+  createDirectoryIfNotExist,
+  emitCategoryMetadata,
   emitMdx,
   emitMessagesJson,
-  MessageData,
   PackageData,
 } from "./lib/doc-to-mdx";
 
@@ -22,7 +23,14 @@ const PATH_TO_PLUGIN_DICTIONARY_FOLDER = path.join(
   "../website/plugins/proto-messages/dictionary"
 );
 
+const PATH_TO_WKT_MDX_FOLDER = `${PATH_TO_MDX_FOLDER}/wkt`;
+
 const PRESERVED_DOCS_FILES = ["intro.mdx"];
+
+// Labels for the local types and the well-known types.
+const CATEGORY_LABELS = {
+  wkt: "Well Known Types",
+};
 
 (async () => {
   // This does 2 things:
@@ -31,6 +39,13 @@ const PRESERVED_DOCS_FILES = ["intro.mdx"];
   await Promise.all([
     deleteDirectoryEntries(PATH_TO_MDX_FOLDER, PRESERVED_DOCS_FILES),
     deleteDirectoryEntries(PATH_TO_PLUGIN_DICTIONARY_FOLDER),
+  ]);
+
+  // Re-create the folders.
+  await Promise.all([
+    createDirectoryIfNotExist(PATH_TO_PLUGIN_DICTIONARY_FOLDER),
+    createDirectoryIfNotExist(PATH_TO_MDX_FOLDER),
+    createDirectoryIfNotExist(PATH_TO_WKT_MDX_FOLDER),
   ]);
 
   // Generate MDX and dictionary for local types.
@@ -57,17 +72,30 @@ const PRESERVED_DOCS_FILES = ["intro.mdx"];
   const wktPackages = await recursivelyReadDirectory({
     pathToDirectory: PATH_TO_GENERATED_WKT,
   });
-  const allWktMessages: MessageData[] = [];
+  const wktPackagesDictionary: Record<string, PackageData> = {};
 
   for (const pkg of wktPackages) {
-    // We want to merge all WKTs in one file so it's not scattered.
-    const pathToMdx = `${PATH_TO_MDX_FOLDER}/wkt/${[pkg.name]}`;
+    if (wktPackagesDictionary[pkg.name] === undefined) {
+      wktPackagesDictionary[pkg.name] = {
+        ...pkg,
+        messagesData: [],
+      };
+    }
 
-    allWktMessages.push(...pkg.messagesData);
-    promises.push(emitMdx(pathToMdx, pkg));
+    wktPackagesDictionary[pkg.name].messagesData.push(...pkg.messagesData);
   }
 
+  // Render MDX one-by-one.
+  const allWktPackages = Object.values(wktPackagesDictionary);
+  const allMdxPromises = allWktPackages.map((pkg) => {
+    const pathToMdx = `${PATH_TO_WKT_MDX_FOLDER}/${pkg.name}`;
+    return emitMdx(pathToMdx, pkg);
+  });
+
+  promises.push(...allMdxPromises);
+
   // Render all WKT JSON in one file.
+  const allWktMessages = allWktPackages.map((p) => p.messagesData).flat();
   const pathToWktFile = `${PATH_TO_PLUGIN_DICTIONARY_FOLDER}/wkt`;
   promises.push(
     emitMessagesJson({
@@ -76,6 +104,11 @@ const PRESERVED_DOCS_FILES = ["intro.mdx"];
       isWkt: true,
     })
   );
+
+  // Create the metadatas.
+  promises.push([
+    emitCategoryMetadata(PATH_TO_WKT_MDX_FOLDER, CATEGORY_LABELS.wkt),
+  ]);
 
   await Promise.all(promises);
 })();
