@@ -181,6 +181,7 @@ import DefinitionHeader from "@theme/DefinitionHeader";
 import RpcDefinition from "@theme/RpcDefinition";
 import RpcDefinitionHeader from "@theme/RpcDefinitionHeader";
 import RpcDefinitionDescription from "@theme/RpcDefinitionDescription";
+import RpcMethodText from "@theme/RpcMethodText";
 
 ${getPackageDescription(pkg)}
 
@@ -229,7 +230,19 @@ export function getServiceString({
     );
   }
 
-  return serviceBody.join("\n\n");
+  return `<Definition>
+
+<DefinitionHeader name="service">
+
+## ${service.name}
+
+</DefinitionHeader>
+
+${service.description}
+
+${serviceBody.join("\n\n")}
+
+</Definition>\n\n`;
 }
 
 // Helper functions.
@@ -252,47 +265,66 @@ function getMessageString({
   message,
   parentMessage,
   packageName,
+  isLongVersion = true,
 }: {
   message: ProtoMessage;
   parentMessage?: string;
+  isLongVersion?: boolean;
   packageName: string;
 }) {
   const messageBody = getMessageBody({
     packageName,
     message,
-    withDescription: true,
+    isLongVersion,
   });
-  let heading = "";
-
-  if (parentMessage) {
-    // Set heading 3 for submessages.
-    heading = `### ${parentMessage}.${message.name}`;
-  } else {
-    // Otherwise, heading 2.
-    heading = `## ${message.name}`;
-  }
 
   return `<Definition>
 
-<DefinitionHeader name="message">
-
-${heading}
-
-</DefinitionHeader>
+${getDescription(message.name, parentMessage, isLongVersion)}
 
 ${messageBody}
 
 </Definition>`;
 }
 
+function getDescription(
+  name: string,
+  parentMessage: string | undefined,
+  isLongVersion: boolean
+) {
+  if (!isLongVersion) {
+    return "";
+  }
+
+  let heading = name;
+
+  if (isLongVersion) {
+    if (parentMessage) {
+      // Set heading 3 for submessages.
+      heading = `### ${parentMessage}.${name}`;
+    } else {
+      // Otherwise, heading 2.
+      heading = `## ${name}`;
+    }
+  }
+
+  return `
+<DefinitionHeader name="message">
+
+${heading}
+
+</DefinitionHeader>
+  `.trim();
+}
+
 function getMessageBody({
   packageName,
   message,
-  withDescription,
+  isLongVersion,
 }: {
   packageName: string;
   message: ProtoMessage;
-  withDescription?: boolean;
+  isLongVersion?: boolean;
 }) {
   const fields = message.fields
     .map((field, idx) => getField(field, idx + 1))
@@ -306,7 +338,7 @@ function getMessageBody({
     messageBlock = `{\n${fields}\n}`;
   }
 
-  if (withDescription) {
+  if (isLongVersion) {
     description = `${message.description.replace(/\//g, "\\/")}`;
   }
 
@@ -384,15 +416,27 @@ function getServiceMethodString({
 
 </RpcDefinitionHeader>
 
+<RpcDefinitionDescription>
+
 ${method.description}
 
 <RpcMethodText type="request" isStream={${requestStreaming}}>${requestType}</RpcMethodText>
 
-${getMessageString({ message: requestMessage, packageName })}
+${getMessageString({
+  message: requestMessage,
+  packageName,
+  isLongVersion: false,
+})}
 
 <RpcMethodText type="response" isStream={${responseStreaming}}>${responseType}</RpcMethodText>
 
-${getMessageString({ message: responseMessage, packageName })}
+${getMessageString({
+  message: responseMessage,
+  packageName,
+  isLongVersion: false,
+})}
+
+</RpcDefinitionDescription>
 
 </RpcDefinition>
   `.trim();

@@ -61,12 +61,17 @@
   padding: 8px;
 }
 
+.rpc-definition-description > .definition > .definition-title {
+  margin-top: 0;
+}
+
 .rpc-definition-description > p:last-child {
   margin-bottom: 0;
 }
 
 .rpc-method-options {
   color: var(--ifm-color-gray-600);
+  margin-right: 8px;
 }
 
 .rpc-method-options-stream {
