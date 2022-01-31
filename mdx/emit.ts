@@ -22,7 +22,6 @@ const PATH_TO_PLUGIN_DICTIONARY_FOLDER = path.join(
   process.env.PWD!,
   "../website/plugins/proto-messages/dictionary"
 );
-
 const PATH_TO_WKT_MDX_FOLDER = `${PATH_TO_MDX_FOLDER}/wkt`;
 
 const PRESERVED_DOCS_FILES = ["intro.mdx"];
