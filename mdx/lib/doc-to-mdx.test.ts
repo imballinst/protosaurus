@@ -14,7 +14,9 @@ const BOOKING_MDX_EXPECTED_RESULT_PATH = path.join(
 );
 
 test("convertPackageToMdx", async () => {
-  const packages = await convertPackageToMdx(BOOKING_DOC_JSON_PATH);
+  const { packageData: packages } = await convertPackageToMdx(
+    BOOKING_DOC_JSON_PATH
+  );
   const allMessages: string[] = [];
 
   for (const pkg of packages) {

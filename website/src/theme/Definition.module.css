@@ -64,3 +64,13 @@
 .rpc-definition-description > p:last-child {
   margin-bottom: 0;
 }
+
+.rpc-method-options {
+  color: var(--ifm-color-gray-600);
+}
+
+.rpc-method-options-stream {
+  border: 1px solid var(--ifm-color-gray-600);
+  border-radius: 16px;
+  color: var(--ifm-color-info);
+}

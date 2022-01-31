@@ -18,7 +18,7 @@ interface Protofile {
   services: ProtoService[];
 }
 
-interface ProtoMessage {
+export interface ProtoMessage {
   name: string;
   longName: string;
   fullName: string;
@@ -46,37 +46,48 @@ interface Field {
   };
 }
 
+interface ServiceMethod {
+  name: string;
+  description: string;
+  requestType: string;
+  requestLongType: string;
+  requestFullType: string;
+  requestStreaming: boolean;
+  responseType: string;
+  responseLongType: string;
+  responseFullType: string;
+  responseStreaming: boolean;
+  options: any;
+}
+
 interface ProtoService {
   name: string;
   longName: string;
   fullName: string;
   description: string;
-  methods: {
-    name: string;
-    description: string;
-    requestType: string;
-    requestLongType: string;
-    requestFullType: string;
-    requestStreaming: boolean;
-    responseType: string;
-    responseLongType: string;
-    responseFullType: string;
-    responseStreaming: boolean;
-    options: any;
-  };
+  methods: ServiceMethod[];
 }
 
 export interface MessageData {
   name: string;
   packageName: string;
   hash: string;
-  messageStrings: string;
+  body: string;
+}
+
+export interface ServiceData {
+  name: string;
+  packageName: string;
+  body: string;
 }
 
 export interface PackageData {
   name: string;
   description: string;
   messagesData: MessageData[];
+  servicesData: ServiceData[];
+  // Raw proto services.
+  rawProtoServices: ProtoService[];
 }
 
 // Main exported functions.
@@ -86,6 +97,7 @@ export async function convertPackageToMdx(packagePath: string) {
     files: Protofile[];
   } = JSON.parse(content);
   const packageData: PackageData[] = [];
+  const rawProtoMessages: ProtoMessage[] = [];
 
   for (const file of json.files) {
     if (!file.messages) {
@@ -104,7 +116,7 @@ export async function convertPackageToMdx(packagePath: string) {
         name: message.longName,
         packageName: file.package,
         hash: message.longName.toLowerCase().replace(".", ""),
-        messageStrings: getMessageString({
+        body: getMessageString({
           message,
           parentMessage:
             messageNameArray.length > 1 ? messageNameArray[0] : undefined,
@@ -117,10 +129,13 @@ export async function convertPackageToMdx(packagePath: string) {
       name: file.package,
       description: file.description,
       messagesData,
+      servicesData: [],
+      rawProtoServices: file.services,
     });
+    rawProtoMessages.push(...file.messages);
   }
 
-  return packageData;
+  return { packageData, rawProtoMessages };
 }
 
 export async function emitMessagesJson({
@@ -137,22 +152,21 @@ export async function emitMessagesJson({
   for (const message of messages) {
     const { name, packageName, hash } = message;
     // For example:
-    // If it's not WKT, then it's /docs/booking.v1#Booking.
+    // If it's not WKT, then it's /docs/messages/booking.v1#Booking.
     // If it's WKT, then it's /docs/wkt/google.protobuf#Int32.
-    map[name] = `/docs/${isWkt ? "wkt/" : ""}${packageName}#${hash}`;
+    map[name] = `/docs/${isWkt ? "wkt" : "messages"}/${packageName}#${hash}`;
   }
-
-  // Check for existence and create parent directories, if not exist.
-  await createDirectoryIfNotExist(filePath);
 
   return writeFile(`${filePath}.json`, JSON.stringify(map));
 }
 
-export async function emitMdx(filePath: string, pkg: PackageData) {
-  // Separate each message with double new lines.
-  const messageStrings = pkg.messagesData
-    .map((m) => m.messageStrings)
-    .join("\n\n");
+export async function emitMdx(
+  filePath: string,
+  pkg: PackageData,
+  type: "messagesData" | "servicesData"
+) {
+  // Separate each message/service with double new lines.
+  const body = pkg[type].map((m) => m.body).join("\n\n");
 
   return writeFile(
     `${filePath}.mdx`,
@@ -170,7 +184,7 @@ import RpcDefinitionDescription from "@theme/RpcDefinitionDescription";
 
 ${getPackageDescription(pkg)}
 
-${messageStrings}\n`.trimStart()
+${body}\n`.trimStart()
   );
 }
 
@@ -191,8 +205,34 @@ export async function createDirectoryIfNotExist(directory: string) {
   }
 }
 
-// Helper functions.
+export function getServiceString({
+  service,
+  packageName,
+  allProtoMessages,
+  allWktMessages,
+}: {
+  service: ProtoService;
+  packageName: string;
+  allProtoMessages: Record<string, ProtoMessage>;
+  allWktMessages: Record<string, ProtoMessage>;
+}) {
+  const serviceBody: string[] = [];
 
+  for (const method of service.methods) {
+    serviceBody.push(
+      getServiceMethodString({
+        method,
+        packageName,
+        allProtoMessages,
+        allWktMessages,
+      })
+    );
+  }
+
+  return serviceBody.join("\n\n");
+}
+
+// Helper functions.
 function getPackageDescription(pkg: PackageData) {
   if (pkg.description === "") {
     return "";
@@ -207,6 +247,7 @@ ${pkg.description}
   `.trim();
 }
 
+// Messages.
 function getMessageString({
   message,
   parentMessage,
@@ -216,17 +257,12 @@ function getMessageString({
   parentMessage?: string;
   packageName: string;
 }) {
-  const fields = message.fields
-    .map((field, idx) => getField(field, idx + 1))
-    .join("\n");
+  const messageBody = getMessageBody({
+    packageName,
+    message,
+    withDescription: true,
+  });
   let heading = "";
-  let messageBlock = "";
-
-  if (fields === "") {
-    messageBlock = "{}";
-  } else {
-    messageBlock = `{\n${fields}\n}`;
-  }
 
   if (parentMessage) {
     // Set heading 3 for submessages.
@@ -244,13 +280,43 @@ ${heading}
 
 </DefinitionHeader>
 
-${message.description.replace(/\//g, "\\/")}
+${messageBody}
+
+</Definition>`;
+}
+
+function getMessageBody({
+  packageName,
+  message,
+  withDescription,
+}: {
+  packageName: string;
+  message: ProtoMessage;
+  withDescription?: boolean;
+}) {
+  const fields = message.fields
+    .map((field, idx) => getField(field, idx + 1))
+    .join("\n");
+  let messageBlock = "";
+  let description = "";
+
+  if (fields === "") {
+    messageBlock = "{}";
+  } else {
+    messageBlock = `{\n${fields}\n}`;
+  }
+
+  if (withDescription) {
+    description = `${message.description.replace(/\//g, "\\/")}`;
+  }
+
+  return `
+${description}
 
 \`\`\`protosaurus--${packageName}.${message.name}
 message ${message.name} ${messageBlock}
 \`\`\`
-
-</Definition>`;
+  `.trim();
 }
 
 function getField(field: Field, num: number) {
@@ -265,4 +331,69 @@ function getCommentString(comment: string) {
   }
 
   return lines.join("\n");
+}
+
+// Services.
+function getServiceMethodString({
+  method,
+  packageName,
+  allProtoMessages,
+  allWktMessages,
+}: {
+  packageName: string;
+  method: ServiceMethod;
+  allProtoMessages: Record<string, ProtoMessage>;
+  allWktMessages: Record<string, ProtoMessage>;
+}) {
+  const {
+    requestType,
+    responseType,
+    requestStreaming,
+    responseStreaming,
+    name,
+  } = method;
+  let requestMessage: ProtoMessage;
+  let responseMessage: ProtoMessage;
+
+  // Set request message.
+  if (allProtoMessages?.[requestType]) {
+    requestMessage = allProtoMessages?.[requestType];
+  } else {
+    // WKT.
+    requestMessage = allWktMessages[requestType];
+  }
+
+  // Set response message.
+  if (allProtoMessages?.[responseType]) {
+    responseMessage = allProtoMessages?.[responseType];
+  } else {
+    // WKT.
+    responseMessage = allWktMessages[responseType];
+  }
+
+  return `
+<RpcDefinition>
+
+<RpcDefinitionHeader
+  requestTypePrefix="${requestStreaming ? "stream" : ""}"
+  requestType="${requestType}"
+  responseTypePrefix="${responseStreaming ? "stream" : ""}"
+  responseType="${responseType}">
+
+### ${name}
+
+</RpcDefinitionHeader>
+
+${method.description}
+
+<RpcMethodText type="request" isStream={${requestStreaming}}>${requestType}</RpcMethodText>
+
+${getMessageString({ message: requestMessage, packageName })}
+
+<RpcMethodText type="response" isStream={${responseStreaming}}>${responseType}</RpcMethodText>
+
+${getMessageString({ message: responseMessage, packageName })}
+
+</RpcDefinition>
+  `.trim();
 }
