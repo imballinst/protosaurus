@@ -75,6 +75,7 @@ export interface MessageData {
 
 export interface PackageData {
   name: string;
+  description: string;
   messagesData: MessageData[];
 }
 
@@ -114,6 +115,7 @@ export async function convertPackageToMdx(packagePath: string) {
 
     packageData.push({
       name: file.package,
+      description: file.description,
       messagesData,
     });
   }
@@ -146,9 +148,11 @@ export async function emitMessagesJson({
   return writeFile(`${filePath}.json`, JSON.stringify(map));
 }
 
-export async function emitMdx(filePath: string, messages: MessageData[]) {
+export async function emitMdx(filePath: string, pkg: PackageData) {
   // Separate each message with double new lines.
-  const messageStrings = messages.map((m) => m.messageStrings).join("\n\n");
+  const messageStrings = pkg.messagesData
+    .map((m) => m.messageStrings)
+    .join("\n\n");
 
   // Check for existence and create parent directories, if not exist.
   await createParentDirectoriesIfNotExist(filePath);
@@ -160,12 +164,14 @@ export async function emitMdx(filePath: string, messages: MessageData[]) {
 ---
 
 import ReferenceWrapper from "@theme/ReferenceWrapper";
-import DefinitionHeader from "@theme/DefinitionHeader";
+import Description from "@theme/Description";
 import Definition from "@theme/Definition";
+import DefinitionHeader from "@theme/DefinitionHeader";
 import RpcDefinition from "@theme/RpcDefinition";
 import RpcDefinitionHeader from "@theme/RpcDefinitionHeader";
 import RpcDefinitionDescription from "@theme/RpcDefinitionDescription";
-import Description from "@theme/Description";
+
+${getPackageDescription(pkg)}
 
 ${messageStrings}\n`.trimStart()
   );
@@ -181,6 +187,20 @@ async function createParentDirectoriesIfNotExist(filePath: string) {
     // Not found.
     await fs.mkdirp(parentDirectory);
   }
+}
+
+function getPackageDescription(pkg: PackageData) {
+  if (pkg.description === "") {
+    return "";
+  }
+
+  return `
+<Description>
+
+${pkg.description}
+
+</Description>
+  `.trim();
 }
 
 function getMessageString({
