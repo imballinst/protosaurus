@@ -104,7 +104,8 @@ const CATEGORY_LABELS = {
     })
   );
 
-  // Create the metadatas.
+  // Create the metadata file.
+  // Add more to this array as needed later.
   promises.push([
     emitCategoryMetadata(PATH_TO_WKT_MDX_FOLDER, CATEGORY_LABELS.wkt),
   ]);
