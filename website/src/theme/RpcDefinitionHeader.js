@@ -17,8 +17,10 @@ export default function DefinitionHeader({
         <span>rpc</span> {children}
       </div>
 
-      <Type prefix={requestTypePrefix}>({requestType})</Type>
-      <Type prefix={responseTypePrefix}>returns ({responseType})</Type>
+      <Type prefix={requestTypePrefix}>{requestType}</Type>
+
+      <span> returns</span>
+      <Type prefix={responseTypePrefix}>{responseType}</Type>
     </div>
   );
 }
@@ -26,7 +28,7 @@ export default function DefinitionHeader({
 function Type({ prefix, children }) {
   let prefixJsx;
 
-  if (prefix !== undefined) {
+  if (prefix) {
     prefixJsx = (
       <>
         <span>{prefix}</span>{" "}
@@ -36,8 +38,8 @@ function Type({ prefix, children }) {
 
   return (
     <div>
-      {prefixJsx}
-      {children}
+      ({prefixJsx}
+      {children})
     </div>
   );
 }

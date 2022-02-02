@@ -1,0 +1,33 @@
+<Definition>
+
+<DefinitionHeader name="message">
+
+### Location
+
+</DefinitionHeader>
+
+Sample location.
+
+```protosaurus--location.v1.Location
+message Location {
+  // Latitude of the location.
+  int32 latitude = 1;
+  // Longitude of the location.
+  int32 longitude = 2;
+  // Address (human-friendly string) of the location.
+  string address = 3;
+
+  message InnerMessage {
+    // Sample integer.
+    int32 hello = 1;
+  }
+
+  // Sample message.
+  InnerMessage inner_message = 4;
+  // Sample message yet again.
+  InnerMessage second_inner = 5;
+  InnerMessage empty_comment = 6;
+}
+```
+
+</Definition>

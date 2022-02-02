@@ -6,8 +6,10 @@ import {
   emitCategoryMetadata,
   emitMdx,
   emitMessagesJson,
-  PackageData,
+  getServiceString,
 } from "./lib/doc-to-mdx";
+import { convertProtoToRecord } from "./lib/record";
+import { PackageData, ProtoMessage } from "./lib/types";
 
 // These are meant only to be ran from the Makefile to take effect of the PWD environment variable.
 // This is because, after being compiled to `.js` files, they go into a deeper nested directories,
@@ -36,8 +38,8 @@ const CATEGORY_LABELS = {
   // 1. Delete all files except intro.mdx in `PATH_TO_MDX_FOLDER`.
   // 2. Delete the dictionary folder `PATH_TO_PLUGIN_DICTIONARY_FOLDER`.
   await Promise.all([
-    deleteDirectoryEntries(PATH_TO_MDX_FOLDER, PRESERVED_DOCS_FILES),
-    deleteDirectoryEntries(PATH_TO_PLUGIN_DICTIONARY_FOLDER),
+    ...(await deleteDirectoryEntries(PATH_TO_MDX_FOLDER, PRESERVED_DOCS_FILES)),
+    ...(await deleteDirectoryEntries(PATH_TO_PLUGIN_DICTIONARY_FOLDER)),
   ]);
 
   // Re-create the folders.
@@ -48,17 +50,41 @@ const CATEGORY_LABELS = {
   ]);
 
   // Generate MDX and dictionary for local types.
-  const localPackages = await recursivelyReadDirectory({
-    pathToDirectory: PATH_TO_GENERATED,
-    excludedDirectories: [PATH_TO_GENERATED_WKT],
-  });
+  const { allPackages: localPackages, allProtoMessages } =
+    await recursivelyReadDirectory({
+      pathToDirectory: PATH_TO_GENERATED,
+      excludedDirectories: [PATH_TO_GENERATED_WKT],
+    });
+  const { allPackages: wktPackages, allProtoMessages: allWktProtoMessages } =
+    await recursivelyReadDirectory({
+      pathToDirectory: PATH_TO_GENERATED_WKT,
+    });
+
+  const localMessagesDictionary = convertProtoToRecord(allProtoMessages);
+  const wktMessagesDictionary = convertProtoToRecord(allWktProtoMessages);
   const promises = [];
 
   for (const pkg of localPackages) {
-    const pathToMdx = `${PATH_TO_MDX_FOLDER}/${pkg.name}`;
-    const pathToPlugin = `${PATH_TO_PLUGIN_DICTIONARY_FOLDER}/${pkg.name}`;
+    // Since services require the information of all messages, then
+    // we can only "render" the service string here, after all messages
+    // have been identified.
+    pkg.servicesData = pkg.rawProtoServices.map((service) => ({
+      name: service.name,
+      packageName: pkg.name,
+      body: getServiceString({
+        service,
+        allProtoMessages: localMessagesDictionary,
+        allWktMessages: wktMessagesDictionary,
+        packageName: pkg.name,
+      }),
+    }));
 
-    promises.push(emitMdx(pathToMdx, pkg));
+    // Emit messages and services.
+    const pathToMessagesMdx = `${PATH_TO_MDX_FOLDER}/${pkg.name}`;
+    promises.push(emitMdx(pathToMessagesMdx, pkg));
+
+    // Emit JSON dictionary for the plugin.
+    const pathToPlugin = `${PATH_TO_PLUGIN_DICTIONARY_FOLDER}/${pkg.name}`;
     promises.push(
       emitMessagesJson({
         filePath: pathToPlugin,
@@ -68,9 +94,6 @@ const CATEGORY_LABELS = {
   }
 
   // Generate MDX and dictionary for well known types (WKT).
-  const wktPackages = await recursivelyReadDirectory({
-    pathToDirectory: PATH_TO_GENERATED_WKT,
-  });
   const wktPackagesDictionary: Record<string, PackageData> = {};
 
   for (const pkg of wktPackages) {
@@ -94,21 +117,19 @@ const CATEGORY_LABELS = {
   promises.push(...allMdxPromises);
 
   // Render all WKT JSON in one file.
-  const allWktMessages = allWktPackages.map((p) => p.messagesData).flat();
   const pathToWktFile = `${PATH_TO_PLUGIN_DICTIONARY_FOLDER}/wkt`;
   promises.push(
     emitMessagesJson({
       filePath: pathToWktFile,
-      messages: allWktMessages,
+      messages: allWktPackages.map((pkg) => pkg.messagesData).flat(),
       isWkt: true,
     })
   );
 
   // Create the metadata file.
-  // Add more to this array as needed later.
-  promises.push([
-    emitCategoryMetadata(PATH_TO_WKT_MDX_FOLDER, CATEGORY_LABELS.wkt),
-  ]);
+  promises.push(
+    emitCategoryMetadata(PATH_TO_WKT_MDX_FOLDER, CATEGORY_LABELS.wkt)
+  );
 
   await Promise.all(promises);
 })();
@@ -123,11 +144,15 @@ async function recursivelyReadDirectory({
   // Directories to exclude. Mostly this is to stop reading WKT JSONs
   // when we want to just read the non-WKT JSONs.
   excludedDirectories?: string[];
-}): Promise<PackageData[]> {
+}): Promise<{
+  allPackages: PackageData[];
+  allProtoMessages: ProtoMessage[];
+}> {
   const allPackages: PackageData[] = [];
+  const allProtoMessages: ProtoMessage[] = [];
 
   if (excludedDirectories && excludedDirectories.includes(pathToDirectory)) {
-    return allPackages;
+    return { allPackages, allProtoMessages };
   }
 
   const entries = await readdir(pathToDirectory, {
@@ -140,21 +165,25 @@ async function recursivelyReadDirectory({
 
     // If file, read its contents.
     if (entry.isFile()) {
-      const packages = await convertPackageToMdx(pathToEntry);
+      const { packageData: packages, rawProtoMessages } =
+        await convertPackageToMdx(pathToEntry);
 
       allPackages.push(...packages);
+      allProtoMessages.push(...rawProtoMessages);
       continue;
     }
 
     // Otherwise, keep reading recursively.
-    const packages = await recursivelyReadDirectory({
-      pathToDirectory: pathToEntry,
-      excludedDirectories,
-    });
+    const { allPackages: packages, allProtoMessages: rawProtoMessages } =
+      await recursivelyReadDirectory({
+        pathToDirectory: pathToEntry,
+        excludedDirectories,
+      });
+    allProtoMessages.push(...rawProtoMessages);
     allPackages.push(...packages);
   }
 
-  return allPackages;
+  return { allPackages, allProtoMessages };
 }
 
 async function deleteDirectoryEntries(dir: string, exception?: string[]) {
@@ -183,5 +212,7 @@ async function deleteDirectoryEntries(dir: string, exception?: string[]) {
     return deletedEntries.map((entry) =>
       rm(`${dir}/${entry.name}`, { recursive: true })
     );
-  } catch (err) {}
+  } catch (err) {
+    return [];
+  }
 }
