@@ -43,4 +43,7 @@ message Location {
 
   // Sample message yet again.
   InnerMessage second_inner = 5;
+
+  //
+  InnerMessage empty_comment = 6;
 }

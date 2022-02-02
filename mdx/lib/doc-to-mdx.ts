@@ -334,7 +334,7 @@ function getField(field: Field, num: number, level: number) {
 
 function getCommentString(comment: string, prefix: string) {
   if (comment === "") {
-    return "\n";
+    return "";
   }
 
   const lines = comment.split("\n");
