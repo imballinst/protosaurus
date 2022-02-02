@@ -66,9 +66,8 @@ const CATEGORY_LABELS = {
 
   for (const pkg of localPackages) {
     // Since services require the information of all messages, then
-    // we can only "render" the service string here. This is because,
-    // services request type and response type _can_ be a crosslink
-    // from other files in the same package.
+    // we can only "render" the service string here, after all messages
+    // have been identified.
     pkg.servicesData = pkg.rawProtoServices.map((service) => ({
       name: service.name,
       packageName: pkg.name,
@@ -83,11 +82,6 @@ const CATEGORY_LABELS = {
     // Emit messages and services.
     const pathToMessagesMdx = `${PATH_TO_MDX_FOLDER}/${pkg.name}`;
     promises.push(emitMdx(pathToMessagesMdx, pkg));
-
-    // Emit services.
-    // TODO(imballinst): remove this when we have emitted messages and services along together.
-    // const pathToServicesMdx = `${PATH_TO_MDX_FOLDER}/${pkg.name}`;
-    // promises.push(emitMdx(pathToServicesMdx, pkg, "servicesData"));
 
     // Emit JSON dictionary for the plugin.
     const pathToPlugin = `${PATH_TO_PLUGIN_DICTIONARY_FOLDER}/${pkg.name}`;
@@ -133,7 +127,6 @@ const CATEGORY_LABELS = {
   );
 
   // Create the metadata file.
-  // Add more to this array as needed later.
   promises.push(
     emitCategoryMetadata(PATH_TO_WKT_MDX_FOLDER, CATEGORY_LABELS.wkt)
   );
