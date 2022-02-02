@@ -91,9 +91,9 @@ export async function emitMessagesJson({
   for (const message of messages) {
     const { name, packageName, hash } = message;
     // For example:
-    // If it's not WKT, then it's /docs/messages/booking.v1#Booking.
+    // If it's not WKT, then it's /docs/booking.v1#Booking.
     // If it's WKT, then it's /docs/wkt/google.protobuf#Int32.
-    map[name] = `/docs/${isWkt ? "wkt" : ""}/${packageName}#${hash}`;
+    map[name] = `/docs/${isWkt ? "wkt/" : ""}${packageName}#${hash}`;
   }
 
   return writeFile(`${filePath}.json`, JSON.stringify(map));
