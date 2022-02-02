@@ -7,9 +7,9 @@ import {
   emitMdx,
   emitMessagesJson,
   getServiceString,
-  PackageData,
-  ProtoMessage,
 } from "./lib/doc-to-mdx";
+import { convertProtoToRecord } from "./lib/record";
+import { PackageData, ProtoMessage } from "./lib/types";
 
 // These are meant only to be ran from the Makefile to take effect of the PWD environment variable.
 // This is because, after being compiled to `.js` files, they go into a deeper nested directories,
@@ -24,8 +24,6 @@ const PATH_TO_PLUGIN_DICTIONARY_FOLDER = path.join(
   process.env.PWD!,
   "../website/plugins/proto-messages/dictionary"
 );
-const PATH_TO_MESSAGES_MDX_FOLDER = `${PATH_TO_MDX_FOLDER}/messages`;
-const PATH_TO_SERVICES_MDX_FOLDER = `${PATH_TO_MDX_FOLDER}/services`;
 const PATH_TO_WKT_MDX_FOLDER = `${PATH_TO_MDX_FOLDER}/wkt`;
 
 const PRESERVED_DOCS_FILES = ["intro.mdx"];
@@ -33,8 +31,6 @@ const PRESERVED_DOCS_FILES = ["intro.mdx"];
 // Labels for the local types and the well-known types.
 const CATEGORY_LABELS = {
   wkt: "Well Known Types",
-  messages: "Messages",
-  services: "Services",
 };
 
 (async () => {
@@ -49,8 +45,7 @@ const CATEGORY_LABELS = {
   // Re-create the folders.
   await Promise.all([
     createDirectoryIfNotExist(PATH_TO_PLUGIN_DICTIONARY_FOLDER),
-    createDirectoryIfNotExist(PATH_TO_MESSAGES_MDX_FOLDER),
-    createDirectoryIfNotExist(PATH_TO_SERVICES_MDX_FOLDER),
+    createDirectoryIfNotExist(PATH_TO_MDX_FOLDER),
     createDirectoryIfNotExist(PATH_TO_WKT_MDX_FOLDER),
   ]);
 
@@ -85,13 +80,14 @@ const CATEGORY_LABELS = {
       }),
     }));
 
-    // Emit messages.
-    const pathToMessagesMdx = `${PATH_TO_MESSAGES_MDX_FOLDER}/${pkg.name}`;
-    promises.push(emitMdx(pathToMessagesMdx, pkg, "messagesData"));
+    // Emit messages and services.
+    const pathToMessagesMdx = `${PATH_TO_MDX_FOLDER}/${pkg.name}`;
+    promises.push(emitMdx(pathToMessagesMdx, pkg));
 
     // Emit services.
-    const pathToServicesMdx = `${PATH_TO_SERVICES_MDX_FOLDER}/${pkg.name}`;
-    promises.push(emitMdx(pathToServicesMdx, pkg, "servicesData"));
+    // TODO(imballinst): remove this when we have emitted messages and services along together.
+    // const pathToServicesMdx = `${PATH_TO_MDX_FOLDER}/${pkg.name}`;
+    // promises.push(emitMdx(pathToServicesMdx, pkg, "servicesData"));
 
     // Emit JSON dictionary for the plugin.
     const pathToPlugin = `${PATH_TO_PLUGIN_DICTIONARY_FOLDER}/${pkg.name}`;
@@ -121,7 +117,7 @@ const CATEGORY_LABELS = {
   const allWktPackages = Object.values(wktPackagesDictionary);
   const allMdxPromises = allWktPackages.map((pkg) => {
     const pathToMdx = `${PATH_TO_WKT_MDX_FOLDER}/${pkg.name}`;
-    return emitMdx(pathToMdx, pkg, "messagesData");
+    return emitMdx(pathToMdx, pkg);
   });
 
   promises.push(...allMdxPromises);
@@ -138,11 +134,9 @@ const CATEGORY_LABELS = {
 
   // Create the metadata file.
   // Add more to this array as needed later.
-  promises.push([
-    emitCategoryMetadata(PATH_TO_WKT_MDX_FOLDER, CATEGORY_LABELS.wkt),
-    emitCategoryMetadata(PATH_TO_MESSAGES_MDX_FOLDER, CATEGORY_LABELS.messages),
-    emitCategoryMetadata(PATH_TO_SERVICES_MDX_FOLDER, CATEGORY_LABELS.services),
-  ]);
+  promises.push(
+    emitCategoryMetadata(PATH_TO_WKT_MDX_FOLDER, CATEGORY_LABELS.wkt)
+  );
 
   await Promise.all(promises);
 })();
@@ -228,16 +222,4 @@ async function deleteDirectoryEntries(dir: string, exception?: string[]) {
   } catch (err) {
     return [];
   }
-}
-
-function convertProtoToRecord(
-  messages: ProtoMessage[]
-): Record<string, ProtoMessage> {
-  const record: Record<string, ProtoMessage> = {};
-
-  for (const message of messages) {
-    record[message.name] = message;
-  }
-
-  return record;
 }

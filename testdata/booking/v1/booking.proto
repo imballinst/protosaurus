@@ -64,9 +64,11 @@ message Booking {
   string color_preference = 6 [deprecated = true];
 
   // Pick-up location.
+  // This is a coordinate.
   location.v1.Location pickup_location = 7;
 
   // Destination location.
+  // This is a coordinate.
   location.v1.Location destination_location = 8;
 }
 

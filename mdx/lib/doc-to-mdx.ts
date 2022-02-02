@@ -1,94 +1,13 @@
 import fs, { writeFile } from "fs-extra";
-import path from "path";
-
-// Types.
-interface Protofile {
-  name: string;
-  title: string;
-  description: string;
-  package: string;
-  hasEnums: false;
-  hasExtensions: boolean;
-  hasMessages: boolean;
-  hasServices: boolean;
-  // TODO(imballinst): create proper typing.
-  enums: any;
-  extensions: any;
-  messages: ProtoMessage[];
-  services: ProtoService[];
-}
-
-export interface ProtoMessage {
-  name: string;
-  longName: string;
-  fullName: string;
-  description: string;
-  hasExtensions: boolean;
-  hasFields: boolean;
-  hasOneofs: boolean;
-  extensions: any[];
-  fields: Field[];
-}
-
-interface Field {
-  name: string;
-  description: string;
-  label: string;
-  type: string;
-  longType: string;
-  fullType: string;
-  ismap: boolean;
-  isoneof: boolean;
-  oneofdecl: string;
-  defaultValue: string;
-  options?: {
-    [index: string]: any;
-  };
-}
-
-interface ServiceMethod {
-  name: string;
-  description: string;
-  requestType: string;
-  requestLongType: string;
-  requestFullType: string;
-  requestStreaming: boolean;
-  responseType: string;
-  responseLongType: string;
-  responseFullType: string;
-  responseStreaming: boolean;
-  options: any;
-}
-
-interface ProtoService {
-  name: string;
-  longName: string;
-  fullName: string;
-  description: string;
-  methods: ServiceMethod[];
-}
-
-export interface MessageData {
-  name: string;
-  packageName: string;
-  hash: string;
-  body: string;
-}
-
-export interface ServiceData {
-  name: string;
-  packageName: string;
-  body: string;
-}
-
-export interface PackageData {
-  name: string;
-  description: string;
-  messagesData: MessageData[];
-  servicesData: ServiceData[];
-  // Raw proto services.
-  rawProtoServices: ProtoService[];
-}
+import {
+  Field,
+  MessageData,
+  PackageData,
+  Protofile,
+  ProtoMessage,
+  ProtoService,
+  ServiceMethod,
+} from "./types";
 
 // Main exported functions.
 export async function convertPackageToMdx(packagePath: string) {
@@ -121,6 +40,7 @@ export async function convertPackageToMdx(packagePath: string) {
           parentMessage:
             messageNameArray.length > 1 ? messageNameArray[0] : undefined,
           packageName: file.package,
+          level: 1,
         }),
       });
     }
@@ -160,13 +80,9 @@ export async function emitMessagesJson({
   return writeFile(`${filePath}.json`, JSON.stringify(map));
 }
 
-export async function emitMdx(
-  filePath: string,
-  pkg: PackageData,
-  type: "messagesData" | "servicesData"
-) {
-  // Separate each message/service with double new lines.
-  const body = pkg[type].map((m) => m.body).join("\n\n");
+export async function emitMdx(filePath: string, pkg: PackageData) {
+  const services = pkg.servicesData.map((m) => m.body).join("\n\n");
+  const messages = pkg.messagesData.map((m) => m.body).join("\n\n");
 
   return writeFile(
     `${filePath}.mdx`,
@@ -185,7 +101,9 @@ import RpcMethodText from "@theme/RpcMethodText";
 
 ${getPackageDescription(pkg)}
 
-${body}\n`.trimStart()
+${services}
+
+${messages}\n`.trimStart()
   );
 }
 
@@ -266,28 +184,31 @@ function getMessageString({
   parentMessage,
   packageName,
   isLongVersion = true,
+  level,
 }: {
   message: ProtoMessage;
   parentMessage?: string;
   isLongVersion?: boolean;
   packageName: string;
+  level: number;
 }) {
   const messageBody = getMessageBody({
     packageName,
     message,
     isLongVersion,
+    level,
   });
 
   return `<Definition>
 
-${getDescription(message.name, parentMessage, isLongVersion)}
+${getMessageHeading(message.name, parentMessage, isLongVersion)}
 
 ${messageBody}
 
 </Definition>`;
 }
 
-function getDescription(
+function getMessageHeading(
   name: string,
   parentMessage: string | undefined,
   isLongVersion: boolean
@@ -321,13 +242,15 @@ function getMessageBody({
   packageName,
   message,
   isLongVersion,
+  level,
 }: {
   packageName: string;
   message: ProtoMessage;
   isLongVersion?: boolean;
+  level: number;
 }) {
   const fields = message.fields
-    .map((field, idx) => getField(field, idx + 1))
+    .map((field, idx) => getField(field, idx + 1, level))
     .join("\n");
   let messageBlock = "";
   let description = "";
@@ -351,18 +274,30 @@ message ${message.name} ${messageBlock}
   `.trim();
 }
 
-function getField(field: Field, num: number) {
-  return `  ${getCommentString(field.description)}
-  ${field.type} ${field.name} = ${num};`;
-}
+function getField(field: Field, num: number, level: number) {
+  let prefixSpaces = "";
 
-function getCommentString(comment: string) {
-  const lines = comment.split("\n");
-  for (let i = 0; i < lines.length; i++) {
-    lines[i] = `// ${lines[i]}`;
+  for (let i = 0; i < level; i++) {
+    prefixSpaces += "  ";
   }
 
-  return lines.join("\n");
+  return (
+    getCommentString(field.description, prefixSpaces) +
+    `${prefixSpaces}${field.type} ${field.name} = ${num};`
+  );
+}
+
+function getCommentString(comment: string, prefix: string) {
+  if (comment === "") {
+    return "\n";
+  }
+
+  const lines = comment.split("\n");
+  for (let i = 0; i < lines.length; i++) {
+    lines[i] = `${prefix}// ${lines[i]}`;
+  }
+
+  return `${lines.join("\n")}\n`;
 }
 
 // Services.
@@ -420,12 +355,15 @@ function getServiceMethodString({
 
 ${method.description}
 
-<RpcMethodText type="request" isStream={${requestStreaming}}>${requestType}</RpcMethodText>
+<RpcMethodText type="request" isStream={${requestStreaming}}>
+  ${requestType}
+</RpcMethodText>
 
 ${getMessageString({
   message: requestMessage,
   packageName,
   isLongVersion: false,
+  level: 1,
 })}
 
 <RpcMethodText type="response" isStream={${responseStreaming}}>${responseType}</RpcMethodText>
@@ -434,6 +372,7 @@ ${getMessageString({
   message: responseMessage,
   packageName,
   isLongVersion: false,
+  level: 1,
 })}
 
 </RpcDefinitionDescription>
