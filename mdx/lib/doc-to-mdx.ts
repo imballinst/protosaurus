@@ -93,7 +93,7 @@ export async function emitMessagesJson({
     // For example:
     // If it's not WKT, then it's /docs/messages/booking.v1#Booking.
     // If it's WKT, then it's /docs/wkt/google.protobuf#Int32.
-    map[name] = `/docs/${isWkt ? "wkt" : "messages"}/${packageName}#${hash}`;
+    map[name] = `/docs/${isWkt ? "wkt" : ""}/${packageName}#${hash}`;
   }
 
   return writeFile(`${filePath}.json`, JSON.stringify(map));
