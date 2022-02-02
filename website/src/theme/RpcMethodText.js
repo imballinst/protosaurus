@@ -6,7 +6,7 @@ import styles from "./Definition.module.css";
 
 export default function RpcMethodText({ type, isStream, children }) {
   return (
-    <div>
+    <div className={styles["rpc-method"]}>
       <span className={styles["rpc-method-options"]}>{type}</span>
       {children}
       {isStream ? (

@@ -4,7 +4,7 @@
  */
 
 /* Messages. */
-.definition {
+.definition:not(:last-child) {
   margin-bottom: var(--ifm-paragraph-margin-bottom);
 }
 
@@ -12,10 +12,10 @@
   margin-bottom: calc(
     var(--ifm-heading-vertical-rhythm-bottom) * var(--ifm-leading)
   );
-  margin-top: calc(var(--ifm-h2-vertical-rhythm-top) * var(--ifm-leading));
+  margin-top: calc(var(--ifm-h3-vertical-rhythm-top) * var(--ifm-leading));
 }
 
-.definition-title h2 {
+.definition-title h3 {
   scroll-margin-top: calc(var(--ifm-navbar-height) + 2rem);
 }
 
@@ -26,12 +26,11 @@
 /* Services. */
 .rpc-definition {
   margin-bottom: var(--ifm-paragraph-margin-bottom);
-  border-top: none;
-  border: 1px solid var(--ifm-toc-border-color);
   border-radius: 4px;
 }
 
 .rpc-definition-title {
+  border-top: 1px solid var(--ifm-toc-border-color);
   border-bottom: 1px solid var(--ifm-toc-border-color);
   padding: 8px;
 }
@@ -44,12 +43,12 @@
   content: " ";
 }
 
-.rpc-definition-name h3 {
+.rpc-definition-name h4 {
   display: inline;
   font-size: 1rem;
 }
 
-.rpc-definition-name h3 a {
+.rpc-definition-name h4 a {
   display: none;
 }
 
@@ -69,6 +68,10 @@
   margin-bottom: 0;
 }
 
+.rpc-method {
+  margin-bottom: 4px;
+}
+
 .rpc-method-options {
   color: var(--ifm-color-gray-600);
   margin-right: 8px;
@@ -78,4 +81,6 @@
   border: 1px solid var(--ifm-color-gray-600);
   border-radius: 16px;
   color: var(--ifm-color-info);
+  margin-left: 8px;
+  padding: 2px 8px;
 }
