@@ -23,22 +23,40 @@ export async function convertPackageToMdx(packagePath: string) {
       continue;
     }
 
-    const length = file.messages.length;
     const messagesData: MessageData[] = [];
 
-    for (let i = 0; i < length; i++) {
-      const message = file.messages[i];
-      // When a `longName` has a "dot" separator, then it's a submessage.
+    // Store inner messages.
+    const innerMessagesRecord: Record<string, string> = {};
+    const messagesRecord: Record<string, ProtoMessage> = {};
+
+    for (const message of file.messages) {
       const messageNameArray = message.longName.split(".");
+      const isInnerMessage = messageNameArray.length > 1;
+
+      if (isInnerMessage) {
+        // We will use this later to "patch" `messagesRecord`.
+        innerMessagesRecord[message.longName] = getMessageSnippet({
+          message,
+          level: 2,
+        });
+      } else {
+        // Store non-inner messages.
+        // We need to "patch" it with `innerMessagesRecord` later.
+        messagesRecord[message.longName] = message;
+      }
+    }
+
+    // Process actual messages for real.
+    for (const key in messagesRecord) {
+      const message = messagesRecord[key];
 
       messagesData.push({
         name: message.longName,
         packageName: file.package,
-        hash: message.longName.toLowerCase().replace(".", ""),
+        hash: message.longName.toLowerCase(),
         body: getMessageString({
           message,
-          parentMessage:
-            messageNameArray.length > 1 ? messageNameArray[0] : undefined,
+          innerMessagesRecord,
           packageName: file.package,
           level: 1,
         }),
@@ -49,6 +67,7 @@ export async function convertPackageToMdx(packagePath: string) {
       name: file.package,
       description: file.description,
       messagesData,
+      innerMessagesRecord,
       servicesData: [],
       rawProtoServices: file.services,
     });
@@ -164,7 +183,53 @@ ${serviceBody.join("\n\n")}
 </Definition>\n\n`;
 }
 
+function getMessageSnippet({
+  message,
+  innerMessagesRecord,
+  level,
+}: {
+  message: ProtoMessage;
+  innerMessagesRecord?: Record<string, string>;
+  level: number;
+}) {
+  const prefixSpaces = getIndentation(level - 1);
+  const fields = message.fields
+    .map((field, idx) => {
+      let innerMessage = "";
+
+      if (innerMessagesRecord && innerMessagesRecord[field.longType]) {
+        // Add one newline before and two after the inner message.
+        innerMessage = `\n${innerMessagesRecord[field.longType]}\n\n`;
+
+        // Clear inner message so that it won't be used by the next fields.
+        innerMessagesRecord[field.longType] = "";
+      }
+
+      return innerMessage + getField(field, idx + 1, level);
+    })
+    .join("\n");
+  let messageBlock = "";
+
+  if (fields === "") {
+    messageBlock = "{}";
+  } else {
+    messageBlock = `{\n${fields}\n${prefixSpaces}}`;
+  }
+
+  return `${prefixSpaces}message ${message.name} ${messageBlock}`;
+}
+
 // Helper functions.
+function getIndentation(level: number) {
+  let prefixSpaces = "";
+
+  for (let i = 0; i < level; i++) {
+    prefixSpaces += "  ";
+  }
+
+  return prefixSpaces;
+}
+
 function getPackageDescription(pkg: PackageData) {
   if (pkg.description === "") {
     return "";
@@ -182,38 +247,35 @@ ${pkg.description}
 // Messages.
 function getMessageString({
   message,
-  parentMessage,
   packageName,
   isLongVersion = true,
+  innerMessagesRecord,
   level,
 }: {
   message: ProtoMessage;
-  parentMessage?: string;
   isLongVersion?: boolean;
+  innerMessagesRecord?: Record<string, string>;
   packageName: string;
   level: number;
 }) {
   const messageBody = getMessageBody({
     packageName,
     message,
+    innerMessagesRecord,
     isLongVersion,
     level,
   });
 
   return `<Definition>
 
-${getMessageHeading(message.name, parentMessage, isLongVersion)}
+${getMessageHeading(message.name, isLongVersion)}
 
 ${messageBody}
 
 </Definition>`;
 }
 
-function getMessageHeading(
-  name: string,
-  parentMessage: string | undefined,
-  isLongVersion: boolean
-) {
+function getMessageHeading(name: string, isLongVersion: boolean) {
   if (!isLongVersion) {
     return "";
   }
@@ -221,13 +283,7 @@ function getMessageHeading(
   let heading = name;
 
   if (isLongVersion) {
-    if (parentMessage) {
-      // Set heading 3 for submessages.
-      heading = `#### ${parentMessage}.${name}`;
-    } else {
-      // Otherwise, heading 2.
-      heading = `### ${name}`;
-    }
+    heading = `### ${name}`;
   }
 
   return `
@@ -243,24 +299,16 @@ function getMessageBody({
   packageName,
   message,
   isLongVersion,
+  innerMessagesRecord,
   level,
 }: {
   packageName: string;
   message: ProtoMessage;
   isLongVersion?: boolean;
+  innerMessagesRecord?: Record<string, string>;
   level: number;
 }) {
-  const fields = message.fields
-    .map((field, idx) => getField(field, idx + 1, level))
-    .join("\n");
-  let messageBlock = "";
   let description = "";
-
-  if (fields === "") {
-    messageBlock = "{}";
-  } else {
-    messageBlock = `{\n${fields}\n}`;
-  }
 
   if (isLongVersion) {
     description = `${message.description.replace(/\//g, "\\/")}`;
@@ -270,17 +318,13 @@ function getMessageBody({
 ${description}
 
 \`\`\`protosaurus--${packageName}.${message.name}
-message ${message.name} ${messageBlock}
+${getMessageSnippet({ message, innerMessagesRecord, level })}
 \`\`\`
   `.trim();
 }
 
 function getField(field: Field, num: number, level: number) {
-  let prefixSpaces = "";
-
-  for (let i = 0; i < level; i++) {
-    prefixSpaces += "  ";
-  }
+  const prefixSpaces = getIndentation(level);
 
   return (
     getCommentString(field.description, prefixSpaces) +

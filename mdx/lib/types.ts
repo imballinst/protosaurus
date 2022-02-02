@@ -81,6 +81,7 @@ export interface PackageData {
   name: string;
   description: string;
   messagesData: MessageData[];
+  innerMessagesRecord: Record<string, string>;
   servicesData: ServiceData[];
   // Raw proto services.
   rawProtoServices: ProtoService[];
