@@ -84,6 +84,9 @@ export async function emitMdx(filePath: string, pkg: PackageData) {
   const services = pkg.servicesData.map((m) => m.body).join("\n\n");
   const messages = pkg.messagesData.map((m) => m.body).join("\n\n");
 
+  const servicesString = services.length ? `## Services\n\n${services}` : "";
+  const messagesString = messages.length ? `## Messages\n\n${messages}` : "";
+
   return writeFile(
     `${filePath}.mdx`,
     `
@@ -101,9 +104,7 @@ import RpcMethodText from "@theme/RpcMethodText";
 
 ${getPackageDescription(pkg)}
 
-${services}
-
-${messages}\n`.trimStart()
+${servicesString}${messagesString}\n`.trimStart()
   );
 }
 
@@ -152,7 +153,7 @@ export function getServiceString({
 
 <DefinitionHeader name="service">
 
-## ${service.name}
+### ${service.name}
 
 </DefinitionHeader>
 
@@ -222,10 +223,10 @@ function getMessageHeading(
   if (isLongVersion) {
     if (parentMessage) {
       // Set heading 3 for submessages.
-      heading = `### ${parentMessage}.${name}`;
+      heading = `#### ${parentMessage}.${name}`;
     } else {
       // Otherwise, heading 2.
-      heading = `## ${name}`;
+      heading = `### ${name}`;
     }
   }
 
@@ -347,7 +348,7 @@ function getServiceMethodString({
   responseTypePrefix="${responseStreaming ? "stream" : ""}"
   responseType="${responseType}">
 
-### ${name}
+#### ${name}
 
 </RpcDefinitionHeader>
 
