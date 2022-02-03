@@ -2,7 +2,7 @@ import path from "path";
 import { expect } from "chai";
 import { readFile } from "fs-extra";
 
-import { convertProtoToRecord } from "./utils/record";
+import { convertProtoToRecord } from "./record";
 import { readPackageData } from "./packages";
 import { getServiceString } from "./services";
 

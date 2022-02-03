@@ -1,4 +1,4 @@
-import { Field, ProtoMessage } from "../types";
+import { Field, ProtoMessage } from "./types";
 
 export function getMessageDefinition({
   header,

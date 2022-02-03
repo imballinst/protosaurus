@@ -1,5 +1,5 @@
 import { ProtoService, ProtoMessage, ServiceMethod } from "./types";
-import { getMessageProtosaurusBlock } from "./utils/messages";
+import { getMessageProtosaurusBlock } from "./messages";
 
 export function getServiceString({
   service,

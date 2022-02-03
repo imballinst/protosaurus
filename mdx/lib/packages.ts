@@ -6,7 +6,7 @@ import {
   getMessageDefinition,
   getMessageHeader,
   getMessageProtosaurusBlock,
-} from "./utils/messages";
+} from "./messages";
 
 export async function readPackageData(packagePath: string) {
   const content = await readFile(packagePath, "utf-8");

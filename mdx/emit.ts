@@ -1,13 +1,13 @@
 import { readdir, rm, stat } from "fs-extra";
 import path from "path";
 import { emitMdx } from "./lib/mdx";
-import { convertProtoToRecord } from "./lib/utils/record";
+import { convertProtoToRecord } from "./lib/record";
 import { PackageData, ProtoMessage } from "./lib/types";
 import { emitMessagesJson } from "./lib/json";
 import { emitCategoryMetadata } from "./lib/metadata";
 import { readPackageData } from "./lib/packages";
 import { getServiceString } from "./lib/services";
-import { createDirectoryIfNotExist } from "./lib/utils/filesystem";
+import { createDirectoryIfNotExist } from "./lib/filesystem";
 
 // These are meant only to be ran from the Makefile to take effect of the PWD environment variable.
 // This is because, after being compiled to `.js` files, they go into a deeper nested directories,
