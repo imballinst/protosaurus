@@ -1,4 +1,4 @@
-import { ProtoMessage } from "./types";
+import { ProtoMessage } from "../types";
 
 export function convertProtoToRecord(
   messages: ProtoMessage[]
