@@ -79,7 +79,7 @@ export interface ServiceData {
 
 export interface PackageData {
   name: string;
-  description: string;
+  descriptionMdx: string;
   messagesData: MessageData[];
   innerMessagesRecord: Record<string, string>;
   servicesData: ServiceData[];
