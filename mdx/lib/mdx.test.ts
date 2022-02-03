@@ -1,12 +1,14 @@
-import { convertPackageToMdx, getServiceString } from "./doc-to-mdx";
 import path from "path";
-import assert from "assert";
+import { expect } from "chai";
 import { readFile } from "fs-extra";
+
 import { convertProtoToRecord } from "./record";
+import { readPackageData } from "./packages";
+import { getServiceString } from "./services";
 
 const ROOT_PATH = path.join(__dirname, "../../");
 
-describe("convertPackageToMdx", () => {
+describe("readPackageData", () => {
   // Test messages.
   const BOOKING_DOC_JSON_PATH = path.join(
     ROOT_PATH,
@@ -18,7 +20,7 @@ describe("convertPackageToMdx", () => {
   );
 
   test("messages", async () => {
-    const { packageData: packages } = await convertPackageToMdx(
+    const { packageData: packages } = await readPackageData(
       BOOKING_DOC_JSON_PATH
     );
     const allMessages: string[] = [];
@@ -35,7 +37,7 @@ describe("convertPackageToMdx", () => {
       "utf-8"
     );
 
-    assert.equal(msgResult.trim(), expectedMsg.trim());
+    expect(msgResult.trim()).equal(expectedMsg.trim());
   });
 
   // Test inner messages.
@@ -49,7 +51,7 @@ describe("convertPackageToMdx", () => {
   );
 
   test("inner messages", async () => {
-    const { packageData: packages } = await convertPackageToMdx(
+    const { packageData: packages } = await readPackageData(
       LOCATION_DOC_JSON_PATH
     );
     const allMessages: string[] = [];
@@ -66,7 +68,7 @@ describe("convertPackageToMdx", () => {
       "utf-8"
     );
 
-    assert.equal(msgResult.trim(), expectedMsg.trim());
+    expect(msgResult.trim()).equal(expectedMsg.trim());
   });
 
   // Test services.
@@ -76,8 +78,9 @@ describe("convertPackageToMdx", () => {
   );
 
   test("services", async () => {
-    const { packageData: packages, rawProtoMessages } =
-      await convertPackageToMdx(BOOKING_DOC_JSON_PATH);
+    const { packageData: packages, rawProtoMessages } = await readPackageData(
+      BOOKING_DOC_JSON_PATH
+    );
     const localProtoMessagesDictionary = convertProtoToRecord(rawProtoMessages);
     const allServices: string[] = [];
 
@@ -103,6 +106,6 @@ describe("convertPackageToMdx", () => {
 
     // Slice the last trailing CRLF from the `expectedSvc` variable.
     // This is because each file is expectedSvc to have a trailing new line.
-    assert.equal(svcResult.trim(), expectedSvc.trim());
+    expect(svcResult.trim()).equal(expectedSvc.trim());
   });
 });

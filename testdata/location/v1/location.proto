@@ -30,6 +30,7 @@ message Location {
   int32 longitude = 2 [(google.api.field_behavior) = REQUIRED];
 
   // Address (human-friendly string) of the location.
+  // This line tests a <html> tag comment.
   string address = 3 [(google.api.field_behavior) = REQUIRED, (validate.rules).string.min_len = 1];
 
   // Sample InnerMessage to test submessages.
