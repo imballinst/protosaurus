@@ -151,27 +151,85 @@ module.exports = () => {
           } else {
             // Otherwise, push the line normally.
             const isNotLast = i + 1 < length;
-            let val = `${line}`;
+            const isAComment = /^\s+\/\//.test(line);
+            const matches = getLinksFromALine(line);
+            const elements = [];
 
-            // Add newline if not the last line.
-            // This is because previously we are splitting by "\n".
-            if (isNotLast) {
-              val += "\n";
+            if (matches.length) {
+              // Line containing one or more links.
+              let previousIndex = 0;
 
-              // In case of double space, we need to
-              // add another (as a result of .split()).
-              // We need to add this "zero-width space" otherwise
-              // the MDX renderer will remove the second newline.
-              if (line === "") {
-                val = "​\n";
+              for (const match of matches) {
+                const { position, text, href, originalText } = match;
+                const nextPreviousIndex = match.position + originalText.length;
+
+                // Push the text before the match. This will always be a non-text.
+                // This is because the line will always start with whitespace + double slashes.
+                elements.push({
+                  type: "text",
+                  value: line.slice(previousIndex, position),
+                });
+                // Push the link.
+                elements.push({
+                  type: "element",
+                  tagName: "a",
+                  properties: {
+                    href,
+                  },
+                  children: [
+                    {
+                      type: "text",
+                      value: text,
+                    },
+                  ],
+                });
+
+                previousIndex = nextPreviousIndex;
               }
+
+              // If there is still remaining characters in the line, push the rest of them.
+              if (previousIndex + 1 <= line.length) {
+                elements.push({
+                  type: "text",
+                  value: `${line.slice(previousIndex)}\n`,
+                });
+              }
+            } else {
+              // Line without links.
+              let val = line;
+
+              // Add newline if not the last line.
+              // This is because previously we are splitting by "\n".
+              if (isNotLast) {
+                val += "\n";
+
+                // In case of double space, we need to
+                // add another (as a result of .split()).
+                // We need to add this "zero-width space" otherwise
+                // the MDX renderer will remove the second newline.
+                if (line === "") {
+                  val = "​\n";
+                }
+              }
+
+              elements.push({
+                type: "text",
+                value: val,
+              });
             }
 
-            // Not found.
-            children.push({
-              type: "text",
-              value: val,
-            });
+            if (isAComment) {
+              children.push({
+                type: "element",
+                tagName: "span",
+                properties: {
+                  className: "comment",
+                },
+                children: elements,
+              });
+            } else {
+              children.push(...elements);
+            }
           }
         }
 
@@ -210,4 +268,47 @@ function getMatchingType(sourceDictionary, line) {
   }
 
   return match;
+}
+
+const TLD = "(\\.\\w+)+";
+const LINK_ONLY = `https?\:\/\/.+${TLD}`;
+const LINK_WITH_TEXT = `\\[.+\\]\\(${LINK_ONLY}\\)`;
+
+const LINK_WITH_TEXT_SEPARATOR = "](";
+
+function getLinksFromALine(line) {
+  // Matches [any](any) or any://any.
+  const lineRegex = new RegExp(`${LINK_ONLY}|${LINK_WITH_TEXT}`, "g");
+  const matches = [];
+  let match = lineRegex.exec(line);
+
+  while (match) {
+    const separatorIndex = match[0].indexOf(LINK_WITH_TEXT_SEPARATOR);
+    let text = match[0];
+    let href = match[0];
+
+    // This part is only applicable for something like [link inside comment](https://github.com).
+    // In so doing, we get the text and link separately.
+    if (separatorIndex > -1) {
+      // Get the href.
+      text = match[0].slice(1, separatorIndex);
+      // Get the text.
+      href = match[0].slice(
+        separatorIndex + LINK_WITH_TEXT_SEPARATOR.length,
+        -1
+      );
+    }
+
+    // Push it to the array.
+    matches.push({
+      text,
+      position: match.index,
+      href,
+      originalText: match[0],
+    });
+    // Get the next match.
+    match = lineRegex.exec(line);
+  }
+
+  return matches;
 }
