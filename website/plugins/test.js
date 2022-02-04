@@ -20,7 +20,7 @@ const path = require("path");
 const rehypeProtoPlugin = require("./proto-messages");
 
 const md = fs.readFileSync(
-  path.join(__dirname, "../docs/booking.v1.mdx"),
+  path.join(__dirname, "../../mdx/lib/test-resources/location-messages.mdx"),
   "utf-8"
 );
 
@@ -28,7 +28,9 @@ main();
 
 async function main() {
   // MDX v1, reference: https://github.com/mdx-js/mdx/blob/v1/docs/advanced/plugins.mdx.
-  mdx.sync(md, {
+  const result = mdx.sync(md, {
     rehypePlugins: [rehypeProtoPlugin],
   });
+  // Hide this as needed.
+  console.log(result);
 }
