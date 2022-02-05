@@ -71,6 +71,7 @@ for (const entry of entries) {
   }
 }
 
+// TODO(imballinst): refactor this so that it's more "breakdownable".
 module.exports = () => {
   return (tree) => {
     // During build, we can use `process.env` from `docusaurus.config.js` perhaps
@@ -105,16 +106,20 @@ module.exports = () => {
 
           // Find the matching type.
           // First of all, we search by the submessage.
-          let match = getMatchingType(subMessagesDictionary[namespace], line);
+          let match = getMatchingTypeFromLine(
+            subMessagesDictionary[namespace],
+            line
+          );
+          let builtInMatch;
 
           // If no submessage found, test against dictionary.
           if (match === undefined) {
-            match = getMatchingType(dictionary, line);
+            match = getMatchingTypeFromLine(dictionary, line);
           }
 
           // If still undefined, then match against wkt.
           if (match === undefined) {
-            match = getMatchingType(wkt, line);
+            match = getMatchingTypeFromLine(wkt, line);
           }
 
           if (match !== undefined) {
@@ -244,7 +249,34 @@ module.exports = () => {
 };
 
 // Helper functions.
-function getMatchingType(sourceDictionary, line) {
+const BUILTIN_TYPES = [
+  // Source: https://developers.google.com/protocol-buffers/docs/proto.
+  "bool",
+  "bytes",
+  "double",
+  "fixed32",
+  "sfixed32",
+  "fixed64",
+  "sfixed64",
+  "float",
+  "int32",
+  "sint32",
+  "uint32",
+  "int64",
+  "sint64",
+  "uint64",
+  "string",
+];
+
+function getBuiltInTypeFromLine(line) {
+  const trimmed = line.trim();
+  const segments = trimmed.split(" ");
+
+  if (BUILTIN_TYPES.includes(segments[0])) {
+  }
+}
+
+function getMatchingTypeFromLine(sourceDictionary, line) {
   let match;
 
   for (const type in sourceDictionary) {
