@@ -151,7 +151,15 @@ module.exports = () => {
           } else {
             // Otherwise, push the line normally.
             const isNotLast = i + 1 < length;
+            const isAComment = isLineAComment(line);
             const matches = getLinksFromALine(line);
+            // Reference: https://github.com/syntax-tree/hast#element.
+            // Store HAST elements in an array and apply some rules:
+            //
+            // (1) If the line is a comment, we wrap it in a `span` tag
+            //     with a class which will give it a comment color. Otherwise,
+            //     render it normally.
+            const hastElements = [];
 
             if (matches.length) {
               // Line containing one or more links.
@@ -163,12 +171,12 @@ module.exports = () => {
 
                 // Push the text before the match. This will always be a non-text.
                 // This is because the line will always start with whitespace + double slashes.
-                children.push({
+                hastElements.push({
                   type: "text",
                   value: line.slice(previousIndex, position),
                 });
                 // Push the link.
-                children.push({
+                hastElements.push({
                   type: "element",
                   tagName: "a",
                   properties: {
@@ -187,38 +195,47 @@ module.exports = () => {
 
               // If there is still remaining characters in the line, push the rest of them.
               if (previousIndex + 1 <= line.length) {
-                children.push({
+                hastElements.push({
                   type: "text",
                   value: `${line.slice(previousIndex)}\n`,
                 });
               }
+            } else {
+              // Line without links.
+              let val = line;
 
-              // Skip the rest of the loop.
-              continue;
-            }
+              // Add newline if not the last line.
+              // This is because previously we are splitting by "\n".
+              if (isNotLast) {
+                val += "\n";
 
-            // Line without links.
-            let val = line;
-
-            // Add newline if not the last line.
-            // This is because previously we are splitting by "\n".
-            if (isNotLast) {
-              val += "\n";
-
-              // In case of double space, we need to
-              // add another (as a result of .split()).
-              // We need to add this "zero-width space" otherwise
-              // the MDX renderer will remove the second newline.
-              if (line === "") {
-                val = "​\n";
+                // In case of double space, we need to
+                // add another (as a result of .split()).
+                // We need to add this "zero-width space" otherwise
+                // the MDX renderer will remove the second newline.
+                if (line === "") {
+                  val = "​\n";
+                }
               }
+
+              hastElements.push({
+                type: "text",
+                value: val,
+              });
             }
 
-            // Not found.
-            children.push({
-              type: "text",
-              value: val,
-            });
+            if (isAComment) {
+              children.push({
+                type: "element",
+                tagName: "span",
+                properties: {
+                  className: "comment",
+                },
+                children: hastElements,
+              });
+            } else {
+              children.push(...hastElements);
+            }
           }
         }
 
@@ -285,9 +302,9 @@ function getLinksFromALine(line) {
     // This part is only applicable for something like [link inside comment](https://github.com).
     // In so doing, we get the text and link separately.
     if (separatorIndex > -1) {
-      // Get the href.
-      text = text.slice(1, separatorIndex);
       // Get the text.
+      text = text.slice(1, separatorIndex);
+      // Get the href.
       href = href.slice(separatorIndex + LINK_WITH_TEXT_SEPARATOR.length, -1);
     }
 
@@ -303,4 +320,8 @@ function getLinksFromALine(line) {
   }
 
   return matches;
+}
+
+function isLineAComment(line) {
+  return line.trim().startsWith("//");
 }

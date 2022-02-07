@@ -28,7 +28,9 @@ main();
 
 async function main() {
   // MDX v1, reference: https://github.com/mdx-js/mdx/blob/v1/docs/advanced/plugins.mdx.
-  mdx.sync(md, {
+  const result = mdx.sync(md, {
     rehypePlugins: [rehypeProtoPlugin],
   });
+  // Hide this as needed.
+  console.log(result);
 }
