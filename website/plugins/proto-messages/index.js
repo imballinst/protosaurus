@@ -331,26 +331,32 @@ function getDictionaryTypeFromLine(line, namespace, whitespaces) {
 function getDictionaryType(line, namespace, whitespaces, repeated) {
   // Find the matching type.
   // First of all, we search by the submessage.
-  let match = getMatchingDictionaryTypeFromLine(
-    subMessagesDictionary[namespace],
+  let match = getMatchingDictionaryTypeFromLine({
+    sourceDictionary: subMessagesDictionary[namespace],
     line,
     whitespaces,
-    repeated
-  );
+    repeated,
+    isInnerMessage,
+  });
 
   // If no submessage found, test against dictionary.
   if (match === undefined) {
-    match = getMatchingDictionaryTypeFromLine(
-      dictionary,
+    match = getMatchingDictionaryTypeFromLine({
+      sourceDictionary: dictionary,
       line,
       whitespaces,
-      repeated
-    );
+      repeated,
+    });
   }
 
   // If still undefined, then match against wkt.
   if (match === undefined) {
-    match = getMatchingDictionaryTypeFromLine(wkt, line, whitespaces, repeated);
+    match = getMatchingDictionaryTypeFromLine({
+      sourceDictionary: wkt,
+      line,
+      whitespaces,
+      repeated,
+    });
   }
 
   return match;
@@ -437,12 +443,13 @@ function getMapTypeFromLine(line, namespace) {
   return match;
 }
 
-function getMatchingDictionaryTypeFromLine(
+function getMatchingDictionaryTypeFromLine({
   sourceDictionary,
   line,
   whitespaces = "\\s+",
-  repeated
-) {
+  repeated,
+  isInnerMessage,
+}) {
   // "Shift" the line when it contains "repeated" label.
   // Otherwise, it won't parse the linked types properly.
   const restOfLine = repeated ? line.replace(REPEATED_TEXT, "") : line;
@@ -461,7 +468,7 @@ function getMatchingDictionaryTypeFromLine(
       // and store the type name as well.
       match = {
         position: line.indexOf(type),
-        href: sourceDictionary[type],
+        href: !isInnerMessage ? sourceDictionary[type] : undefined,
         name: type,
       };
       break;
