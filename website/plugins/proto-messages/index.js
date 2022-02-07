@@ -154,7 +154,6 @@ module.exports = () => {
             const matches = getLinksFromALine(line);
 
             if (matches.length) {
-              const elements = [];
               // Line containing one or more links.
               let previousIndex = 0;
 
@@ -164,12 +163,12 @@ module.exports = () => {
 
                 // Push the text before the match. This will always be a non-text.
                 // This is because the line will always start with whitespace + double slashes.
-                elements.push({
+                children.push({
                   type: "text",
                   value: line.slice(previousIndex, position),
                 });
                 // Push the link.
-                elements.push({
+                children.push({
                   type: "element",
                   tagName: "a",
                   properties: {
@@ -188,13 +187,12 @@ module.exports = () => {
 
               // If there is still remaining characters in the line, push the rest of them.
               if (previousIndex + 1 <= line.length) {
-                elements.push({
+                children.push({
                   type: "text",
                   value: `${line.slice(previousIndex)}\n`,
                 });
               }
 
-              children.push(...elements);
               // Skip the rest of the loop.
               continue;
             }
