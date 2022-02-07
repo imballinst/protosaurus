@@ -103,23 +103,33 @@ module.exports = () => {
         // Discard the last line from the code block (pure newline).
         for (let i = 0, length = codeArray.length - 1; i < length; i++) {
           const line = codeArray[i];
+          const isMessageDeclaration = line.trim().startsWith("message");
+          let match;
 
-          // Find the matching type.
-          // First of all, we search by the submessage.
-          let match = getMatchingTypeFromLine(
-            subMessagesDictionary[namespace],
-            line
-          );
-          let builtInMatch;
+          if (isMessageDeclaration) {
+            match = { name: "message", position: line.indexOf("message") };
+          } else {
+            // Find the matching type.
+            // First of all, we search by the submessage.
+            match = getMatchingTypeFromLine(
+              subMessagesDictionary[namespace],
+              line
+            );
 
-          // If no submessage found, test against dictionary.
-          if (match === undefined) {
-            match = getMatchingTypeFromLine(dictionary, line);
-          }
+            // If no submessage found, test against dictionary.
+            if (match === undefined) {
+              match = getMatchingTypeFromLine(dictionary, line);
+            }
 
-          // If still undefined, then match against wkt.
-          if (match === undefined) {
-            match = getMatchingTypeFromLine(wkt, line);
+            // If still undefined, then match against wkt.
+            if (match === undefined) {
+              match = getMatchingTypeFromLine(wkt, line);
+            }
+
+            // If still undefined, then it's most likely a built-in type.
+            if (match === undefined) {
+              match = getBuiltInTypeFromLine(line);
+            }
           }
 
           if (match !== undefined) {
@@ -129,17 +139,14 @@ module.exports = () => {
 
             const firstSlice = line.slice(0, position);
             const secondSlice = line.slice(position + name.length);
+            let hastTypeElement;
 
-            children.push(
-              {
-                type: "text",
-                value: firstSlice,
-              },
-              {
+            if (href) {
+              hastTypeElement = {
                 type: "element",
                 tagName: "a",
                 properties: {
-                  href: href,
+                  href,
                 },
                 children: [
                   {
@@ -147,7 +154,30 @@ module.exports = () => {
                     value: name,
                   },
                 ],
+              };
+            } else {
+              // If not, then it's built-in type.
+              hastTypeElement = {
+                type: "element",
+                tagName: "span",
+                properties: {
+                  className: "type",
+                },
+                children: [
+                  {
+                    type: "text",
+                    value: name,
+                  },
+                ],
+              };
+            }
+
+            children.push(
+              {
+                type: "text",
+                value: firstSlice,
               },
+              hastTypeElement,
               {
                 type: "text",
                 value: `${secondSlice}\n`,
@@ -272,14 +302,23 @@ const BUILTIN_TYPES = [
   "sint64",
   "uint64",
   "string",
+  // TODO(imballinst): add `message` later.
+  // Also think on `map`.
 ];
 
 function getBuiltInTypeFromLine(line) {
   const trimmed = line.trim();
   const segments = trimmed.split(" ");
+  let match;
 
   if (BUILTIN_TYPES.includes(segments[0])) {
+    match = {
+      name: segments[0],
+      position: line.indexOf(segments[0]),
+    };
   }
+
+  return match;
 }
 
 function getMatchingTypeFromLine(sourceDictionary, line) {
