@@ -151,7 +151,54 @@ module.exports = () => {
           } else {
             // Otherwise, push the line normally.
             const isNotLast = i + 1 < length;
-            let val = `${line}`;
+            const matches = getLinksFromALine(line);
+
+            if (matches.length) {
+              // Line containing one or more links.
+              let previousIndex = 0;
+
+              for (const match of matches) {
+                const { position, text, href, originalText } = match;
+                const nextPreviousIndex = match.position + originalText.length;
+
+                // Push the text before the match. This will always be a non-text.
+                // This is because the line will always start with whitespace + double slashes.
+                children.push({
+                  type: "text",
+                  value: line.slice(previousIndex, position),
+                });
+                // Push the link.
+                children.push({
+                  type: "element",
+                  tagName: "a",
+                  properties: {
+                    href,
+                  },
+                  children: [
+                    {
+                      type: "text",
+                      value: text,
+                    },
+                  ],
+                });
+
+                previousIndex = nextPreviousIndex;
+              }
+
+              // If there is still remaining characters in the line, push the rest of them.
+              if (previousIndex + 1 <= line.length) {
+                children.push({
+                  type: "text",
+                  value: `${line.slice(previousIndex)}\n`,
+                });
+              }
+
+              // Skip the rest of the loop.
+              continue;
+            }
+
+            // Line without links.
+            let val = line;
 
             // Add newline if not the last line.
             // This is because previously we are splitting by "\n".
@@ -210,4 +257,50 @@ function getMatchingType(sourceDictionary, line) {
   }
 
   return match;
+}
+
+const TLD = "(\\.\\w+)+";
+const LINK_ONLY = `https?\:\/\/.+${TLD}`;
+const LINK_WITH_TEXT = `\\[.+\\]\\(${LINK_ONLY}\\)`;
+
+const LINK_WITH_TEXT_SEPARATOR = "](";
+const LINE_REGEX = new RegExp(`${LINK_ONLY}|${LINK_WITH_TEXT}`, "g");
+
+function getLinksFromALine(line) {
+  // Matches [text](url) or protocol://domain.
+  const matches = [];
+  let match = LINE_REGEX.exec(line);
+
+  while (match) {
+    // The first index `0` will always be present here, since
+    // `match` is not `null`.
+    const textMatch = match[0];
+    const separatorIndex = textMatch.indexOf(LINK_WITH_TEXT_SEPARATOR);
+    // The text that represent the link.
+    // Sometimes, the text is equal as the link, but if we are using the
+    // [text](link) format, then `text` and `href` needs to be differentiated.
+    let text = textMatch;
+    let href = textMatch;
+
+    // This part is only applicable for something like [link inside comment](https://github.com).
+    // In so doing, we get the text and link separately.
+    if (separatorIndex > -1) {
+      // Get the href.
+      text = text.slice(1, separatorIndex);
+      // Get the text.
+      href = href.slice(separatorIndex + LINK_WITH_TEXT_SEPARATOR.length, -1);
+    }
+
+    // Push it to the array.
+    matches.push({
+      text,
+      position: match.index,
+      href,
+      originalText: textMatch,
+    });
+    // Get the next match.
+    match = LINE_REGEX.exec(line);
+  }
+
+  return matches;
 }
