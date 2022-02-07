@@ -1,5 +1,12 @@
 import { readFile } from "fs-extra";
-import { Protofile, PackageData, ProtoMessage, MessageData } from "./types";
+import {
+  Protofile,
+  PackageData,
+  ProtoMessage,
+  MessageData,
+  MessagesRecord,
+  InnerMessagesRecord,
+} from "./types";
 import {
   getMessageFieldsBlock,
   getMessageDescription,
@@ -24,8 +31,8 @@ export async function readPackageData(packagePath: string) {
     const messagesData: MessageData[] = [];
 
     // Store inner messages.
-    const innerMessagesRecord: Record<string, string> = {};
-    const messagesRecord: Record<string, ProtoMessage> = {};
+    const innerMessagesRecord: InnerMessagesRecord = {};
+    const messagesRecord: MessagesRecord = {};
 
     for (const message of file.messages) {
       const messageNameArray = message.longName.split(".");
@@ -33,10 +40,13 @@ export async function readPackageData(packagePath: string) {
 
       if (isInnerMessage) {
         // We will use this later to "patch" `messagesRecord`.
-        innerMessagesRecord[message.longName] = getMessageFieldsBlock({
-          message,
-          level: 2,
-        });
+        innerMessagesRecord[message.longName] = {
+          rawMessage: message,
+          messageBlock: getMessageFieldsBlock({
+            message,
+            level: 2,
+          }),
+        };
       } else {
         // Store non-inner messages.
         // We need to "patch" it with `innerMessagesRecord` later.
@@ -62,6 +72,7 @@ export async function readPackageData(packagePath: string) {
               level: 1,
               message,
               innerMessagesRecord,
+              messagesRecord,
             }),
         }),
       });

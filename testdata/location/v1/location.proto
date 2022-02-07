@@ -51,4 +51,8 @@ message Location {
 
   //
   InnerMessage empty_comment = 6;
+
+  map<string, InnerMessage> test_map = 7;
+
+  repeated InnerMessage test_repeated = 8;
 }

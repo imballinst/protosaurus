@@ -32,5 +32,5 @@ async function main() {
     rehypePlugins: [rehypeProtoPlugin],
   });
   // Hide this as needed.
-  console.log(result);
+  // console.log(result);
 }

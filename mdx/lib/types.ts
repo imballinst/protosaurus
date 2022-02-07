@@ -77,11 +77,20 @@ export interface ServiceData {
   body: string;
 }
 
+export type InnerMessagesRecord = Record<
+  string,
+  {
+    messageBlock: string;
+    rawMessage: ProtoMessage;
+  }
+>;
+export type MessagesRecord = Record<string, ProtoMessage>;
+
 export interface PackageData {
   name: string;
   descriptionMdx: string;
   messagesData: MessageData[];
-  innerMessagesRecord: Record<string, string>;
+  innerMessagesRecord: InnerMessagesRecord;
   servicesData: ServiceData[];
   // Raw proto services.
   rawProtoServices: ProtoService[];

@@ -35,6 +35,7 @@
   --ifm-pre-background-color: rgb(246, 248, 250);
 
   --precustom-comment-color: rgb(153, 153, 136);
+  --precustom-type-color: rgb(0, 0, 159);
 }
 
 html[data-theme="dark"] {
@@ -42,6 +43,7 @@ html[data-theme="dark"] {
   --ifm-pre-background: rgb(40, 42, 54);
 
   --precustom-comment-color: rgb(98, 114, 164);
+  --precustom-type-color: rgb(189, 147, 249);
 }
 
 .docusaurus-highlight-code-line {
@@ -67,4 +69,8 @@ precustom {
 
 precustom .comment {
   color: var(--precustom-comment-color);
+}
+
+precustom .type {
+  color: var(--precustom-type-color);
 }
