@@ -17,7 +17,6 @@
 // TODO(imballinst): convert to TypeScript.
 // If Docusaurus can't support TypeScript plugin files, then we need
 // to convert to JavaScript files first in the `prebuild` hook.
-const { match } = require("assert");
 const fs = require("fs");
 const path = require("path");
 
