@@ -264,28 +264,31 @@ const LINK_ONLY = `https?\:\/\/.+${TLD}`;
 const LINK_WITH_TEXT = `\\[.+\\]\\(${LINK_ONLY}\\)`;
 
 const LINK_WITH_TEXT_SEPARATOR = "](";
+const LINE_REGEX = new RegExp(`${LINK_ONLY}|${LINK_WITH_TEXT}`, "g");
 
 function getLinksFromALine(line) {
-  // Matches [any](any) or any://any.
-  const lineRegex = new RegExp(`${LINK_ONLY}|${LINK_WITH_TEXT}`, "g");
+  // Matches [text](url) or protocol://domain.
   const matches = [];
-  let match = lineRegex.exec(line);
+  let match = LINE_REGEX.exec(line);
 
   while (match) {
-    const separatorIndex = match[0].indexOf(LINK_WITH_TEXT_SEPARATOR);
-    let text = match[0];
-    let href = match[0];
+    // The first index `0` will always be present here, since
+    // `match` is not `null`.
+    const textMatch = match[0];
+    const separatorIndex = textMatch.indexOf(LINK_WITH_TEXT_SEPARATOR);
+    // The text that represent the link.
+    // Sometimes, the text is equal as the link, but if we are using the
+    // [text](link) format, then `text` and `href` needs to be differentiated.
+    let text = textMatch;
+    let href = textMatch;
 
     // This part is only applicable for something like [link inside comment](https://github.com).
     // In so doing, we get the text and link separately.
     if (separatorIndex > -1) {
       // Get the href.
-      text = match[0].slice(1, separatorIndex);
+      text = text.slice(1, separatorIndex);
       // Get the text.
-      href = match[0].slice(
-        separatorIndex + LINK_WITH_TEXT_SEPARATOR.length,
-        -1
-      );
+      href = href.slice(separatorIndex + LINK_WITH_TEXT_SEPARATOR.length, -1);
     }
 
     // Push it to the array.
@@ -293,10 +296,10 @@ function getLinksFromALine(line) {
       text,
       position: match.index,
       href,
-      originalText: match[0],
+      originalText: textMatch,
     });
     // Get the next match.
-    match = lineRegex.exec(line);
+    match = LINE_REGEX.exec(line);
   }
 
   return matches;
