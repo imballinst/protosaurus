@@ -336,7 +336,7 @@ function getDictionaryType(line, namespace, whitespaces, repeated) {
     line,
     whitespaces,
     repeated,
-    isInnerMessage,
+    isInnerMessage: true,
   });
 
   // If no submessage found, test against dictionary.
