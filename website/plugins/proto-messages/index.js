@@ -300,12 +300,15 @@ function getHastElementType(match) {
 function getFieldTypeFromLine(line, namespace, whitespaces) {
   const trimmed = line.trim();
   const segments = trimmed.split(" ");
+  // For example:
+  //
+  // repeated string test_string = 1; --> [repeated, string, test_string, =, 1].
+  // string test_another = 2; --> [string, test_another, =, 2].
+  //
+  // In the above example, then the first one `repeated = true`, and
+  // for the second `repeated = false`.
+  const repeated = segments[0] === "repeated";
   let match = findTypeInDictionaries(line, namespace, whitespaces, repeated);
-  let repeated = false;
-
-  if (segments[0] === "repeated") {
-    repeated = true;
-  }
 
   // If `match` is undefined (not found in dictionary), then it's most likely a built-in type.
   if (match === undefined) {
