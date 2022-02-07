@@ -17,6 +17,7 @@
 // TODO(imballinst): convert to TypeScript.
 // If Docusaurus can't support TypeScript plugin files, then we need
 // to convert to JavaScript files first in the `prebuild` hook.
+const { match } = require("assert");
 const fs = require("fs");
 const path = require("path");
 
@@ -71,6 +72,8 @@ for (const entry of entries) {
   }
 }
 
+const REPEATED_TEXT = "repeated ";
+
 // TODO(imballinst): refactor this so that it's more "breakdownable".
 module.exports = () => {
   return (tree) => {
@@ -103,73 +106,61 @@ module.exports = () => {
         // Discard the last line from the code block (pure newline).
         for (let i = 0, length = codeArray.length - 1; i < length; i++) {
           const line = codeArray[i];
-          const isMessageDeclaration = line.trim().startsWith("message");
-          let match;
+          let type = getTypeFromLine(line, namespace);
 
-          if (isMessageDeclaration) {
-            match = { name: "message", position: line.indexOf("message") };
-          } else {
-            // Find the matching type.
-            // First of all, we search by the submessage.
-            match = getMatchingTypeFromLine(
-              subMessagesDictionary[namespace],
-              line
-            );
-
-            // If no submessage found, test against dictionary.
-            if (match === undefined) {
-              match = getMatchingTypeFromLine(dictionary, line);
-            }
-
-            // If still undefined, then match against wkt.
-            if (match === undefined) {
-              match = getMatchingTypeFromLine(wkt, line);
-            }
-
-            // If still undefined, then it's most likely a built-in type.
-            if (match === undefined) {
-              match = getBuiltInTypeFromLine(line);
-            }
+          if (type === undefined && line.trim().startsWith("message")) {
+            // If undefined, then we find the built-in syntaxes.
+            type = {
+              match: { name: "message", position: line.indexOf("message") },
+            };
           }
 
-          if (match !== undefined) {
+          if (type !== undefined) {
             // When found, we split the line into 3 parts.
             // The text before the type, the type, and the text after the type.
-            const { position, href, name } = match;
+            const { match = {}, repeated } = type;
+            const { position, name, map } = match;
+            let firstSlice;
+            let secondSlice;
+            let hastTypeElements = [];
 
-            const firstSlice = line.slice(0, position);
-            const secondSlice = line.slice(position + name.length);
-            let hastTypeElement;
+            if (map) {
+              // Map type.
+              const { key, value, mapCloseTagIndex } = map;
 
-            if (href) {
-              hastTypeElement = {
-                type: "element",
-                tagName: "a",
-                properties: {
-                  href,
+              firstSlice = line.slice(0, key.position);
+              secondSlice = line.slice(mapCloseTagIndex + 1);
+
+              hastTypeElements.push(
+                getHastElementType(key),
+                {
+                  type: "text",
+                  value: ", ",
                 },
-                children: [
-                  {
-                    type: "text",
-                    value: name,
-                  },
-                ],
-              };
+                getHastElementType(value),
+                {
+                  type: "text",
+                  value: ">",
+                }
+              );
             } else {
-              // If not, then it's built-in type.
-              hastTypeElement = {
-                type: "element",
-                tagName: "span",
-                properties: {
-                  className: "type",
-                },
-                children: [
-                  {
-                    type: "text",
-                    value: name,
-                  },
-                ],
-              };
+              // Common type.
+              let firstSlicePosition = position;
+
+              // Pre-pend the `repeated` text beforehand, if it has "repeated" label.
+              if (repeated) {
+                hastTypeElements.push(
+                  getHastElementType({
+                    name: REPEATED_TEXT,
+                  })
+                );
+                firstSlicePosition = firstSlicePosition - REPEATED_TEXT.length;
+              }
+
+              firstSlice = line.slice(0, firstSlicePosition);
+              secondSlice = line.slice(position + name.length);
+
+              hastTypeElements.push(getHastElementType(match));
             }
 
             children.push(
@@ -177,7 +168,7 @@ module.exports = () => {
                 type: "text",
                 value: firstSlice,
               },
-              hastTypeElement,
+              ...hastTypeElements,
               {
                 type: "text",
                 value: `${secondSlice}\n`,
@@ -201,7 +192,7 @@ module.exports = () => {
               let previousIndex = 0;
 
               for (const match of matches) {
-                const { position, text, href, originalText } = match;
+                const { position, originalText } = match;
                 const nextPreviousIndex = match.position + originalText.length;
 
                 // Push the text before the match. This will always be a non-text.
@@ -211,19 +202,7 @@ module.exports = () => {
                   value: line.slice(previousIndex, position),
                 });
                 // Push the link.
-                hastElements.push({
-                  type: "element",
-                  tagName: "a",
-                  properties: {
-                    href,
-                  },
-                  children: [
-                    {
-                      type: "text",
-                      value: text,
-                    },
-                  ],
-                });
+                hastElements.push(getHastElementType(match));
 
                 previousIndex = nextPreviousIndex;
               }
@@ -285,6 +264,98 @@ module.exports = () => {
 };
 
 // Helper functions.
+function getHastElementType(match) {
+  const { name, href } = match;
+
+  if (href) {
+    return {
+      type: "element",
+      tagName: "a",
+      properties: {
+        href,
+      },
+      children: [
+        {
+          type: "text",
+          value: name,
+        },
+      ],
+    };
+  }
+
+  return {
+    type: "element",
+    tagName: "span",
+    properties: {
+      className: "type",
+    },
+    children: [
+      {
+        type: "text",
+        value: name,
+      },
+    ],
+  };
+}
+
+function getTypeFromLine(line, namespace, whitespaces) {
+  let { match, repeated } = getDictionaryTypeFromLine(
+    line,
+    namespace,
+    whitespaces
+  );
+
+  // If still undefined, then it's most likely a built-in type.
+  if (match === undefined) {
+    match = getBuiltInTypeFromLine(line, namespace);
+  }
+
+  return match !== undefined ? { match, repeated } : undefined;
+}
+
+function getDictionaryTypeFromLine(line, namespace, whitespaces) {
+  const trimmed = line.trim();
+  const segments = trimmed.split(" ");
+  let repeated = false;
+
+  if (segments[0] === "repeated") {
+    repeated = true;
+  }
+
+  return {
+    match: getDictionaryType(line, namespace, whitespaces, repeated),
+    repeated,
+  };
+}
+
+function getDictionaryType(line, namespace, whitespaces, repeated) {
+  // Find the matching type.
+  // First of all, we search by the submessage.
+  let match = getMatchingDictionaryTypeFromLine(
+    subMessagesDictionary[namespace],
+    line,
+    whitespaces,
+    repeated
+  );
+
+  // If no submessage found, test against dictionary.
+  if (match === undefined) {
+    match = getMatchingDictionaryTypeFromLine(
+      dictionary,
+      line,
+      whitespaces,
+      repeated
+    );
+  }
+
+  // If still undefined, then match against wkt.
+  if (match === undefined) {
+    match = getMatchingDictionaryTypeFromLine(wkt, line, whitespaces, repeated);
+  }
+
+  return match;
+}
+
 const BUILTIN_TYPES = [
   // Source: https://developers.google.com/protocol-buffers/docs/proto.
   "bool",
@@ -302,13 +373,10 @@ const BUILTIN_TYPES = [
   "sint64",
   "uint64",
   "string",
-  // TODO(imballinst): add `message` later.
-  // Also think on `map`.
 ];
 
-function getBuiltInTypeFromLine(line) {
-  const trimmed = line.trim();
-  const segments = trimmed.split(" ");
+function getBuiltInTypeFromLine(line, namespace) {
+  const segments = line.trim().split(" ");
   let match;
 
   if (BUILTIN_TYPES.includes(segments[0])) {
@@ -316,12 +384,68 @@ function getBuiltInTypeFromLine(line) {
       name: segments[0],
       position: line.indexOf(segments[0]),
     };
+  } else {
+    // Test map.
+    match = getMapTypeFromLine(line, namespace);
   }
 
   return match;
 }
 
-function getMatchingTypeFromLine(sourceDictionary, line) {
+// TODO(imballinst): use these later.
+// We also haven't covered `option` inside `enum` yet.
+// const BUILTIN_SYNTAXES = ["message", "enum"];
+// const BUILTIN_SYNTAXES_WITHOUT_COLORS = ["oneof", "reserved"];
+
+// For example, "string, string".
+// Not sure if "string,string" is possible, but 0-N seems safer.
+const MAP_KEY_VALUE_REGEX = /,\s*/;
+
+function getMapTypeFromLine(line, namespace) {
+  let match;
+
+  if (line.trim().startsWith("map<")) {
+    const mapOpenTagIndex = line.indexOf("<");
+    // Get first index of the closing `>`.
+    // This should be safe because the value can't be another map.
+    // Map also cannot be repeated.
+    // Reference: https://developers.google.com/protocol-buffers/docs/proto3#maps.
+    const mapCloseTagIndex = line.indexOf(">");
+    const sliced = line.slice(mapOpenTagIndex + 1, mapCloseTagIndex);
+
+    const [keyType, valueType] = sliced.split(MAP_KEY_VALUE_REGEX);
+    const keyMatch = getDictionaryType(keyType, namespace, "");
+    const valueMatch = getDictionaryType(valueType, namespace, "");
+
+    match = {
+      map: {
+        key: keyMatch || {
+          name: keyType,
+          href: undefined,
+          position: line.indexOf(keyType),
+        },
+        value: valueMatch || {
+          name: valueType,
+          href: undefined,
+          position: line.indexOf(valueType),
+        },
+        mapCloseTagIndex: line.indexOf(">"),
+      },
+    };
+  }
+
+  return match;
+}
+
+function getMatchingDictionaryTypeFromLine(
+  sourceDictionary,
+  line,
+  whitespaces = "\\s+",
+  repeated
+) {
+  // "Shift" the line when it contains "repeated" label.
+  // Otherwise, it won't parse the linked types properly.
+  const restOfLine = repeated ? line.replace(REPEATED_TEXT, "") : line;
   let match;
 
   for (const type in sourceDictionary) {
@@ -329,8 +453,8 @@ function getMatchingTypeFromLine(sourceDictionary, line) {
     // so we want to find lines that start with whitespace, then the full type name.
     // the "\b" here marks the "word boundary". So, for example, "Booking" won't
     // match for "BookingStatus".
-    const regex = new RegExp(`^\\s+\\b${type}\\b`);
-    const isIncluded = regex.test(line);
+    const regex = new RegExp(`^${whitespaces}\\b${type}\\b`);
+    const isIncluded = regex.test(restOfLine);
 
     if (isIncluded) {
       // When found, we get the index of the type word in the line,
@@ -367,21 +491,21 @@ function getLinksFromALine(line) {
     // The text that represent the link.
     // Sometimes, the text is equal as the link, but if we are using the
     // [text](link) format, then `text` and `href` needs to be differentiated.
-    let text = textMatch;
+    let name = textMatch;
     let href = textMatch;
 
     // This part is only applicable for something like [link inside comment](https://github.com).
     // In so doing, we get the text and link separately.
     if (separatorIndex > -1) {
       // Get the text.
-      text = text.slice(1, separatorIndex);
+      name = name.slice(1, separatorIndex);
       // Get the href.
       href = href.slice(separatorIndex + LINK_WITH_TEXT_SEPARATOR.length, -1);
     }
 
     // Push it to the array.
     matches.push({
-      text,
+      name,
       position: match.index,
       href,
       originalText: textMatch,

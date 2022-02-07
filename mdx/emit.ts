@@ -86,7 +86,16 @@ const CATEGORY_LABELS = {
     promises.push(
       emitMessagesJson({
         filePath: pathToPlugin,
-        messages: pkg.messagesData,
+        messages: pkg.messagesData.concat(
+          // Concat with this array because we'll need the inner messages
+          // in the dictionary for syntax coloring.
+          Object.values(pkg.innerMessagesRecord).map((message) => ({
+            body: "",
+            name: message.rawMessage.longName,
+            packageName: pkg.name,
+            hash: message.rawMessage.longName.toLowerCase(),
+          }))
+        ),
       })
     );
   }
