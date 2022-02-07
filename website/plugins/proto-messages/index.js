@@ -106,7 +106,7 @@ module.exports = () => {
         // Discard the last line from the code block (pure newline).
         for (let i = 0, length = codeArray.length - 1; i < length; i++) {
           const line = codeArray[i];
-          let type = getTypeFromLine(line, namespace);
+          let type = getFieldTypeFromLine(line, namespace);
 
           if (type === undefined && line.trim().startsWith("message")) {
             // If undefined, then we find the built-in syntaxes.
@@ -298,37 +298,25 @@ function getHastElementType(match) {
   };
 }
 
-function getTypeFromLine(line, namespace, whitespaces) {
-  let { match, repeated } = getDictionaryTypeFromLine(
-    line,
-    namespace,
-    whitespaces
-  );
-
-  // If still undefined, then it's most likely a built-in type.
-  if (match === undefined) {
-    match = getBuiltInTypeFromLine(line, namespace);
-  }
-
-  return match !== undefined ? { match, repeated } : undefined;
-}
-
-function getDictionaryTypeFromLine(line, namespace, whitespaces) {
+function getFieldTypeFromLine(line, namespace, whitespaces) {
   const trimmed = line.trim();
   const segments = trimmed.split(" ");
+  let match = findTypeInDictionaries(line, namespace, whitespaces, repeated);
   let repeated = false;
 
   if (segments[0] === "repeated") {
     repeated = true;
   }
 
-  return {
-    match: getDictionaryType(line, namespace, whitespaces, repeated),
-    repeated,
-  };
+  // If `match` is undefined (not found in dictionary), then it's most likely a built-in type.
+  if (match === undefined) {
+    match = getBuiltInFieldType(line, namespace);
+  }
+
+  return match !== undefined ? { match, repeated } : undefined;
 }
 
-function getDictionaryType(line, namespace, whitespaces, repeated) {
+function findTypeInDictionaries(line, namespace, whitespaces, repeated) {
   // Find the matching type.
   // First of all, we search by the submessage.
   let match = getMatchingDictionaryTypeFromLine({
@@ -381,7 +369,7 @@ const BUILTIN_TYPES = [
   "string",
 ];
 
-function getBuiltInTypeFromLine(line, namespace) {
+function getBuiltInFieldType(line, namespace) {
   const segments = line.trim().split(" ");
   let match;
 
@@ -392,7 +380,7 @@ function getBuiltInTypeFromLine(line, namespace) {
     };
   } else {
     // Test map.
-    match = getMapTypeFromLine(line, namespace);
+    match = getMapFieldTypes(line, namespace);
   }
 
   return match;
@@ -407,7 +395,7 @@ function getBuiltInTypeFromLine(line, namespace) {
 // Not sure if "string,string" is possible, but 0-N seems safer.
 const MAP_KEY_VALUE_REGEX = /,\s*/;
 
-function getMapTypeFromLine(line, namespace) {
+function getMapFieldTypes(line, namespace) {
   let match;
 
   if (line.trim().startsWith("map<")) {
@@ -420,8 +408,8 @@ function getMapTypeFromLine(line, namespace) {
     const sliced = line.slice(mapOpenTagIndex + 1, mapCloseTagIndex);
 
     const [keyType, valueType] = sliced.split(MAP_KEY_VALUE_REGEX);
-    const keyMatch = getDictionaryType(keyType, namespace, "");
-    const valueMatch = getDictionaryType(valueType, namespace, "");
+    const keyMatch = findTypeInDictionaries(keyType, namespace, "");
+    const valueMatch = findTypeInDictionaries(valueType, namespace, "");
 
     match = {
       map: {
