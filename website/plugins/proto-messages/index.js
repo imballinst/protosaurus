@@ -153,7 +153,7 @@ module.exports = () => {
             const isNotLast = i + 1 < length;
             const isAComment = /^\s+\/\//.test(line);
             const matches = getLinksFromALine(line);
-            const elements = [];
+            const hastElements = [];
 
             if (matches.length) {
               // Line containing one or more links.
@@ -165,12 +165,12 @@ module.exports = () => {
 
                 // Push the text before the match. This will always be a non-text.
                 // This is because the line will always start with whitespace + double slashes.
-                elements.push({
+                hastElements.push({
                   type: "text",
                   value: line.slice(previousIndex, position),
                 });
                 // Push the link.
-                elements.push({
+                hastElements.push({
                   type: "element",
                   tagName: "a",
                   properties: {
@@ -189,7 +189,7 @@ module.exports = () => {
 
               // If there is still remaining characters in the line, push the rest of them.
               if (previousIndex + 1 <= line.length) {
-                elements.push({
+                hastElements.push({
                   type: "text",
                   value: `${line.slice(previousIndex)}\n`,
                 });
@@ -212,7 +212,7 @@ module.exports = () => {
                 }
               }
 
-              elements.push({
+              hastElements.push({
                 type: "text",
                 value: val,
               });
@@ -225,10 +225,10 @@ module.exports = () => {
                 properties: {
                   className: "comment",
                 },
-                children: elements,
+                children: hastElements,
               });
             } else {
-              children.push(...elements);
+              children.push(...hastElements);
             }
           }
         }
@@ -275,28 +275,31 @@ const LINK_ONLY = `https?\:\/\/.+${TLD}`;
 const LINK_WITH_TEXT = `\\[.+\\]\\(${LINK_ONLY}\\)`;
 
 const LINK_WITH_TEXT_SEPARATOR = "](";
+const LINE_REGEX = new RegExp(`${LINK_ONLY}|${LINK_WITH_TEXT}`, "g");
 
 function getLinksFromALine(line) {
   // Matches [any](any) or any://any.
-  const lineRegex = new RegExp(`${LINK_ONLY}|${LINK_WITH_TEXT}`, "g");
   const matches = [];
-  let match = lineRegex.exec(line);
+  let match = LINE_REGEX.exec(line);
 
   while (match) {
-    const separatorIndex = match[0].indexOf(LINK_WITH_TEXT_SEPARATOR);
-    let text = match[0];
-    let href = match[0];
+    // The first index `0` will always be present here, since
+    // `match` is not `null`.
+    const textMatch = match[0];
+    const separatorIndex = textMatch.indexOf(LINK_WITH_TEXT_SEPARATOR);
+    // The text that represent the link.
+    // Sometimes, the text is equal as the link, but if we are using the
+    // [text](link) format, then `text` and `href` needs to be differentiated.
+    let text = textMatch;
+    let href = textMatch;
 
     // This part is only applicable for something like [link inside comment](https://github.com).
     // In so doing, we get the text and link separately.
     if (separatorIndex > -1) {
-      // Get the href.
-      text = match[0].slice(1, separatorIndex);
       // Get the text.
-      href = match[0].slice(
-        separatorIndex + LINK_WITH_TEXT_SEPARATOR.length,
-        -1
-      );
+      text = text.slice(1, separatorIndex);
+      // Get the href.
+      href = href.slice(separatorIndex + LINK_WITH_TEXT_SEPARATOR.length, -1);
     }
 
     // Push it to the array.
@@ -304,10 +307,10 @@ function getLinksFromALine(line) {
       text,
       position: match.index,
       href,
-      originalText: match[0],
+      originalText: textMatch,
     });
     // Get the next match.
-    match = lineRegex.exec(line);
+    match = LINE_REGEX.exec(line);
   }
 
   return matches;
