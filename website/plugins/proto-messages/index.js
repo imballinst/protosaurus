@@ -151,8 +151,14 @@ module.exports = () => {
           } else {
             // Otherwise, push the line normally.
             const isNotLast = i + 1 < length;
-            const isAComment = /^\s+\/\//.test(line);
+            const isAComment = isLineAComment(line);
             const matches = getLinksFromALine(line);
+            // Reference: https://github.com/syntax-tree/hast#element.
+            // Store HAST elements in an array and apply some rules:
+            //
+            // (1) If the line is a comment, we wrap it in a `span` tag
+            //     with a class which will give it a comment color. Otherwise,
+            //     render it normally.
             const hastElements = [];
 
             if (matches.length) {
@@ -314,4 +320,8 @@ function getLinksFromALine(line) {
   }
 
   return matches;
+}
+
+function isLineAComment(line) {
+  return line.trim().startsWith("//");
 }
