@@ -284,7 +284,7 @@ const LINK_WITH_TEXT_SEPARATOR = "](";
 const LINE_REGEX = new RegExp(`${LINK_ONLY}|${LINK_WITH_TEXT}`, "g");
 
 function getLinksFromALine(line) {
-  // Matches [any](any) or any://any.
+  // Matches [text](url) or protocol://domain.
   const matches = [];
   let match = LINE_REGEX.exec(line);
 
