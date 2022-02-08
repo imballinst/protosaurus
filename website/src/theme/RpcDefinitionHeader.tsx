@@ -1,8 +1,16 @@
 // Copyright 2022 Protosaurus Authors
 // Licensed under the Apache License, Version 2.0 (the "License")
 
-import React from "react";
+import React, { ReactNode } from "react";
 import styles from "./Definition.module.css";
+
+interface DefinitionHeaderProps {
+  requestType: string;
+  responseType: string;
+  requestTypePrefix?: string;
+  responseTypePrefix?: string;
+  children: ReactNode;
+}
 
 export default function DefinitionHeader({
   requestTypePrefix,
@@ -10,7 +18,7 @@ export default function DefinitionHeader({
   responseTypePrefix,
   responseType,
   children,
-}) {
+}: DefinitionHeaderProps) {
   return (
     <div className={styles["rpc-definition-title"]}>
       <div className={styles["rpc-definition-name"]}>
