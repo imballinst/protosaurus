@@ -14,6 +14,7 @@
  * limitations under the License.
  */
 
+import type { Plugin } from "@docusaurus/types";
 import { Comment, DocType, Element, Root, Text } from "hast-format";
 import { getLinksFromALine, isLineAComment } from "./comments";
 import { REPEATED_TEXT } from "./constants";
@@ -23,7 +24,7 @@ import { getHastElementType } from "./hast";
 
 const { innerMessages, localMessages, wktMessages } = getAllDictionaries();
 
-export default () => {
+const docusaurusPlugin: Plugin = () => {
   return (tree: Root) => {
     // During build, we can use `process.env` from `docusaurus.config.js` perhaps
     // to get the directory containing the intermediary JSON.
@@ -238,6 +239,8 @@ export default () => {
     }
   };
 };
+
+export default docusaurusPlugin;
 
 // Helper functions.
 function isElement(

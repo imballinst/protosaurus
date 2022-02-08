@@ -20,7 +20,9 @@
 const lightCodeTheme = require("prism-react-renderer/themes/github");
 const darkCodeTheme = require("prism-react-renderer/themes/dracula");
 
-const protoMessageRehypePlugin = require("./plugins/proto-messages");
+const {
+  default: protoMessageRehypePlugin,
+} = require("./plugins/proto-messages/lib");
 
 /** @type {import('@docusaurus/types').Config} */
 const config = {

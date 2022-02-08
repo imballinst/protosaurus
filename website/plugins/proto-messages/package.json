@@ -5,6 +5,7 @@
   "license": "MIT",
   "private": true,
   "scripts": {
+    "build": "rm -rf lib && tsc",
     "test:mdx": "ts-node test-remark.ts"
   },
   "devDependencies": {
