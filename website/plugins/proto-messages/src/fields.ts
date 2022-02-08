@@ -20,7 +20,7 @@ import {
   HashRecord,
   NamespaceHashRecord,
 } from "./dictionary";
-import { TextMatch } from "./types";
+import { FieldType, TextMatch } from "./types";
 
 interface GetFieldInformationParameter {
   line: string;
@@ -38,7 +38,7 @@ export function getFieldInformation({
   localMessages,
   innerMessages,
   wktMessages,
-}: GetFieldInformationParameter) {
+}: GetFieldInformationParameter): FieldType | undefined {
   const trimmed = line.trim();
   const segments = trimmed.split(" ");
   // For example:

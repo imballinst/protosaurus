@@ -15,21 +15,23 @@
  */
 
 import { Element } from "hast-format";
-import { TextMatchField } from "./types";
+import { PartialSpecific, TextMatchField } from "./types";
 
-export function getHastElementType(match: TextMatchField): Element {
+export function getHastElementType(
+  match: PartialSpecific<TextMatchField, "position">
+): Element {
   const { name, href } = match;
 
   if (href) {
     return {
-      type: "element",
+      type: "element" as const,
       tagName: "a",
       properties: {
         href,
       },
       children: [
         {
-          type: "text",
+          type: "text" as const,
           value: name,
         },
       ],
@@ -37,7 +39,7 @@ export function getHastElementType(match: TextMatchField): Element {
   }
 
   return {
-    type: "element",
+    type: "element" as const,
     tagName: "span",
     properties: {
       className: "type",

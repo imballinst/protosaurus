@@ -30,3 +30,14 @@ export interface TextMatch {
     mapClosingTagIndex: number;
   };
 }
+
+export interface FieldType {
+  match: TextMatch;
+  isRepeated?: boolean;
+}
+
+export type PartialSpecific<TBaseType, TUnion extends keyof TBaseType> = Omit<
+  TBaseType,
+  TUnion
+> &
+  Partial<Pick<TBaseType, TUnion>>;
