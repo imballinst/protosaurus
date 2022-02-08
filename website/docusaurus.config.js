@@ -22,7 +22,7 @@ const darkCodeTheme = require("prism-react-renderer/themes/dracula");
 
 const protoMessageRehypePlugin = require("./plugins/proto-messages");
 
-/** @type {import('@docusaurus/core').Config} */
+/** @type {import('@docusaurus/types').Config} */
 const config = {
   title: "My Site",
   tagline: "Dinosaurs are cool",
