@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import fs from "fs/promises";
+import fs from "fs";
 import path from "path";
 import { REPEATED_TEXT } from "./constants";
 import { TextMatch, TextMatchField } from "./types";
@@ -24,7 +24,7 @@ const PATH_TO_DICTIONARY_FOLDER = path.join(__dirname, "../dictionary");
 export type HashRecord = Record<string, string>;
 export type NamespaceHashRecord = Record<string, HashRecord>;
 
-export async function getAllDictionaries() {
+export function getAllDictionaries() {
   // This contains all "local" messages.
   const localMessages: HashRecord = {};
   // This contains all submessages. Submessages are messages inside a message.
@@ -32,7 +32,7 @@ export async function getAllDictionaries() {
   const innerMessages: NamespaceHashRecord = {};
   let wktMessages: HashRecord = {};
 
-  const entries = await fs.readdir(PATH_TO_DICTIONARY_FOLDER, {
+  const entries = fs.readdirSync(PATH_TO_DICTIONARY_FOLDER, {
     encoding: "utf-8",
     withFileTypes: true,
   });
@@ -42,7 +42,7 @@ export async function getAllDictionaries() {
     const basename = path.basename(entry.name, ext);
 
     if (ext === ".json") {
-      const file = await fs.readFile(
+      const file = fs.readFileSync(
         path.join(PATH_TO_DICTIONARY_FOLDER, entry.name),
         "utf-8"
       );

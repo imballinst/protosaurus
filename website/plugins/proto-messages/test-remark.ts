@@ -14,13 +14,13 @@
  * limitations under the License.
  */
 
-const mdx = require("@mdx-js/mdx");
-const fs = require("fs");
-const path = require("path");
-const rehypeProtoPlugin = require("./proto-messages");
+import mdx from "@mdx-js/mdx";
+import fs from "fs";
+import path from "path";
+import rehypeProtoPlugin from "./src";
 
 const md = fs.readFileSync(
-  path.join(__dirname, "../../mdx/lib/test-resources/location-messages.mdx"),
+  path.join(__dirname, "../../../mdx/lib/test-resources/location-messages.mdx"),
   "utf-8"
 );
 

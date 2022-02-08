@@ -21,10 +21,9 @@ import { getAllDictionaries } from "./dictionary";
 import { getFieldInformation } from "./fields";
 import { getHastElementType } from "./hast";
 
-export default async () => {
-  const { innerMessages, localMessages, wktMessages } =
-    await getAllDictionaries();
+const { innerMessages, localMessages, wktMessages } = getAllDictionaries();
 
+export default () => {
   return (tree: Root) => {
     // During build, we can use `process.env` from `docusaurus.config.js` perhaps
     // to get the directory containing the intermediary JSON.
