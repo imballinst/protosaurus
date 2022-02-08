@@ -12,7 +12,7 @@
     "serve": "docusaurus serve",
     "write-translations": "docusaurus write-translations",
     "write-heading-ids": "docusaurus write-heading-ids",
-    "build-plugin": "yarn workspace plugins/proto-messages build"
+    "build-plugin": "yarn workspace proto-messages build"
   },
   "workspaces": [
     "plugins/proto-messages"
