@@ -51,8 +51,6 @@ jobs:
       - run: make gen
       # TODO(imballinst): not sure whether to put this test here or to create a new job.
       - run: make test
-      - run: make -C mdx build
-      - run: make -C mdx gen-mdx
       - run: make docs
       - uses: peaceiris/actions-gh-pages@v3
         if: ${{ github.ref == 'refs/heads/main' }}
