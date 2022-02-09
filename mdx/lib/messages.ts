@@ -208,6 +208,9 @@ function cleanupComment(line: string) {
   let i = 0;
 
   while (i < length) {
+    // Since we can "jump" through the line (it's not always +1),
+    // then we need to declare it as a variable.
+    // For example, the [text](link) means we will skip 12 characters.
     let nextIndex = i + 1;
     let textToAdd = line.charAt(i);
 
@@ -216,14 +219,15 @@ function cleanupComment(line: string) {
       const bracketParenthesisIndex = line.indexOf("](", i);
 
       if (bracketParenthesisIndex > -1) {
-        // Exists. We then check for the closing parenthesis.
+        // Bracket and parenthesis exist.
+        // We then check for the closing parenthesis.
         const closingParenthesisIndex = line.indexOf(")", i);
 
         if (
           i < bracketParenthesisIndex &&
           bracketParenthesisIndex < closingParenthesisIndex
         ) {
-          // The bracket parenthesis should be in the middle.
+          // The bracket and parenthesis should be positioned in the middle.
           // Slice the text.
           const text = line.slice(i + 1, bracketParenthesisIndex);
           const link = line.slice(
@@ -256,8 +260,12 @@ function cleanupComment(line: string) {
 
               if (match) {
                 const offset = match.index;
+                // Append with the text until the next whitespace.
                 textToAdd += line.slice(nextIndex, nextIndex + offset);
+                // Append the newline.
                 textToAdd += "\n";
+                // Increase the next index by offset + 1 so that the whitespace
+                // won't be included in the next iteration.
                 nextIndex += offset + 1;
               }
             }
