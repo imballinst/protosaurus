@@ -57,6 +57,9 @@ html[data-theme="dark"] .docusaurus-highlight-code-line {
   background-color: rgba(0, 0, 0, 0.3);
 }
 
+/* Protosaurus code block. */
+/* TODO(imballinst): this causes warning in dev mode regarding `precustom` element not known. */
+/* Perhaps we should change it to div.precustom or something... if it's possible. */
 precustom {
   font: var(--ifm-code-font-size) / var(--ifm-pre-line-height)
     var(--ifm-font-family-monospace);
@@ -73,4 +76,23 @@ precustom .comment {
 
 precustom .type {
   color: var(--precustom-type-color);
+}
+
+/* Button text to enable the image gallery. */
+.button-text {
+  background-color: transparent;
+  color: inherit;
+  border: none;
+  padding: 0;
+  font: inherit;
+  /* Inherit the color of a link. */
+  color: var(--ifm-link-color);
+  text-decoration: var(--ifm-link-decoration);
+  transition: color var(--ifm-transition-fast)
+    var(--ifm-transition-timing-default);
+  cursor: pointer;
+}
+
+.button-text:hover {
+  text-decoration: underline;
 }

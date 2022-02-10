@@ -64,8 +64,10 @@ export function getLinksFromALine(line: string) {
           links.push({
             name: text,
             href: link,
+            // Consider the previous "!", so we decrement the index by 1.
             position: type === "link" ? i : i - 1,
-            originalText: textToAdd,
+            // Consider the above decrement, and so, we need to offset it by adding a space.
+            originalText: type === "link" ? textToAdd : `${textToAdd} `,
             type,
           });
         }
@@ -132,5 +134,11 @@ function findNextWhitespace(line: string, startIndex: number) {
     character = line.charAt(nextWhitespaceIndex);
   }
 
-  return nextWhitespaceIndex - 1;
+  // TODO(imballinst): consider the edge cases.
+  // This handles edge case: end of sentence period.
+  if (line.charAt(nextWhitespaceIndex - 1) === ".") {
+    nextWhitespaceIndex--;
+  }
+
+  return nextWhitespaceIndex;
 }

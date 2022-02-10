@@ -216,7 +216,7 @@ const docusaurusPlugin: Plugin = () => {
                 value: val,
               });
             }
-            console.log(JSON.stringify(hastElements, null, 2));
+
             if (isAComment) {
               children.push({
                 type: "element",

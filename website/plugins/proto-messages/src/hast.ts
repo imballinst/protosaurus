@@ -28,6 +28,7 @@ export function getHastElementType(
       tagName: "button",
       properties: {
         "data-image-src": href,
+        "data-image-alt": name,
         className: "button-text __button-protosaurus-image-toggle__",
       },
       children: [

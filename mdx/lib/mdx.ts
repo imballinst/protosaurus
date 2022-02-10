@@ -24,6 +24,8 @@ import RpcDefinitionDescription from "@theme/RpcDefinitionDescription";
 import RpcMethodText from "@theme/RpcMethodText";
 import ProtosaurusImage from "@theme/ProtosaurusImage";
 
+<ProtosaurusImage />
+
 ${pkg.descriptionMdx}
 
 ${servicesString}${messagesString}\n`.trimStart()
