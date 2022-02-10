@@ -21,8 +21,14 @@ const LINK_WITH_TEXT = `\\[.+\\]\\(${LINK_ONLY}\\)`;
 const LINK_WITH_TEXT_SEPARATOR = "](";
 const LINE_REGEX = new RegExp(`${LINK_ONLY}|${LINK_WITH_TEXT}`, "g");
 
-// TODO(imballinst): we can't parse link from only a line.
-// We need to take the comments from a field as a whole.
+// Here, we are at HAST stage.
+// All things considered, like multi-line text links were already handled by the `mdx` module
+// in the project root. We want to consider 2 cases here so that a word satisfies a "link":
+//
+// 1. A pure hyperlink text. http://example.com, https://example.com, even something like ftp://example.com.
+//    The format is {protocol}://{domain}{optional_directory}.
+// 2. A text with hyperlink. [hello](https://world), or [hello](world), or [hello](./world), or [hello](/world).
+//    Or, the absolute links, [hello]({protocol}://{domain}{optional_directory}).
 export function getLinksFromALine(line: string) {
   // Matches [text](url) or protocol://domain.
   const matches = [];
