@@ -57,4 +57,7 @@ message Location {
   map<string, InnerMessage> test_map = 7;
 
   repeated InnerMessage test_repeated = 8;
+
+  // This is an ![example image](/img/protosaurus.jpeg).
+  InnerMessage test_image = 9;
 }

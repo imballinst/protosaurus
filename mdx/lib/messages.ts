@@ -123,7 +123,7 @@ export function getFieldComment(comment: string, linePrefix: string) {
     return "";
   }
 
-  const parsed = cleanupComment(comment);
+  const parsed = processCommentForLinksAndImages(comment);
   const lines = parsed.split("\n");
   const length = lines.length;
 
@@ -202,7 +202,7 @@ function getIndentation(level: number) {
 // Let's define the rules.
 // A link CANNOT contain a space.
 // The hyperlinked text can contain anything, except double newlines.
-function cleanupComment(line: string) {
+function processCommentForLinksAndImages(line: string) {
   const length = line.length;
   let result = "";
   let i = 0;
@@ -217,6 +217,8 @@ function cleanupComment(line: string) {
     if (textToAdd === "[") {
       // The "[" is the biggest indicator of a link.
       const bracketParenthesisIndex = line.indexOf("](", i);
+      let text = "";
+      let link = "";
 
       if (bracketParenthesisIndex > -1) {
         // Bracket and parenthesis exist.
@@ -229,8 +231,8 @@ function cleanupComment(line: string) {
         ) {
           // The bracket and parenthesis should be positioned in the middle.
           // Slice the text.
-          const text = line.slice(i + 1, bracketParenthesisIndex);
-          const link = line.slice(
+          text = line.slice(i + 1, bracketParenthesisIndex);
+          link = line.slice(
             bracketParenthesisIndex + 2,
             closingParenthesisIndex
           );
@@ -271,6 +273,14 @@ function cleanupComment(line: string) {
             }
           }
         }
+      }
+
+      // Check if it's an image.
+      // An image should have text and link.
+      if (line.charAt(i - 1) === "!" && text && link) {
+        // Remove the last "!".
+        result = result.slice(0, -1);
+        textToAdd = `<ProtosaurusImage href="${link}" alt="${text}" />`;
       }
     }
 
