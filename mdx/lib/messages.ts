@@ -280,7 +280,7 @@ function processCommentForLinksAndImages(line: string) {
       if (line.charAt(i - 1) === "!" && text && link) {
         // Remove the last "!".
         result = result.slice(0, -1);
-        textToAdd = `<ProtosaurusImage href="${link}" alt="${text}" />`;
+        textToAdd = `<ProtosaurusImage src="${link}" alt="${text}" />`;
       }
     }
 
