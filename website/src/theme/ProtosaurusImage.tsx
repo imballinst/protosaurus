@@ -12,6 +12,7 @@ interface ProtosaurusImageProps {
 // 1. https://mui.com/components/modal/.
 // 2. https://www.w3.org/TR/wai-aria-practices/#dialog_modal.
 // 3. https://reactjs.org/docs/portals.html.
+// 4. https://chakra-ui.com/docs/media-and-icons/icon.
 export default function ProtosaurusImage({ alt, src }: ProtosaurusImageProps) {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const dialogId = `image-label-${src}`;
