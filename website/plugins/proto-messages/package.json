@@ -5,11 +5,12 @@
   "license": "MIT",
   "private": true,
   "scripts": {
-    "build": "rm -rf lib && tsc",
+    "build": "rm -rf lib && tsc --project tsconfig.build.json",
     "test:mdx": "ts-node test-remark.ts"
   },
   "devDependencies": {
     "@types/hast-format": "2.3.0",
+    "@types/node": "17.0.16",
     "ts-node": "10.5.0"
   }
 }
