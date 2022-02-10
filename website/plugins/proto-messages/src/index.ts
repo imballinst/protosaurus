@@ -84,6 +84,7 @@ const docusaurusPlugin: Plugin = () => {
             type = {
               match: {
                 field: {
+                  type: "text",
                   name: "message",
                   position: line.indexOf("message"),
                 },
@@ -129,6 +130,7 @@ const docusaurusPlugin: Plugin = () => {
                 hastTypeElements.push(
                   getHastElementType({
                     name: REPEATED_TEXT,
+                    type: "text",
                   })
                 );
                 firstSlicePosition = firstSlicePosition - REPEATED_TEXT.length;
@@ -214,7 +216,7 @@ const docusaurusPlugin: Plugin = () => {
                 value: val,
               });
             }
-
+            console.log(JSON.stringify(hastElements, null, 2));
             if (isAComment) {
               children.push({
                 type: "element",

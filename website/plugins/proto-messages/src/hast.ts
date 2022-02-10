@@ -15,12 +15,29 @@
  */
 
 import { Element } from "hast-format";
-import { PartialSpecific, TextMatchField } from "./types";
+import { LinkMatch, PartialSpecific, TextMatchField } from "./types";
 
 export function getHastElementType(
-  match: PartialSpecific<TextMatchField, "position">
+  match: PartialSpecific<TextMatchField, "position"> | LinkMatch
 ): Element {
   const { name, href } = match;
+
+  if (isImageMatch(match)) {
+    return {
+      type: "element" as const,
+      tagName: "button",
+      properties: {
+        "data-image-src": href,
+        className: "button-text __button-protosaurus-image-toggle__",
+      },
+      children: [
+        {
+          type: "text" as const,
+          value: name,
+        },
+      ],
+    };
+  }
 
   if (href) {
     return {
@@ -51,4 +68,10 @@ export function getHastElementType(
       },
     ],
   };
+}
+
+function isImageMatch(
+  match: PartialSpecific<TextMatchField, "position"> | LinkMatch
+): match is LinkMatch {
+  return match.type === "image";
 }

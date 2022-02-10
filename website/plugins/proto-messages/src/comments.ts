@@ -56,6 +56,7 @@ export function getLinksFromALine(line: string) {
             bracketParenthesisIndex + 2,
             closingParenthesisIndex
           );
+          const type = line.charAt(i - 1) === "!" ? "image" : "link";
 
           textToAdd = `[${text}](${link})`;
           nextIndex = closingParenthesisIndex + 1;
@@ -63,8 +64,9 @@ export function getLinksFromALine(line: string) {
           links.push({
             name: text,
             href: link,
-            position: i,
+            position: type === "link" ? i : i - 1,
             originalText: textToAdd,
+            type,
           });
         }
       }
@@ -88,6 +90,7 @@ export function getLinksFromALine(line: string) {
           position: firstWordCharacterIndex,
           href: lineText,
           originalText: lineText,
+          type: "link",
         });
 
         nextIndex = i + lineText.length;
