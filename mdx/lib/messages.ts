@@ -274,14 +274,6 @@ function processCommentForLinksAndImages(line: string) {
           }
         }
       }
-
-      // Check if it's an image.
-      // An image should have text and link.
-      if (line.charAt(i - 1) === "!" && text && link) {
-        // Remove the last "!".
-        result = result.slice(0, -1);
-        textToAdd = `<ProtosaurusImage src="${link}" alt="${text}" />`;
-      }
     }
 
     result += textToAdd;

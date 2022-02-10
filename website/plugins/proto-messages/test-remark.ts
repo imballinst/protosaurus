@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import mdx from "@mdx-js/mdx";
+const mdx = require("@mdx-js/mdx");
 import fs from "fs";
 import path from "path";
 import rehypeProtoPlugin from "./src";
