@@ -35,6 +35,8 @@ message Location {
   // https://github.com tests line at the start.
   // This line tests for a link https://github.com at the middle.
   // This line tests for a [link inside comment](https://github.com) and https://github.com.
+  // This line tests for a [multi-line
+  // link inside a comment](https://github.com). Beware!
   string address = 3 [(google.api.field_behavior) = REQUIRED, (validate.rules).string.min_len = 1];
 
   // Sample InnerMessage to test submessages.
