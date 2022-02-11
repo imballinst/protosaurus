@@ -85,6 +85,9 @@ precustom .type {
   border: none;
   padding: 0;
   font: inherit;
+  display: inline-flex;
+  flex-direction: row;
+  align-items: center;
   /* Inherit the color of a link. */
   color: var(--ifm-link-color);
   text-decoration: var(--ifm-link-decoration);
@@ -95,4 +98,8 @@ precustom .type {
 
 .button-text:hover {
   text-decoration: underline;
+}
+
+.button-text > svg {
+  margin-left: 4px;
 }

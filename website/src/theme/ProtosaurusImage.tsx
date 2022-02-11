@@ -1,19 +1,10 @@
-import React, { ReactNode, useEffect, useState } from "react";
-import { createPortal } from "react-dom";
+import React, { useEffect, useRef, useState } from "react";
+import Modal from "react-modal";
 
 import styles from "./ProtosaurusImage.module.css";
 
-interface ProtosaurusImageProps {
-  alt: string;
-  src: string;
-}
+Modal.setAppElement("#__docusaurus");
 
-// References used:
-// 1. https://mui.com/components/modal/.
-// 2. https://www.w3.org/TR/wai-aria-practices/#dialog_modal.
-// 3. https://reactjs.org/docs/portals.html.
-// 4. https://chakra-ui.com/docs/media-and-icons/icon.
-// export default function ProtosaurusImage({ alt, src }: ProtosaurusImageProps) {
 export default function ProtosaurusImage() {
   const [modalInfo, setModalInfo] = useState<
     | {
@@ -47,12 +38,14 @@ export default function ProtosaurusImage() {
     while (i < buttons.length) {
       const element = buttons.item(i) as HTMLButtonElement;
 
+      // For each button, add click event.
       element.addEventListener("click", onClick);
       elements.push(element);
       i++;
     }
 
     return () => {
+      // Clean-up the events.
       for (const element of elements) {
         element.removeEventListener("click", onClick);
       }
@@ -62,32 +55,40 @@ export default function ProtosaurusImage() {
   if (modalInfo) {
     const { alt, id, src } = modalInfo;
 
-    return createPortal(
-      <div className={styles["container"]} role="dialog" aria-labelledby={id}>
+    return (
+      <Modal
+        isOpen
+        onRequestClose={() => {
+          console.log("heh");
+          setModalInfo(undefined);
+        }}
+        overlayClassName={styles["backdrop"]}
+        className={styles["modal-content"]}
+        shouldCloseOnOverlayClick
+        aria={{ labelledby: id }}
+      >
         <h2 id={id} className={styles["hidden-label"]}>
           Overlay modal to show {alt}. Press "Escape" key or click the close
           button to close the modal.
         </h2>
 
-        <div
-          className={styles["backdrop"]}
-          aria-hidden="true"
-          onClick={() => setModalInfo(undefined)}
-        />
-
-        <div className={styles["modal-content"]}>
-          <div className={styles["close-button-container"]}>
-            <button className={styles["close-button"]}>
-              <CloseIcon />
-            </button>
-          </div>
-
-          <a href={src} target="_blank" rel="noopener">
-            <img src={src} alt={alt} className={styles["image"]} />
-          </a>
+        <div className={styles["close-button-container"]}>
+          <button
+            type="button"
+            className={styles["close-button"]}
+            aria-label="Close modal"
+            tabIndex={0}
+            onClick={() => setModalInfo(undefined)}
+            autoFocus
+          >
+            <CloseIcon />
+          </button>
         </div>
-      </div>,
-      document.body
+
+        <a href={src} target="_blank" rel="noopener">
+          <img src={src} alt={alt} className={styles["image"]} />
+        </a>
+      </Modal>
     );
   }
 
