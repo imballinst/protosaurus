@@ -1,0 +1,15 @@
+{
+  "name": "proto-messages",
+  "version": "1.0.0",
+  "main": "index.js",
+  "license": "MIT",
+  "private": true,
+  "scripts": {
+    "build": "rm -rf lib && tsc",
+    "test:mdx": "ts-node test-remark.ts"
+  },
+  "devDependencies": {
+    "@types/hast-format": "2.3.0",
+    "ts-node": "10.5.0"
+  }
+}

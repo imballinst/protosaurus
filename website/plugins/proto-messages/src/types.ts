@@ -14,23 +14,30 @@
  * limitations under the License.
  */
 
-const mdx = require("@mdx-js/mdx");
-const fs = require("fs");
-const path = require("path");
-const rehypeProtoPlugin = require("./proto-messages");
-
-const md = fs.readFileSync(
-  path.join(__dirname, "../../mdx/lib/test-resources/location-messages.mdx"),
-  "utf-8"
-);
-
-main();
-
-async function main() {
-  // MDX v1, reference: https://github.com/mdx-js/mdx/blob/v1/docs/advanced/plugins.mdx.
-  const result = mdx.sync(md, {
-    rehypePlugins: [rehypeProtoPlugin],
-  });
-  // Hide this as needed.
-  // console.log(result);
+export interface TextMatchField {
+  name: string;
+  // When the `href` is undefined, then we don't render a link.
+  href?: string;
+  // Starting index of the text in a given line.
+  position: number;
 }
+
+export interface TextMatch {
+  field?: TextMatchField;
+  map?: {
+    key: TextMatchField;
+    value: TextMatchField;
+    mapClosingTagIndex: number;
+  };
+}
+
+export interface FieldType {
+  match: TextMatch;
+  isRepeated?: boolean;
+}
+
+export type PartialSpecific<TBaseType, TUnion extends keyof TBaseType> = Omit<
+  TBaseType,
+  TUnion
+> &
+  Partial<Pick<TBaseType, TUnion>>;
