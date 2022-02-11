@@ -19,5 +19,8 @@
     "build": "tsc --project tsconfig.build.json",
     "test": "mocha",
     "emit": "node dist/emit.js"
+  },
+  "engines": {
+    "node": "16"
   }
 }
