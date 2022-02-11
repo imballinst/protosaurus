@@ -13,13 +13,6 @@
     "resolveJsonModule": true,
     "isolatedModules": true
   },
-  "ts-node": {
-    "files": true
-  },
-  "files": [
-    "src/index.ts",
-    "src/global.d.ts"
-  ],
-  "include": ["src"],
+  "include": ["src", "test-remark.ts"],
   "exclude": ["src/*.test.ts"]
 }

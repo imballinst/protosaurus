@@ -22,6 +22,10 @@ export interface TextMatchField {
   position: number;
 }
 
+export interface LinkMatch extends TextMatchField {
+  originalText: string;
+}
+
 export interface TextMatch {
   field?: TextMatchField;
   map?: {
