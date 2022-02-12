@@ -10,6 +10,12 @@ root_dir := $(dir $(abspath $(lastword $(MAKEFILE_LIST))))
 # Path to the `mdx` module.
 mdx_dir := $(root_dir)/mdx
 
+<<<<<<< HEAD
+=======
+# Path to the `proto-messages` plugin.
+docusaurus_plugin_dir := $(root_dir)/website/plugins/proto-messages
+
+>>>>>>> main
 # Currently we resolve it using which. But more sophisticated approach is to use infer GOROOT.
 go     := $(shell which go)
 goarch := $(shell $(go) env GOARCH)
@@ -98,10 +104,22 @@ gen-mdx: $(yarn)
 gen-plugin: $(yarn)
 	@$(yarn) --cwd website build-plugin
 
+start: $(yarn)
+	@$(yarn) --cwd website start
+
+build: $(yarn)
+	@$(yarn) --cwd website build
+
 # This is only used for testing purposes, so that we don't have
 # to build and rebuild every time we change `emit.ts` or other TS files.
 dev-gen-mdx:
 	@PWD=$(mdx_dir) $(yarn) --cwd mdx ts-node emit.ts
+
+# This is only used for testing purposes. We are using this file: website/plugins/proto-messages/test-remark.ts.
+# Otherwise, there's no way we could rapidly test the output correctness of the plugin
+# without running Docusaurus development server.
+dev-test-plugin:
+	@$(yarn) --cwd $(docusaurus_plugin_dir) test:mdx
 
 format: $(buf) $(clang-format) ## Format all proto files
 	@$(clang-format) -i $(shell $(buf) ls-files)

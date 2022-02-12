@@ -134,7 +134,7 @@ function findNextWhitespace(line: string, startIndex: number) {
     character = line.charAt(nextWhitespaceIndex);
   }
 
-  // TODO(imballinst): consider the edge cases.
+  // TODO(imballinst): consider other edge cases.
   // This handles edge case: end of sentence period.
   if (line.charAt(nextWhitespaceIndex - 1) === ".") {
     nextWhitespaceIndex--;

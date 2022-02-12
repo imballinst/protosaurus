@@ -14,6 +14,8 @@
  * limitations under the License.
  */
 
+// We use `require` because this MDX v1 doesn't have typings
+// and hence will cause error during TypeScript compilation.
 const mdx = require("@mdx-js/mdx");
 import fs from "fs";
 import path from "path";
