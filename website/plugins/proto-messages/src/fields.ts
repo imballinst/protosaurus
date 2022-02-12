@@ -86,6 +86,7 @@ function getBuiltInType({
   if (BUILTIN_TYPES.includes(segments[0])) {
     textMatch = {
       field: {
+        type: "text",
         name: segments[0],
         position: line.indexOf(segments[0]),
       },
@@ -154,11 +155,13 @@ function getMapFieldTypes({
     match = {
       key: keyMatch?.field || {
         name: keyType,
+        type: "text",
         href: undefined,
         position: line.indexOf(keyType),
       },
       value: valueMatch?.field || {
         name: valueType,
+        type: "text",
         href: undefined,
         position: line.indexOf(valueType),
       },

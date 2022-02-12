@@ -104,6 +104,9 @@ gen-plugin: $(yarn)
 start: $(yarn)
 	@$(yarn) --cwd website start
 
+build: $(yarn)
+	@$(yarn) --cwd website build
+
 # This is only used for testing purposes, so that we don't have
 # to build and rebuild every time we change `emit.ts` or other TS files.
 dev-gen-mdx:

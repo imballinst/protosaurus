@@ -15,7 +15,6 @@ export async function emitMdx(filePath: string, pkg: PackageData) {
 ---
 ---
 
-import ReferenceWrapper from "@theme/ReferenceWrapper";
 import Description from "@theme/Description";
 import Definition from "@theme/Definition";
 import DefinitionHeader from "@theme/DefinitionHeader";
@@ -23,6 +22,9 @@ import RpcDefinition from "@theme/RpcDefinition";
 import RpcDefinitionHeader from "@theme/RpcDefinitionHeader";
 import RpcDefinitionDescription from "@theme/RpcDefinitionDescription";
 import RpcMethodText from "@theme/RpcMethodText";
+import ProtosaurusImage from "@theme/ProtosaurusImage";
+
+<ProtosaurusImage />
 
 ${pkg.descriptionMdx}
 

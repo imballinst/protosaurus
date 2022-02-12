@@ -58,8 +58,11 @@ message Location {
 
   repeated InnerMessage test_repeated = 8;
 
+  // This is an ![example image](/img/protosaurus.jpeg).
+  InnerMessage test_image = 9;
+  
   // This line tests for a [link without https](http://example.com) as well as
   // [link that is not http](ftp://example.com), another [link](intro), and
   // [another relative link](./intro).
-  InnerMessage test_non_https_link = 9;
+  InnerMessage test_non_https_link = 10;
 }

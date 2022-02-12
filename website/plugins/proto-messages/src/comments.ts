@@ -56,6 +56,7 @@ export function getLinksFromALine(line: string) {
             bracketParenthesisIndex + 2,
             closingParenthesisIndex
           );
+          const type = line.charAt(i - 1) === "!" ? "image" : "link";
 
           textToAdd = `[${text}](${link})`;
           nextIndex = closingParenthesisIndex + 1;
@@ -63,8 +64,11 @@ export function getLinksFromALine(line: string) {
           links.push({
             name: text,
             href: link,
-            position: i,
-            originalText: textToAdd,
+            // Consider the previous "!", so we decrement the index by 1.
+            position: type === "link" ? i : i - 1,
+            // Consider the above decrement, and so, we need to offset it by adding a space.
+            originalText: type === "link" ? textToAdd : `${textToAdd} `,
+            type,
           });
         }
       }
@@ -88,6 +92,7 @@ export function getLinksFromALine(line: string) {
           position: firstWordCharacterIndex,
           href: lineText,
           originalText: lineText,
+          type: "link",
         });
 
         nextIndex = i + lineText.length;
@@ -129,5 +134,11 @@ function findNextWhitespace(line: string, startIndex: number) {
     character = line.charAt(nextWhitespaceIndex);
   }
 
-  return nextWhitespaceIndex - 1;
+  // TODO(imballinst): consider other edge cases.
+  // This handles edge case: end of sentence period.
+  if (line.charAt(nextWhitespaceIndex - 1) === ".") {
+    nextWhitespaceIndex--;
+  }
+
+  return nextWhitespaceIndex;
 }

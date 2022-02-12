@@ -13,7 +13,13 @@ Before starting to develop Protosaurus, there are some things that might be impo
 
 ### Generating the required data
 
-The entry file is the [Makefile](./Makefile) in the root of the project. Firstly, we need to generate the required files by doing `make gen`. What this command does is:
+The entry file is the [Makefile](./Makefile) in the root of the project. Firstly, we need to generate the required files by doing:
+
+```
+make gen
+```
+
+What the command above does is:
 
 1. Read packages inside [`testdata`](./testdata) folder and generate a `doc.json` for each package. The generated `doc.json` resides in this [`website/generated folder`](./website/generated). The folder structure represents the package path, for example, `booking.v1` will become `booking/v1`.
 2. Emit JavaScript files from TypeScript for the `mdx` module.
@@ -26,7 +32,7 @@ The entry file is the [Makefile](./Makefile) in the root of the project. Firstly
 Now that the required files have been generated, we can run this command inside the `website` folder to start the development server:
 
 ```
-yarn start
+make start
 ```
 
 ### Building
@@ -34,7 +40,7 @@ yarn start
 To build, inside the `website` folder, run this command:
 
 ```
-yarn build
+make build
 ```
 
 ## Developing `mdx` module

@@ -14,7 +14,9 @@
  * limitations under the License.
  */
 
-import mdx from "@mdx-js/mdx";
+// We use `require` because this MDX v1 doesn't have typings
+// and hence will cause error during TypeScript compilation.
+const mdx = require("@mdx-js/mdx");
 import fs from "fs";
 import path from "path";
 import rehypeProtoPlugin from "./src";

@@ -160,6 +160,7 @@ function findMatchingMessageInDictionary({
       // When found, we get the index of the type word in the line,
       // and store the type name as well.
       fieldMatch = {
+        type: !isInnerMessage ? "link" : "text",
         position: line.indexOf(type),
         href: !isInnerMessage ? source[type] : undefined,
         name: type,
