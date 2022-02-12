@@ -10,12 +10,9 @@ root_dir := $(dir $(abspath $(lastword $(MAKEFILE_LIST))))
 # Path to the `mdx` module.
 mdx_dir := $(root_dir)/mdx
 
-<<<<<<< HEAD
-=======
 # Path to the `proto-messages` plugin.
 docusaurus_plugin_dir := $(root_dir)/website/plugins/proto-messages
 
->>>>>>> main
 # Currently we resolve it using which. But more sophisticated approach is to use infer GOROOT.
 go     := $(shell which go)
 goarch := $(shell $(go) env GOARCH)
