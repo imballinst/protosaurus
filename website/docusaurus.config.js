@@ -26,10 +26,10 @@ const {
 
 /** @type {import('@docusaurus/types').Config} */
 const config = {
-  title: "My Site",
+  title: `My Site (${process.env.BASE_DIR})`,
   tagline: "Dinosaurs are cool",
   url: "https://your-docusaurus-test-site.com",
-  baseUrl: process.env.WEBSITE_BASE_URL || "/",
+  baseUrl: process.env.BASE_URL || "/",
   onBrokenLinks: "throw",
   onBrokenMarkdownLinks: "warn",
   favicon: "img/favicon.ico",
