@@ -71,8 +71,8 @@ jobs:
       - name: set BASE_URL on PR
         if: ${{ github.ref != 'refs/heads/main' }}
         run: |
-          echo "::set-env name=BASE_URL::pr-${{ steps.current-pr.outputs.pr }}"
-          echo "::set-env name=BASE_DIR::pr-${{ steps.current-pr.outputs.pr }}"
+          echo "BASE_URL=pr-${{ steps.current-pr.outputs.pr }}" >> $GITHUB_ENV
+          echo "BASE_DIR=pr-${{ steps.current-pr.outputs.pr }}" >> $GITHUB_ENV
 
       - run: make docs
 
