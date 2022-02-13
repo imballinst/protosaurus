@@ -18,8 +18,8 @@ defaults:
     shell: bash
 
 env:
+  # This will be added to the docusaurus.baseUrl, i.e. /protosaurus/${BASE_DIR}.
   # Reference: https://docusaurus.io/docs/api/docusaurus-config#baseurl.
-  BASE_URL: "/protosaurus/main/"
   BASE_DIR: "main"
 
 jobs:
@@ -68,10 +68,9 @@ jobs:
         id: current-pr
 
       # The combination of this and the previous step overrides BASE_URL.
-      - name: set BASE_URL on PR
+      - name: set BASE_DIR on PR
         if: ${{ github.ref != 'refs/heads/main' }}
         run: |
-          echo "BASE_URL=pr-${{ steps.current-pr.outputs.pr }}" >> $GITHUB_ENV
           echo "BASE_DIR=pr-${{ steps.current-pr.outputs.pr }}" >> $GITHUB_ENV
 
       - run: make docs
