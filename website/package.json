@@ -45,7 +45,8 @@
     "typescript": "4.5.5"
   },
   "peerDependencies": {
-    "protosaurus-plugin-codeblock": ">=0"
+    "protosaurus-plugin-codeblock": ">=0",
+    "protosaurus-preset": ">=0"
   },
   "engines": {
     "node": "16"
