@@ -81,10 +81,24 @@ jobs:
           cp -r website/build builds/${BASE_DIR}
           cp -f index.html builds/index.html
 
-      - uses: peaceiris/actions-gh-pages@v3
+      - name: Publish all sites
+        uses: peaceiris/actions-gh-pages@v3
         with:
           github_token: ${{ github.token }}
           publish_dir: builds/
           # This allows you to make your publish branch with only the latest commit.
           # https://github.com/peaceiris/actions-gh-pages#%EF%B8%8F-force-orphan-force_orphan.
           force_orphan: true
+
+      - name: Send message to the PR submitter
+        uses: actions/github-script@v5
+        if: ${{ github.ref != 'refs/heads/main' }}
+        with:
+          github-token: ${{ github.token }}
+          script: |
+            github.rest.issues.createComment({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body: '👋 you can check the preview on: https://imballinst.github.io/protosaurus/${{ steps.current-pr.outputs.pr }}/.'
+            })
