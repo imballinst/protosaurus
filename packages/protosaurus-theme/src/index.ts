@@ -1,31 +1,21 @@
 import type { Plugin } from "@docusaurus/types";
 import path from "path";
-import fs from "fs";
 
-const SRC_PATH = path.join(__dirname, "../src/theme");
+const SRC_THEME_PATH = path.join(__dirname, "../src/theme");
+const LIB_PATH = path.join(__dirname);
+const LIB_THEME_PATH = path.join(__dirname, "./theme");
 
 export default function protosaurusTheme(): Plugin<void> {
   return {
     name: "protosaurus-theme",
     getThemePath() {
-      return path.join(__dirname, "./theme");
+      return LIB_THEME_PATH;
     },
     getTypeScriptThemePath() {
-      return SRC_PATH;
+      return SRC_THEME_PATH;
     },
     getClientModules() {
-      const allThemeFiles = fs.readdirSync(`${SRC_PATH}/theme`, {
-        encoding: "utf-8",
-        withFileTypes: true,
-      });
-      const allCssModules = allThemeFiles.filter((file) =>
-        file.name.endsWith(".module.css")
-      );
-
-      return [
-        ...allCssModules.map((file) => `${SRC_PATH}/theme/${file.name}`),
-        `${SRC_PATH}/custom.css`,
-      ];
+      return [`${LIB_PATH}/custom.css`];
     },
   };
 }

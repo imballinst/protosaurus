@@ -54,7 +54,7 @@ const config = {
         },
       }),
     ],
-    ["protosaurus", {}],
+    ["protosaurus-preset", {}],
   ],
 
   themeConfig:
