@@ -18,8 +18,9 @@ defaults:
     shell: bash
 
 env:
+  # This will be added to the docusaurus.baseUrl, i.e. /protosaurus/${BASE_DIR}.
   # Reference: https://docusaurus.io/docs/api/docusaurus-config#baseurl.
-  WEBSITE_BASE_URL: "/protosaurus/"
+  BASE_DIR: "main"
 
 jobs:
   gen:
@@ -31,6 +32,13 @@ jobs:
         with:
           access_token: ${{ github.token }}
       - uses: actions/checkout@v2
+
+      - name: Fetch current deployed website
+        uses: actions/checkout@v2
+        with:
+          ref: gh-pages
+          path: builds
+
       - uses: actions/setup-go@v2
         with:
           go-version: 1.17.x
@@ -48,15 +56,53 @@ jobs:
           path: ./.cache/buf
           key: protosaurus-${{ runner.os }}-buf-${{ hashFiles('testdata/buf.lock') }}
           restore-keys: protosaurus-${{ runner.os }}-buf-
+
       - run: make gen
+
       # TODO(imballinst): not sure whether to put this test here or to create a new job.
       - run: make test
+
+      - name: Get current PR number
+        if: ${{ github.ref != 'refs/heads/main' }}
+        uses: jwalton/gh-find-current-pr@v1
+        id: current-pr
+
+      - name: Set repository name
+        run: |
+          echo "REPOSITORY_NAME=$(echo '${{ github.repository }}' | awk -F '/' '{print $2}')" >> $GITHUB_ENV
+
+      # The combination of this and the previous step overrides BASE_URL.
+      - name: Set BASE_DIR on PR
+        if: ${{ github.ref != 'refs/heads/main' }}
+        run: |
+          echo "BASE_DIR=pr-${{ steps.current-pr.outputs.pr }}" >> $GITHUB_ENV
+
       - run: make docs
-      - uses: peaceiris/actions-gh-pages@v3
-        if: ${{ github.ref == 'refs/heads/main' }}
+
+      - name: Merge all sites
+        run: |
+          rm -fr builds/${BASE_DIR}
+          cp -r website/build builds/${BASE_DIR}
+          cp -f index.html builds/index.html
+
+      - name: Publish all sites
+        uses: peaceiris/actions-gh-pages@v3
         with:
           github_token: ${{ github.token }}
-          publish_dir: website/build
+          publish_dir: builds/
           # This allows you to make your publish branch with only the latest commit.
           # https://github.com/peaceiris/actions-gh-pages#%EF%B8%8F-force-orphan-force_orphan.
           force_orphan: true
+
+      - name: Send message to the PR submitter
+        uses: actions/github-script@v5
+        if: ${{ github.ref != 'refs/heads/main' }}
+        with:
+          github-token: ${{ github.token }}
+          script: |
+            github.rest.issues.createComment({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body: '👋 you can check the preview on: https://imballinst.github.io/protosaurus/pr-${{ steps.current-pr.outputs.pr }}/.'
+            })
