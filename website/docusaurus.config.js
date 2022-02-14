@@ -26,7 +26,7 @@ const {
 
 /** @type {import('@docusaurus/types').Config} */
 const config = {
-  title: `My Site (${process.env.BASE_DIR})`,
+  title: `My Site (${process.env.BASE_DIR || "dev"})`,
   tagline: "Dinosaurs are really cool",
   url: "https://your-docusaurus-test-site.com",
   baseUrl: process.env.BASE_DIR
