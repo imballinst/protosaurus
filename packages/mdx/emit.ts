@@ -12,15 +12,18 @@ import { createDirectoryIfNotExist } from "./lib/filesystem";
 // These are meant only to be ran from the Makefile to take effect of the PWD environment variable.
 // This is because, after being compiled to `.js` files, they go into a deeper nested directories,
 // which causes `__dirname` to not work properly.
-const PATH_TO_GENERATED = path.join(process.env.PWD!, "../website/generated");
+const PATH_TO_GENERATED = path.join(
+  process.env.PWD!,
+  "../../website/generated"
+);
 const PATH_TO_GENERATED_WKT = path.join(
   process.env.PWD!,
-  "../website/generated/wkt"
+  "../../website/generated/wkt"
 );
-const PATH_TO_MDX_FOLDER = path.join(process.env.PWD!, "../website/docs");
+const PATH_TO_MDX_FOLDER = path.join(process.env.PWD!, "../../website/docs");
 const PATH_TO_PLUGIN_DICTIONARY_FOLDER = path.join(
   process.env.PWD!,
-  "../website/plugins/proto-messages/dictionary"
+  "../../website/plugins/proto-messages/dictionary"
 );
 const PATH_TO_WKT_MDX_FOLDER = `${PATH_TO_MDX_FOLDER}/wkt`;
 
