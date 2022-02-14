@@ -1,5 +1,8 @@
 {
   "name": "protosaurus-theme",
   "version": "0.0.1",
-  "main": "lib/index.js"
+  "main": "lib/index.js",
+  "scripts": {
+    "build": "tsc --project tsconfig.json"
+  }
 }

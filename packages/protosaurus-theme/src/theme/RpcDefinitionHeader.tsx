@@ -33,7 +33,7 @@ export default function DefinitionHeader({
   );
 }
 
-function Type({ prefix, children }) {
+function Type({ prefix, children }: { prefix?: string; children: ReactNode }) {
   let prefixJsx;
 
   if (prefix) {
