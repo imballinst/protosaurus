@@ -100,5 +100,5 @@ jobs:
               issue_number: context.issue.number,
               owner: context.repo.owner,
               repo: context.repo.repo,
-              body: '👋 you can check the preview on: https://imballinst.github.io/protosaurus/${{ steps.current-pr.outputs.pr }}/.'
+              body: '👋 you can check the preview on: https://imballinst.github.io/protosaurus/pr-${{ steps.current-pr.outputs.pr }}/.'
             })
