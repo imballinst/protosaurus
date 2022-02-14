@@ -28,7 +28,7 @@ export default function ProtosaurusImage() {
       const alt = element.dataset["imageAlt"];
 
       setModalInfo({
-        src,
+        src: require(`@site/static${src}`).default,
         alt,
         // Cleanup the slashes.
         id: `dialog-id-${src.replace(/\//g, "")}`,
