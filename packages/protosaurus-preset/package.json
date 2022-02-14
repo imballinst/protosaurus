@@ -1,4 +1,8 @@
 {
   "name": "protosaurus-preset",
-  "version": "0.0.1"
+  "version": "0.0.1",
+  "main": "lib/index.js",
+  "scripts": {
+    "build": "tsc --project tsconfig.json"
+  }
 }
