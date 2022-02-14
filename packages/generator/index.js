@@ -22,7 +22,7 @@ const fs = require('fs-extra');
 const { bin, cache } = require('@protosaurus/home');
 const wkt = require('@protosaurus/wkt');
 
-const bufGenYaml = require('./buf.gen.yaml');
+const bufGenYaml = require('./buf-gen-yaml');
 const bufName = 'buf';
 const bufPath = path.join(bin, bufName);
 const protocGenDocName = 'protoc-gen-doc';
