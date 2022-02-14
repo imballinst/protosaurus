@@ -22,14 +22,18 @@ const darkCodeTheme = require("prism-react-renderer/themes/dracula");
 
 const {
   default: protoMessageRehypePlugin,
-} = require("./plugins/proto-messages/lib");
+} = require("protosaurus-plugin-codeblock");
 
 /** @type {import('@docusaurus/types').Config} */
 const config = {
   title: `My Site (${process.env.BASE_DIR})`,
   tagline: "Dinosaurs are really cool",
   url: "https://your-docusaurus-test-site.com",
-  baseUrl: process.env.BASE_DIR ? `/${process.env.REPOSITORY_NAME || "protosaurus"}/${process.env.BASE_DIR}/` : "/",
+  baseUrl: process.env.BASE_DIR
+    ? `/${process.env.REPOSITORY_NAME || "protosaurus"}/${
+        process.env.BASE_DIR
+      }/`
+    : "/",
   onBrokenLinks: "throw",
   onBrokenMarkdownLinks: "warn",
   favicon: "img/favicon.ico",

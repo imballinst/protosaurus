@@ -11,7 +11,7 @@ root_dir := $(dir $(abspath $(lastword $(MAKEFILE_LIST))))
 mdx_dir := $(root_dir)/packages/mdx
 
 # Path to the `proto-messages` plugin.
-docusaurus_plugin_dir := $(root_dir)/website/plugins/proto-messages
+docusaurus_plugin_dir := $(root_dir)/packages/protosaurus-plugin-codeblock
 
 # Currently we resolve it using which. But more sophisticated approach is to use infer GOROOT.
 go     := $(shell which go)
@@ -99,7 +99,7 @@ gen-mdx: $(yarn)
 	@MDX_DIR=$(mdx_dir) $(yarn) --cwd packages/mdx emit
 
 gen-plugin: $(yarn)
-	@$(yarn) --cwd website build-plugin
+	@$(yarn) --cwd $(docusaurus_plugin_dir) build
 
 start: $(yarn)
 	@$(yarn) --cwd website start

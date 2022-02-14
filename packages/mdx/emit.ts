@@ -26,7 +26,7 @@ const PATH_TO_MDX_FOLDER = path.join(
 );
 const PATH_TO_PLUGIN_DICTIONARY_FOLDER = path.join(
   process.env.MDX_DIR!,
-  "../../website/plugins/proto-messages/dictionary"
+  "../protosaurus-plugin-codeblock/dictionary"
 );
 const PATH_TO_WKT_MDX_FOLDER = `${PATH_TO_MDX_FOLDER}/wkt`;
 
