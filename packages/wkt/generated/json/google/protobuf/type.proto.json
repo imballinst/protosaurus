@@ -1,0 +1,708 @@
+{
+  "files": [
+    {
+      "name": "google/protobuf/type.proto",
+      "title": "",
+      "description": "",
+      "package": "google.protobuf",
+      "hasEnums": true,
+      "hasExtensions": false,
+      "hasMessages": true,
+      "hasServices": false,
+      "enums": [
+        {
+          "name": "Cardinality",
+          "longName": "Field.Cardinality",
+          "fullName": "google.protobuf.Field.Cardinality",
+          "description": "Whether a field is optional, required, or repeated.",
+          "values": [
+            {
+              "name": "CARDINALITY_UNKNOWN",
+              "number": "0",
+              "description": "For fields with unknown cardinality."
+            },
+            {
+              "name": "CARDINALITY_OPTIONAL",
+              "number": "1",
+              "description": "For optional fields."
+            },
+            {
+              "name": "CARDINALITY_REQUIRED",
+              "number": "2",
+              "description": "For required fields. Proto2 syntax only."
+            },
+            {
+              "name": "CARDINALITY_REPEATED",
+              "number": "3",
+              "description": "For repeated fields."
+            }
+          ]
+        },
+        {
+          "name": "Kind",
+          "longName": "Field.Kind",
+          "fullName": "google.protobuf.Field.Kind",
+          "description": "Basic field types.",
+          "values": [
+            {
+              "name": "TYPE_UNKNOWN",
+              "number": "0",
+              "description": "Field type unknown."
+            },
+            {
+              "name": "TYPE_DOUBLE",
+              "number": "1",
+              "description": "Field type double."
+            },
+            {
+              "name": "TYPE_FLOAT",
+              "number": "2",
+              "description": "Field type float."
+            },
+            {
+              "name": "TYPE_INT64",
+              "number": "3",
+              "description": "Field type int64."
+            },
+            {
+              "name": "TYPE_UINT64",
+              "number": "4",
+              "description": "Field type uint64."
+            },
+            {
+              "name": "TYPE_INT32",
+              "number": "5",
+              "description": "Field type int32."
+            },
+            {
+              "name": "TYPE_FIXED64",
+              "number": "6",
+              "description": "Field type fixed64."
+            },
+            {
+              "name": "TYPE_FIXED32",
+              "number": "7",
+              "description": "Field type fixed32."
+            },
+            {
+              "name": "TYPE_BOOL",
+              "number": "8",
+              "description": "Field type bool."
+            },
+            {
+              "name": "TYPE_STRING",
+              "number": "9",
+              "description": "Field type string."
+            },
+            {
+              "name": "TYPE_GROUP",
+              "number": "10",
+              "description": "Field type group. Proto2 syntax only, and deprecated."
+            },
+            {
+              "name": "TYPE_MESSAGE",
+              "number": "11",
+              "description": "Field type message."
+            },
+            {
+              "name": "TYPE_BYTES",
+              "number": "12",
+              "description": "Field type bytes."
+            },
+            {
+              "name": "TYPE_UINT32",
+              "number": "13",
+              "description": "Field type uint32."
+            },
+            {
+              "name": "TYPE_ENUM",
+              "number": "14",
+              "description": "Field type enum."
+            },
+            {
+              "name": "TYPE_SFIXED32",
+              "number": "15",
+              "description": "Field type sfixed32."
+            },
+            {
+              "name": "TYPE_SFIXED64",
+              "number": "16",
+              "description": "Field type sfixed64."
+            },
+            {
+              "name": "TYPE_SINT32",
+              "number": "17",
+              "description": "Field type sint32."
+            },
+            {
+              "name": "TYPE_SINT64",
+              "number": "18",
+              "description": "Field type sint64."
+            }
+          ]
+        },
+        {
+          "name": "Syntax",
+          "longName": "Syntax",
+          "fullName": "google.protobuf.Syntax",
+          "description": "The syntax in which a protocol buffer element is defined.",
+          "values": [
+            {
+              "name": "SYNTAX_PROTO2",
+              "number": "0",
+              "description": "Syntax `proto2`."
+            },
+            {
+              "name": "SYNTAX_PROTO3",
+              "number": "1",
+              "description": "Syntax `proto3`."
+            }
+          ]
+        }
+      ],
+      "extensions": [],
+      "messages": [
+        {
+          "name": "Enum",
+          "longName": "Enum",
+          "fullName": "google.protobuf.Enum",
+          "description": "Enum type definition.",
+          "hasExtensions": false,
+          "hasFields": true,
+          "hasOneofs": false,
+          "extensions": [],
+          "fields": [
+            {
+              "name": "name",
+              "description": "Enum type name.",
+              "label": "",
+              "type": "string",
+              "longType": "string",
+              "fullType": "string",
+              "ismap": false,
+              "isoneof": false,
+              "oneofdecl": "",
+              "defaultValue": ""
+            },
+            {
+              "name": "enumvalue",
+              "description": "Enum value definitions.",
+              "label": "repeated",
+              "type": "EnumValue",
+              "longType": "EnumValue",
+              "fullType": "google.protobuf.EnumValue",
+              "ismap": false,
+              "isoneof": false,
+              "oneofdecl": "",
+              "defaultValue": ""
+            },
+            {
+              "name": "options",
+              "description": "Protocol buffer options.",
+              "label": "repeated",
+              "type": "Option",
+              "longType": "Option",
+              "fullType": "google.protobuf.Option",
+              "ismap": false,
+              "isoneof": false,
+              "oneofdecl": "",
+              "defaultValue": ""
+            },
+            {
+              "name": "source_context",
+              "description": "The source context.",
+              "label": "",
+              "type": "SourceContext",
+              "longType": "SourceContext",
+              "fullType": "google.protobuf.SourceContext",
+              "ismap": false,
+              "isoneof": false,
+              "oneofdecl": "",
+              "defaultValue": ""
+            },
+            {
+              "name": "syntax",
+              "description": "The source syntax.",
+              "label": "",
+              "type": "Syntax",
+              "longType": "Syntax",
+              "fullType": "google.protobuf.Syntax",
+              "ismap": false,
+              "isoneof": false,
+              "oneofdecl": "",
+              "defaultValue": ""
+            }
+          ]
+        },
+        {
+          "name": "EnumValue",
+          "longName": "EnumValue",
+          "fullName": "google.protobuf.EnumValue",
+          "description": "Enum value definition.",
+          "hasExtensions": false,
+          "hasFields": true,
+          "hasOneofs": false,
+          "extensions": [],
+          "fields": [
+            {
+              "name": "name",
+              "description": "Enum value name.",
+              "label": "",
+              "type": "string",
+              "longType": "string",
+              "fullType": "string",
+              "ismap": false,
+              "isoneof": false,
+              "oneofdecl": "",
+              "defaultValue": ""
+            },
+            {
+              "name": "number",
+              "description": "Enum value number.",
+              "label": "",
+              "type": "int32",
+              "longType": "int32",
+              "fullType": "int32",
+              "ismap": false,
+              "isoneof": false,
+              "oneofdecl": "",
+              "defaultValue": ""
+            },
+            {
+              "name": "options",
+              "description": "Protocol buffer options.",
+              "label": "repeated",
+              "type": "Option",
+              "longType": "Option",
+              "fullType": "google.protobuf.Option",
+              "ismap": false,
+              "isoneof": false,
+              "oneofdecl": "",
+              "defaultValue": ""
+            }
+          ]
+        },
+        {
+          "name": "Field",
+          "longName": "Field",
+          "fullName": "google.protobuf.Field",
+          "description": "A single field of a message type.",
+          "hasExtensions": false,
+          "hasFields": true,
+          "hasOneofs": false,
+          "extensions": [],
+          "fields": [
+            {
+              "name": "kind",
+              "description": "The field type.",
+              "label": "",
+              "type": "Kind",
+              "longType": "Field.Kind",
+              "fullType": "google.protobuf.Field.Kind",
+              "ismap": false,
+              "isoneof": false,
+              "oneofdecl": "",
+              "defaultValue": ""
+            },
+            {
+              "name": "cardinality",
+              "description": "The field cardinality.",
+              "label": "",
+              "type": "Cardinality",
+              "longType": "Field.Cardinality",
+              "fullType": "google.protobuf.Field.Cardinality",
+              "ismap": false,
+              "isoneof": false,
+              "oneofdecl": "",
+              "defaultValue": ""
+            },
+            {
+              "name": "number",
+              "description": "The field number.",
+              "label": "",
+              "type": "int32",
+              "longType": "int32",
+              "fullType": "int32",
+              "ismap": false,
+              "isoneof": false,
+              "oneofdecl": "",
+              "defaultValue": ""
+            },
+            {
+              "name": "name",
+              "description": "The field name.",
+              "label": "",
+              "type": "string",
+              "longType": "string",
+              "fullType": "string",
+              "ismap": false,
+              "isoneof": false,
+              "oneofdecl": "",
+              "defaultValue": ""
+            },
+            {
+              "name": "type_url",
+              "description": "The field type URL, without the scheme, for message or enumeration\ntypes. Example: `\"type.googleapis.com/google.protobuf.Timestamp\"`.",
+              "label": "",
+              "type": "string",
+              "longType": "string",
+              "fullType": "string",
+              "ismap": false,
+              "isoneof": false,
+              "oneofdecl": "",
+              "defaultValue": ""
+            },
+            {
+              "name": "oneof_index",
+              "description": "The index of the field type in `Type.oneofs`, for message or enumeration\ntypes. The first type has index 1; zero means the type is not in the list.",
+              "label": "",
+              "type": "int32",
+              "longType": "int32",
+              "fullType": "int32",
+              "ismap": false,
+              "isoneof": false,
+              "oneofdecl": "",
+              "defaultValue": ""
+            },
+            {
+              "name": "packed",
+              "description": "Whether to use alternative packed wire representation.",
+              "label": "",
+              "type": "bool",
+              "longType": "bool",
+              "fullType": "bool",
+              "ismap": false,
+              "isoneof": false,
+              "oneofdecl": "",
+              "defaultValue": ""
+            },
+            {
+              "name": "options",
+              "description": "The protocol buffer options.",
+              "label": "repeated",
+              "type": "Option",
+              "longType": "Option",
+              "fullType": "google.protobuf.Option",
+              "ismap": false,
+              "isoneof": false,
+              "oneofdecl": "",
+              "defaultValue": ""
+            },
+            {
+              "name": "json_name",
+              "description": "The field JSON name.",
+              "label": "",
+              "type": "string",
+              "longType": "string",
+              "fullType": "string",
+              "ismap": false,
+              "isoneof": false,
+              "oneofdecl": "",
+              "defaultValue": ""
+            },
+            {
+              "name": "default_value",
+              "description": "The string value of the default value of this field. Proto2 syntax only.",
+              "label": "",
+              "type": "string",
+              "longType": "string",
+              "fullType": "string",
+              "ismap": false,
+              "isoneof": false,
+              "oneofdecl": "",
+              "defaultValue": ""
+            }
+          ]
+        },
+        {
+          "name": "Option",
+          "longName": "Option",
+          "fullName": "google.protobuf.Option",
+          "description": "A protocol buffer option, which can be attached to a message, field,\nenumeration, etc.",
+          "hasExtensions": false,
+          "hasFields": true,
+          "hasOneofs": false,
+          "extensions": [],
+          "fields": [
+            {
+              "name": "name",
+              "description": "The option's name. For protobuf built-in options (options defined in\ndescriptor.proto), this is the short name. For example, `\"map_entry\"`.\nFor custom options, it should be the fully-qualified name. For example,\n`\"google.api.http\"`.",
+              "label": "",
+              "type": "string",
+              "longType": "string",
+              "fullType": "string",
+              "ismap": false,
+              "isoneof": false,
+              "oneofdecl": "",
+              "defaultValue": ""
+            },
+            {
+              "name": "value",
+              "description": "The option's value packed in an Any message. If the value is a primitive,\nthe corresponding wrapper type defined in google/protobuf/wrappers.proto\nshould be used. If the value is an enum, it should be stored as an int32\nvalue using the google.protobuf.Int32Value type.",
+              "label": "",
+              "type": "Any",
+              "longType": "Any",
+              "fullType": "google.protobuf.Any",
+              "ismap": false,
+              "isoneof": false,
+              "oneofdecl": "",
+              "defaultValue": ""
+            }
+          ]
+        },
+        {
+          "name": "Type",
+          "longName": "Type",
+          "fullName": "google.protobuf.Type",
+          "description": "A protocol buffer message type.",
+          "hasExtensions": false,
+          "hasFields": true,
+          "hasOneofs": false,
+          "extensions": [],
+          "fields": [
+            {
+              "name": "name",
+              "description": "The fully qualified message name.",
+              "label": "",
+              "type": "string",
+              "longType": "string",
+              "fullType": "string",
+              "ismap": false,
+              "isoneof": false,
+              "oneofdecl": "",
+              "defaultValue": ""
+            },
+            {
+              "name": "fields",
+              "description": "The list of fields.",
+              "label": "repeated",
+              "type": "Field",
+              "longType": "Field",
+              "fullType": "google.protobuf.Field",
+              "ismap": false,
+              "isoneof": false,
+              "oneofdecl": "",
+              "defaultValue": ""
+            },
+            {
+              "name": "oneofs",
+              "description": "The list of types appearing in `oneof` definitions in this type.",
+              "label": "repeated",
+              "type": "string",
+              "longType": "string",
+              "fullType": "string",
+              "ismap": false,
+              "isoneof": false,
+              "oneofdecl": "",
+              "defaultValue": ""
+            },
+            {
+              "name": "options",
+              "description": "The protocol buffer options.",
+              "label": "repeated",
+              "type": "Option",
+              "longType": "Option",
+              "fullType": "google.protobuf.Option",
+              "ismap": false,
+              "isoneof": false,
+              "oneofdecl": "",
+              "defaultValue": ""
+            },
+            {
+              "name": "source_context",
+              "description": "The source context.",
+              "label": "",
+              "type": "SourceContext",
+              "longType": "SourceContext",
+              "fullType": "google.protobuf.SourceContext",
+              "ismap": false,
+              "isoneof": false,
+              "oneofdecl": "",
+              "defaultValue": ""
+            },
+            {
+              "name": "syntax",
+              "description": "The source syntax.",
+              "label": "",
+              "type": "Syntax",
+              "longType": "Syntax",
+              "fullType": "google.protobuf.Syntax",
+              "ismap": false,
+              "isoneof": false,
+              "oneofdecl": "",
+              "defaultValue": ""
+            }
+          ]
+        }
+      ],
+      "services": []
+    }
+  ],
+  "scalarValueTypes": [
+    {
+      "protoType": "double",
+      "notes": "",
+      "cppType": "double",
+      "csType": "double",
+      "goType": "float64",
+      "javaType": "double",
+      "phpType": "float",
+      "pythonType": "float",
+      "rubyType": "Float"
+    },
+    {
+      "protoType": "float",
+      "notes": "",
+      "cppType": "float",
+      "csType": "float",
+      "goType": "float32",
+      "javaType": "float",
+      "phpType": "float",
+      "pythonType": "float",
+      "rubyType": "Float"
+    },
+    {
+      "protoType": "int32",
+      "notes": "Uses variable-length encoding. Inefficient for encoding negative numbers – if your field is likely to have negative values, use sint32 instead.",
+      "cppType": "int32",
+      "csType": "int",
+      "goType": "int32",
+      "javaType": "int",
+      "phpType": "integer",
+      "pythonType": "int",
+      "rubyType": "Bignum or Fixnum (as required)"
+    },
+    {
+      "protoType": "int64",
+      "notes": "Uses variable-length encoding. Inefficient for encoding negative numbers – if your field is likely to have negative values, use sint64 instead.",
+      "cppType": "int64",
+      "csType": "long",
+      "goType": "int64",
+      "javaType": "long",
+      "phpType": "integer/string",
+      "pythonType": "int/long",
+      "rubyType": "Bignum"
+    },
+    {
+      "protoType": "uint32",
+      "notes": "Uses variable-length encoding.",
+      "cppType": "uint32",
+      "csType": "uint",
+      "goType": "uint32",
+      "javaType": "int",
+      "phpType": "integer",
+      "pythonType": "int/long",
+      "rubyType": "Bignum or Fixnum (as required)"
+    },
+    {
+      "protoType": "uint64",
+      "notes": "Uses variable-length encoding.",
+      "cppType": "uint64",
+      "csType": "ulong",
+      "goType": "uint64",
+      "javaType": "long",
+      "phpType": "integer/string",
+      "pythonType": "int/long",
+      "rubyType": "Bignum or Fixnum (as required)"
+    },
+    {
+      "protoType": "sint32",
+      "notes": "Uses variable-length encoding. Signed int value. These more efficiently encode negative numbers than regular int32s.",
+      "cppType": "int32",
+      "csType": "int",
+      "goType": "int32",
+      "javaType": "int",
+      "phpType": "integer",
+      "pythonType": "int",
+      "rubyType": "Bignum or Fixnum (as required)"
+    },
+    {
+      "protoType": "sint64",
+      "notes": "Uses variable-length encoding. Signed int value. These more efficiently encode negative numbers than regular int64s.",
+      "cppType": "int64",
+      "csType": "long",
+      "goType": "int64",
+      "javaType": "long",
+      "phpType": "integer/string",
+      "pythonType": "int/long",
+      "rubyType": "Bignum"
+    },
+    {
+      "protoType": "fixed32",
+      "notes": "Always four bytes. More efficient than uint32 if values are often greater than 2^28.",
+      "cppType": "uint32",
+      "csType": "uint",
+      "goType": "uint32",
+      "javaType": "int",
+      "phpType": "integer",
+      "pythonType": "int",
+      "rubyType": "Bignum or Fixnum (as required)"
+    },
+    {
+      "protoType": "fixed64",
+      "notes": "Always eight bytes. More efficient than uint64 if values are often greater than 2^56.",
+      "cppType": "uint64",
+      "csType": "ulong",
+      "goType": "uint64",
+      "javaType": "long",
+      "phpType": "integer/string",
+      "pythonType": "int/long",
+      "rubyType": "Bignum"
+    },
+    {
+      "protoType": "sfixed32",
+      "notes": "Always four bytes.",
+      "cppType": "int32",
+      "csType": "int",
+      "goType": "int32",
+      "javaType": "int",
+      "phpType": "integer",
+      "pythonType": "int",
+      "rubyType": "Bignum or Fixnum (as required)"
+    },
+    {
+      "protoType": "sfixed64",
+      "notes": "Always eight bytes.",
+      "cppType": "int64",
+      "csType": "long",
+      "goType": "int64",
+      "javaType": "long",
+      "phpType": "integer/string",
+      "pythonType": "int/long",
+      "rubyType": "Bignum"
+    },
+    {
+      "protoType": "bool",
+      "notes": "",
+      "cppType": "bool",
+      "csType": "bool",
+      "goType": "bool",
+      "javaType": "boolean",
+      "phpType": "boolean",
+      "pythonType": "boolean",
+      "rubyType": "TrueClass/FalseClass"
+    },
+    {
+      "protoType": "string",
+      "notes": "A string must always contain UTF-8 encoded or 7-bit ASCII text.",
+      "cppType": "string",
+      "csType": "string",
+      "goType": "string",
+      "javaType": "String",
+      "phpType": "string",
+      "pythonType": "str/unicode",
+      "rubyType": "String (UTF-8)"
+    },
+    {
+      "protoType": "bytes",
+      "notes": "May contain any arbitrary sequence of bytes.",
+      "cppType": "string",
+      "csType": "ByteString",
+      "goType": "[]byte",
+      "javaType": "ByteString",
+      "phpType": "string",
+      "pythonType": "str",
+      "rubyType": "String (ASCII-8BIT)"
+    }
+  ]
+}
