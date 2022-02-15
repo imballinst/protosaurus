@@ -5,7 +5,7 @@ const SRC_PATH = path.join(__dirname, "src");
 const LIB_PATH = path.join(__dirname, "lib");
 
 const SRC_THEME_PATH = path.join(SRC_PATH, "theme");
-const LIB_THEME_PATH = path.join(SRC_PATH, "theme");
+const LIB_THEME_PATH = path.join(LIB_PATH, "theme");
 
 (async () => {
   const allThemeFiles = await fs.readdir(`${SRC_THEME_PATH}`, {
