@@ -6,7 +6,7 @@ import { convertProtoToRecord } from "./record";
 import { readPackageData } from "./packages";
 import { getServiceString } from "./services";
 
-const ROOT_PATH = path.join(__dirname, "../../");
+const ROOT_PATH = path.join(__dirname, "../../../");
 
 describe("readPackageData", () => {
   // Test messages.

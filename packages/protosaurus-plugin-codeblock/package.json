@@ -1,7 +1,7 @@
 {
-  "name": "proto-messages",
+  "name": "protosaurus-plugin-codeblock",
   "version": "1.0.0",
-  "main": "index.js",
+  "main": "lib/index.js",
   "license": "MIT",
   "private": true,
   "scripts": {

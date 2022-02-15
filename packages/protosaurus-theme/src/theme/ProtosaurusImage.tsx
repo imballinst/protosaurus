@@ -40,8 +40,8 @@ export default function ProtosaurusImage() {
 
     function onClick(event: MouseEvent) {
       const element = event.target as HTMLElement;
-      const src = element.dataset["imageSrc"];
-      const alt = element.dataset["imageAlt"];
+      const src = element.dataset["imageSrc"] || "";
+      const alt = element.dataset["imageAlt"] || "";
 
       setModalInfo({
         src: require(`@site/static${src}`).default,
