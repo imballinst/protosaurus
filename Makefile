@@ -22,6 +22,10 @@ goos   := $(shell $(go) env GOOS)
 # Local cache directory.
 CACHE_DIR ?= $(root_dir).cache
 
+# We set the PROTOSAURUS_HOME to be the same as the CACHE_DIR. In real usage, PROTOSAURUS_HOME
+# points to ~/.protosaurus by default.
+export PROTOSAURUS_HOME ?= $(CACHE_DIR)
+
 # Go tools directory holds the binaries of Go-based tools.
 go_tools_dir := $(CACHE_DIR)/tools/go
 # Prepackaged tools may have more than precompiled binaries, e.g. for protoc, it also has an include
@@ -77,17 +81,18 @@ help: ## Describe how to use each target
 	@printf "$(ansi_protosaurus)$(f_white)\n"
 	@awk 'BEGIN {FS = ":.*?## "} /^[0-9a-zA-Z_-]+:.*?## / {sub("\\\\n",sprintf("\n%22c"," "), $$2);printf "$(ansi_format_dark)", $$1, $$2}' $(MAKEFILE_LIST)
 
+# We use @protosaurus/example to generate .json from .proto in this project, provided by
+# buf.work.yaml that points to the testdata (buf) module.
 gen: $(BUF_V1_MODULE_DATA) $(yarn) ## Generate files from proto files
 	@printf "$(ansi_format_dark)" $@ "generating files..."
-	@$(buf) generate
 	@$(MAKE) gen-wkt
-	@printf "$(ansi_format_bright)" $@ "ok"
-	@$(yarn) --cwd packages/mdx
+	@$(yarn) install --frozen-lockfile
+	@$(yarn) workspace @protosaurus/example generate
 	@$(MAKE) gen-mdx
-	@$(yarn) --cwd website
 	@$(MAKE) gen-plugin
+	@printf "$(ansi_format_bright)" $@ "ok"
 
-generated_dir := website/generated/wkt
+generated_dir := packages/wkt/generated/json
 gen-wkt: $(protoc) $(protoc-gen-doc)
 	@mkdir -p $(generated_dir)
 	@for proto in $(shell find $(prepackaged_tools_dir)/include -name "*.proto"); do \
@@ -124,7 +129,7 @@ format: $(buf) $(clang-format) ## Format all proto files
 docs: $(yarn) ## Build the docs site
 	$(yarn) --cwd website build
 
-license_files := website testdata .github Makefile *.mk buf.*.yaml
+license_files := website packages testdata .github Makefile *.mk buf.*.yaml
 license: $(addlicense) ## Add license to files
 	@$(addlicense) $(license_ignore) -c "Protosaurus Authors"  $(license_files) 1>/dev/null 2>&1
 

@@ -1,11 +1,13 @@
 {
   "name": "protosaurus",
-  "version": "0.0.1",
+  "version": "1.0.0",
   "private": true,
-  "workspaces": {
-    "packages": [
-      "packages/*",
-      "website"
-    ]
+  "workspaces":[
+    "website/*",
+    "packages/*"
+  ],
+  "engines": {
+    "node": "16.13.2",
+    "yarn": "1.22.17"
   }
 }

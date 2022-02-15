@@ -14,6 +14,13 @@
  * limitations under the License.
  */
 
-declare module "@mdx-js/mdx" {
-  export const sync = (...args: any) => any;
+const fs = require('fs-extra');
+const path = require('path');
+
+module.exports = {
+  copyAll
+};
+
+function copyAll(dst) {
+  fs.copySync(path.join(__dirname, 'generated', 'json'), dst);
 }

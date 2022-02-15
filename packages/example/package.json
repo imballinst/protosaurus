@@ -1,0 +1,13 @@
+{
+  "name": "@protosaurus/example",
+  "version": "0.0.1",
+  "main": "index.js",
+  "scripts": {
+    "generate": "node ."
+  },
+  "license": "SEE LICENSE IN LICENSE",
+  "dependencies": {
+    "@protosaurus/generator": "0.0.1",
+    "@protosaurus/wkt": "3.9.2"
+  }
+}
