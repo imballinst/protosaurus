@@ -12,6 +12,8 @@ mdx_dir := $(root_dir)/packages/mdx
 
 # Path to the `proto-messages` plugin.
 docusaurus_plugin_dir := $(root_dir)/packages/protosaurus-plugin-codeblock
+docusaurus_theme_dir := $(root_dir)/packages/protosaurus-theme
+docusaurus_preset_dir := $(root_dir)/packages/protosaurus-preset
 
 # Currently we resolve it using which. But more sophisticated approach is to use infer GOROOT.
 go     := $(shell which go)
@@ -89,7 +91,7 @@ gen: $(BUF_V1_MODULE_DATA) $(yarn) ## Generate files from proto files
 	@$(yarn) install --frozen-lockfile
 	@$(yarn) workspace @protosaurus/example generate
 	@$(MAKE) gen-mdx
-	@$(MAKE) gen-plugin
+	@$(MAKE) gen-docusaurus-preset
 	@printf "$(ansi_format_bright)" $@ "ok"
 
 generated_dir := packages/wkt/generated/json
@@ -103,8 +105,10 @@ gen-mdx: $(yarn)
 	@$(yarn) --cwd packages/mdx build
 	@MDX_DIR=$(mdx_dir) $(yarn) --cwd packages/mdx emit
 
-gen-plugin: $(yarn)
+gen-docusaurus-preset: $(yarn)
 	@$(yarn) --cwd $(docusaurus_plugin_dir) build
+	@$(yarn) --cwd $(docusaurus_theme_dir) build
+	@$(yarn) --cwd $(docusaurus_preset_dir) build
 
 start: $(yarn)
 	@$(yarn) --cwd website start
