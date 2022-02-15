@@ -14,6 +14,14 @@
  * limitations under the License.
  */
 
-declare module "@mdx-js/mdx" {
-  export const sync = (...args: any) => any;
-}
+const generator = require('@protosaurus/generator');
+const path = require('path');
+
+(async() => {
+  await generator.generate({
+    workDir: process.env.WORK_DIR || path.resolve(path.join(__dirname, '..', '..')), // Paranoid on resolving.
+    // This should be inside the workDir, hence the actual path of the generated directory:
+    //   path.join(workDir, outPath).
+    outPath: 'website/generated'
+  });
+})();
