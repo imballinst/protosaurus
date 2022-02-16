@@ -49,6 +49,7 @@ export async function emitJsonAndMdx(siteDir: string) {
   await Promise.all([
     ...(await deleteDirectoryEntries(pathToMdx, PRESERVED_DOCS_FILES)),
     ...(await deleteDirectoryEntries(pathToPluginDictionary)),
+    ...(await deleteDirectoryEntries(`${siteDir}/.docusaurus`)),
   ]);
 
   // Re-create the folders.

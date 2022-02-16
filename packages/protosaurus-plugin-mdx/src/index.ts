@@ -23,7 +23,7 @@ export default async function protosaurusPluginMdx(
 ): Promise<Plugin> {
   return {
     name: "docusaurus-plugin-protosaurus-mdx",
-    async contentLoaded() {
+    async loadContent() {
       const pathToCache = `${context.siteDir}/plugin-resources/.cache/buf-ls-files.txt`;
       const pathToBuildCache = `${context.siteDir}/plugin-resources/.cache/previous-build-buf-ls-files.txt`;
 
