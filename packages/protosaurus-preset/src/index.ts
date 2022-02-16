@@ -23,8 +23,5 @@ export type ProtosaurusPresetEntry = [
 export default function protosaurusPreset(): Preset {
   return {
     themes: [require.resolve("@protosaurus/docusaurus-theme-protosaurus")],
-    plugins: [
-      require.resolve("@protosaurus/docusaurus-plugin-protosaurus-mdx"),
-    ],
   };
 }
