@@ -35,7 +35,7 @@ export default async function protosaurusPluginMdx(
       if (shouldEmit) {
         // It's safer to delete after content is loaded.
         // Maybe.
-        await emitJsonAndMdx(context.siteDir);
+        emitJsonAndMdx(context.siteDir);
       }
 
       // Re-create the previous build file (which will be used for next build).

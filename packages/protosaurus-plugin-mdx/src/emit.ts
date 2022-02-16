@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import { readdir, rm, stat } from "fs-extra";
+import { readdirSync, rmSync, statSync } from "fs-extra";
 import path from "path";
 
 import { emitMdx } from "./mdx/mdx";
@@ -33,7 +33,7 @@ const CATEGORY_LABELS = {
   wkt: "Well Known Types",
 };
 
-export async function emitJsonAndMdx(siteDir: string) {
+export function emitJsonAndMdx(siteDir: string) {
   const {
     pathToGenerated,
     pathToGeneratedWkt,
@@ -46,26 +46,22 @@ export async function emitJsonAndMdx(siteDir: string) {
   // This does 2 things:
   // 1. Delete all files except intro.mdx in `pathToMdx`.
   // 2. Delete the dictionary folder `pathToPluginDictionary`.
-  await Promise.all([
-    ...(await deleteDirectoryEntries(pathToMdx, PRESERVED_DOCS_FILES)),
-    ...(await deleteDirectoryEntries(pathToPluginDictionary)),
-  ]);
+  deleteDirectoryEntries(pathToMdx, PRESERVED_DOCS_FILES);
+  deleteDirectoryEntries(pathToPluginDictionary);
 
   // Re-create the folders.
-  await Promise.all([
-    createDirectoryIfNotExist(pathToPluginDictionary),
-    createDirectoryIfNotExist(pathToMdx),
-    createDirectoryIfNotExist(pathToMdxWkt),
-  ]);
+  createDirectoryIfNotExist(pathToPluginDictionary);
+  createDirectoryIfNotExist(pathToMdx);
+  createDirectoryIfNotExist(pathToMdxWkt);
 
   // Generate MDX and dictionary for local types.
   const { allPackages: localPackages, allProtoMessages } =
-    await recursivelyReadDirectory({
+    recursivelyReadDirectory({
       pathToDirectory: pathToGenerated,
       excludedDirectories: [pathToGeneratedWkt],
     });
   const { allPackages: wktPackages, allProtoMessages: allWktProtoMessages } =
-    await recursivelyReadDirectory({
+    recursivelyReadDirectory({
       pathToDirectory: pathToGeneratedWkt,
     });
 
@@ -197,11 +193,11 @@ export async function emitJsonAndMdx(siteDir: string) {
   // Create the metadata file.
   promises.push(emitCategoryMetadata(pathToMdxWkt, CATEGORY_LABELS.wkt));
 
-  await Promise.all(promises);
+  Promise.all(promises);
 }
 
 // Helper functions.
-async function recursivelyReadDirectory({
+function recursivelyReadDirectory({
   pathToDirectory,
   excludedDirectories,
 }: {
@@ -210,10 +206,10 @@ async function recursivelyReadDirectory({
   // Directories to exclude. Mostly this is to stop reading WKT JSONs
   // when we want to just read the non-WKT JSONs.
   excludedDirectories?: string[];
-}): Promise<{
+}): {
   allPackages: PackageData[];
   allProtoMessages: ProtoMessage[];
-}> {
+} {
   const allPackages: PackageData[] = [];
   const allProtoMessages: ProtoMessage[] = [];
 
@@ -221,7 +217,7 @@ async function recursivelyReadDirectory({
     return { allPackages, allProtoMessages };
   }
 
-  const entries = await readdir(pathToDirectory, {
+  const entries = readdirSync(pathToDirectory, {
     encoding: "utf-8",
     withFileTypes: true,
   });
@@ -231,9 +227,8 @@ async function recursivelyReadDirectory({
 
     // If file, read its contents.
     if (entry.isFile()) {
-      const { packageData: packages, rawProtoMessages } = await readPackageData(
-        pathToEntry
-      );
+      const { packageData: packages, rawProtoMessages } =
+        readPackageData(pathToEntry);
 
       allPackages.push(...packages);
       allProtoMessages.push(...rawProtoMessages);
@@ -242,7 +237,7 @@ async function recursivelyReadDirectory({
 
     // Otherwise, keep reading recursively.
     const { allPackages: packages, allProtoMessages: rawProtoMessages } =
-      await recursivelyReadDirectory({
+      recursivelyReadDirectory({
         pathToDirectory: pathToEntry,
         excludedDirectories,
       });
@@ -253,14 +248,14 @@ async function recursivelyReadDirectory({
   return { allPackages, allProtoMessages };
 }
 
-async function deleteDirectoryEntries(dir: string, exception?: string[]) {
+function deleteDirectoryEntries(dir: string, exception?: string[]) {
   try {
     // Check for directory existence.
     // If it doesn't exist, this will throw an error.
-    await stat(dir);
+    statSync(dir);
 
     // If directory exists, proceed.
-    const entries = await readdir(dir, {
+    const entries = readdirSync(dir, {
       encoding: "utf-8",
       withFileTypes: true,
     });
@@ -268,7 +263,7 @@ async function deleteDirectoryEntries(dir: string, exception?: string[]) {
     // Delete without exception.
     if (exception === undefined) {
       return entries.map((entry) =>
-        rm(`${dir}/${entry.name}`, { recursive: true })
+        rmSync(`${dir}/${entry.name}`, { recursive: true })
       );
     }
 
@@ -277,7 +272,7 @@ async function deleteDirectoryEntries(dir: string, exception?: string[]) {
       (entry) => !exception.includes(entry.name)
     );
     return deletedEntries.map((entry) =>
-      rm(`${dir}/${entry.name}`, { recursive: true })
+      rmSync(`${dir}/${entry.name}`, { recursive: true })
     );
   } catch (err) {
     return [];
