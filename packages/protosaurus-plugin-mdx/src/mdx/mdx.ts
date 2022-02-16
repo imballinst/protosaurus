@@ -19,7 +19,6 @@ import { PackageData } from "./types";
 
 // Main exported functions.
 export function emitMdx(filePath: string, pkg: PackageData) {
-  console.log("want to emit", filePath);
   const services = pkg.servicesData.map((m) => m.body).join("\n\n");
   const messages = pkg.messagesData.map((m) => m.body).join("\n\n");
 
