@@ -170,9 +170,10 @@ export function emitJsonAndMdx(siteDir: string) {
 
   // Render MDX one-by-one.
   const allWktPackages = Object.values(wktPackagesDictionary);
+
   for (const pkg of allWktPackages) {
     const pathToMdx = `${pathToMdxWkt}/${pkg.name}`;
-    return emitMdx(pathToMdx, pkg);
+    emitMdx(pathToMdx, pkg);
   }
 
   // Render all WKT JSON in one file.
