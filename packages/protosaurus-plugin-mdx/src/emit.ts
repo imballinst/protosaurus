@@ -67,7 +67,6 @@ export function emitJsonAndMdx(siteDir: string) {
 
   const localMessagesDictionary = convertProtoToRecord(allProtoMessages);
   const wktMessagesDictionary = convertProtoToRecord(allWktProtoMessages);
-  const promises = [];
 
   for (const pkg of localPackages) {
     // Since services require the information of all messages, then
@@ -86,75 +85,73 @@ export function emitJsonAndMdx(siteDir: string) {
 
     // Emit messages and services.
     const pathToMessagesMdx = `${pathToMdx}/${pkg.name}`;
-    promises.push(emitMdx(pathToMessagesMdx, pkg));
+    emitMdx(pathToMessagesMdx, pkg);
 
     // Emit JSON dictionary for the plugin.
     const pathToPlugin = `${pathToPluginDictionary}/${pkg.name}`;
-    promises.push(
-      emitMessagesJson({
-        filePath: pathToPlugin,
-        messages: pkg.messagesData.concat(
-          // Concat with this array because we'll need the inner messages
-          // in the dictionary for syntax coloring.
-          //
-          // Each array element is in this form, for example:
-          //
-          // {
-          //   name: "Location";
-          //   packageName: "location.v1";
-          //   hash: "location";
-          //   body: `
-          //    <Definition>
-          //
-          //    <DefinitionHeader name="message">
-          //
-          //    ### Booking
-          //
-          //    </DefinitionHeader>
-          //
-          //    Represents the booking of a vehicle.
-          //
-          //    Vehicles are some cool shit. But drive carefully.
-          //
-          //    ```protosaurus--booking.v1.Booking
-          //    message Booking {
-          //      // ID of booked vehicle.
-          //      int32 vehicle_id = 1;
-          //      // Customer that booked the vehicle.
-          //      int32 customer_id = 2;
-          //      // Status of the booking.
-          //      BookingStatus status = 3;
-          //      // Has booking confirmation been sent.
-          //      bool confirmation_sent = 4;
-          //      // Has payment been received.
-          //      bool payment_received = 5;
-          //      // Color preference of the customer.
-          //      string color_preference = 6;
-          //      // Pick-up location.
-          //      // This is a coordinate.
-          //      Location pickup_location = 7;
-          //      // Destination location.
-          //      // This is a coordinate.
-          //      Location destination_location = 8;
-          //      // Intermediate locations.
-          //      repeated Location intermediate_locations = 9;
-          //    }
-          //    ```
-          //
-          //    </Definition>
-          //   `;
-          // }
-          Object.values(pkg.innerMessagesRecord).map((message) => ({
-            // We can set the body as empty here because this function emits JSON,
-            // not emitting MDX, and hence, not used.
-            body: "",
-            name: message.rawMessage.longName,
-            packageName: pkg.name,
-            hash: message.rawMessage.longName.toLowerCase(),
-          }))
-        ),
-      })
-    );
+    emitMessagesJson({
+      filePath: pathToPlugin,
+      messages: pkg.messagesData.concat(
+        // Concat with this array because we'll need the inner messages
+        // in the dictionary for syntax coloring.
+        //
+        // Each array element is in this form, for example:
+        //
+        // {
+        //   name: "Location";
+        //   packageName: "location.v1";
+        //   hash: "location";
+        //   body: `
+        //    <Definition>
+        //
+        //    <DefinitionHeader name="message">
+        //
+        //    ### Booking
+        //
+        //    </DefinitionHeader>
+        //
+        //    Represents the booking of a vehicle.
+        //
+        //    Vehicles are some cool shit. But drive carefully.
+        //
+        //    ```protosaurus--booking.v1.Booking
+        //    message Booking {
+        //      // ID of booked vehicle.
+        //      int32 vehicle_id = 1;
+        //      // Customer that booked the vehicle.
+        //      int32 customer_id = 2;
+        //      // Status of the booking.
+        //      BookingStatus status = 3;
+        //      // Has booking confirmation been sent.
+        //      bool confirmation_sent = 4;
+        //      // Has payment been received.
+        //      bool payment_received = 5;
+        //      // Color preference of the customer.
+        //      string color_preference = 6;
+        //      // Pick-up location.
+        //      // This is a coordinate.
+        //      Location pickup_location = 7;
+        //      // Destination location.
+        //      // This is a coordinate.
+        //      Location destination_location = 8;
+        //      // Intermediate locations.
+        //      repeated Location intermediate_locations = 9;
+        //    }
+        //    ```
+        //
+        //    </Definition>
+        //   `;
+        // }
+        Object.values(pkg.innerMessagesRecord).map((message) => ({
+          // We can set the body as empty here because this function emits JSON,
+          // not emitting MDX, and hence, not used.
+          body: "",
+          name: message.rawMessage.longName,
+          packageName: pkg.name,
+          hash: message.rawMessage.longName.toLowerCase(),
+        }))
+      ),
+    });
   }
 
   // Generate MDX and dictionary for well known types (WKT).
@@ -173,27 +170,21 @@ export function emitJsonAndMdx(siteDir: string) {
 
   // Render MDX one-by-one.
   const allWktPackages = Object.values(wktPackagesDictionary);
-  const allMdxPromises = allWktPackages.map((pkg) => {
+  for (const pkg of allWktPackages) {
     const pathToMdx = `${pathToMdxWkt}/${pkg.name}`;
     return emitMdx(pathToMdx, pkg);
-  });
-
-  promises.push(...allMdxPromises);
+  }
 
   // Render all WKT JSON in one file.
   const pathToWktFile = `${pathToPluginDictionary}/wkt`;
-  promises.push(
-    emitMessagesJson({
-      filePath: pathToWktFile,
-      messages: allWktPackages.map((pkg) => pkg.messagesData).flat(),
-      isWkt: true,
-    })
-  );
+  emitMessagesJson({
+    filePath: pathToWktFile,
+    messages: allWktPackages.map((pkg) => pkg.messagesData).flat(),
+    isWkt: true,
+  });
 
   // Create the metadata file.
-  promises.push(emitCategoryMetadata(pathToMdxWkt, CATEGORY_LABELS.wkt));
-
-  Promise.all(promises);
+  emitCategoryMetadata(pathToMdxWkt, CATEGORY_LABELS.wkt);
 }
 
 // Helper functions.

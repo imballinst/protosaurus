@@ -14,18 +14,18 @@
  * limitations under the License.
  */
 
-import { writeFile } from "fs-extra";
+import { writeFileSync } from "fs-extra";
 import { PackageData } from "./types";
 
 // Main exported functions.
-export async function emitMdx(filePath: string, pkg: PackageData) {
+export function emitMdx(filePath: string, pkg: PackageData) {
   const services = pkg.servicesData.map((m) => m.body).join("\n\n");
   const messages = pkg.messagesData.map((m) => m.body).join("\n\n");
 
   const servicesString = services.length ? `## Services\n\n${services}` : "";
   const messagesString = messages.length ? `## Messages\n\n${messages}` : "";
 
-  return writeFile(
+  return writeFileSync(
     `${filePath}.mdx`,
     `
 ---
