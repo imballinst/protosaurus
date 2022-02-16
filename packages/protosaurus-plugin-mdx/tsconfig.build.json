@@ -13,6 +13,6 @@
     "resolveJsonModule": true,
     "isolatedModules": true,
   },
-  "include": ["lib", "./emit.ts"],
+  "include": ["src"],
   "exclude": ["node_modules", "lib/*.test.ts"]
 }

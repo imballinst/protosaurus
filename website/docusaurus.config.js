@@ -22,7 +22,7 @@ const darkCodeTheme = require("prism-react-renderer/themes/dracula");
 
 const {
   default: protoMessageRehypePlugin,
-} = require("protosaurus-plugin-codeblock");
+} = require("@protosaurus/docusaurus-plugin-protosaurus-codeblock");
 
 /** @type {import('@docusaurus/types').Config} */
 const config = {
@@ -50,7 +50,7 @@ const config = {
           // Please change this to your repo.
           editUrl:
             "https://github.com/facebook/docusaurus/tree/main/packages/create-docusaurus/templates/shared/",
-          rehypePlugins: [protoMessageRehypePlugin],
+          rehypePlugins: [[protoMessageRehypePlugin, { siteDir: __dirname }]],
         },
       }),
     ],

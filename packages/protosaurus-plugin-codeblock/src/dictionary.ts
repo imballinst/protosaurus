@@ -19,12 +19,16 @@ import path from "path";
 import { REPEATED_TEXT } from "./constants";
 import { TextMatch, TextMatchField } from "./types";
 
-const PATH_TO_DICTIONARY_FOLDER = path.join(__dirname, "../dictionary");
-
 export type HashRecord = Record<string, string>;
 export type NamespaceHashRecord = Record<string, HashRecord>;
 
-export function getAllDictionaries() {
+interface Options {
+  siteDir: string;
+}
+
+export function getAllDictionaries({ siteDir }: Options) {
+  const pathToDictionary = path.join(siteDir, "plugin-resources/dictionary");
+
   // This contains all "local" messages.
   const localMessages: HashRecord = {};
   // This contains all submessages. Submessages are messages inside a message.
@@ -32,7 +36,7 @@ export function getAllDictionaries() {
   const innerMessages: NamespaceHashRecord = {};
   let wktMessages: HashRecord = {};
 
-  const entries = fs.readdirSync(PATH_TO_DICTIONARY_FOLDER, {
+  const entries = fs.readdirSync(pathToDictionary, {
     encoding: "utf-8",
     withFileTypes: true,
   });
@@ -43,7 +47,7 @@ export function getAllDictionaries() {
 
     if (ext === ".json") {
       const file = fs.readFileSync(
-        path.join(PATH_TO_DICTIONARY_FOLDER, entry.name),
+        path.join(pathToDictionary, entry.name),
         "utf-8"
       );
       const json = JSON.parse(file);

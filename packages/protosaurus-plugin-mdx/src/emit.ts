@@ -1,34 +1,15 @@
+import type { LoadContext } from "@docusaurus/types";
 import { readdir, rm, stat } from "fs-extra";
 import path from "path";
-import { emitMdx } from "./lib/mdx";
-import { convertProtoToRecord } from "./lib/record";
-import { PackageData, ProtoMessage } from "./lib/types";
-import { emitMessagesJson } from "./lib/json";
-import { emitCategoryMetadata } from "./lib/metadata";
-import { readPackageData } from "./lib/packages";
-import { getServiceString } from "./lib/services";
-import { createDirectoryIfNotExist } from "./lib/filesystem";
 
-// These are meant only to be ran from the Makefile to take effect of the MDX_DIR environment variable.
-// This is because, after being compiled to `.js` files, they go into a deeper nested directories,
-// which causes `__dirname` to not work properly.
-const PATH_TO_GENERATED = path.join(
-  process.env.MDX_DIR!,
-  "../../website/generated"
-);
-const PATH_TO_GENERATED_WKT = path.join(
-  process.env.MDX_DIR!,
-  "../../website/generated/wkt"
-);
-const PATH_TO_MDX_FOLDER = path.join(
-  process.env.MDX_DIR!,
-  "../../website/docs"
-);
-const PATH_TO_PLUGIN_DICTIONARY_FOLDER = path.join(
-  process.env.MDX_DIR!,
-  "../protosaurus-plugin-codeblock/dictionary"
-);
-const PATH_TO_WKT_MDX_FOLDER = `${PATH_TO_MDX_FOLDER}/wkt`;
+import { emitMdx } from "./mdx/mdx";
+import { convertProtoToRecord } from "./mdx/record";
+import { PackageData, ProtoMessage } from "./mdx/types";
+import { emitMessagesJson } from "./mdx/json";
+import { emitCategoryMetadata } from "./mdx/metadata";
+import { readPackageData } from "./mdx/packages";
+import { getServiceString } from "./mdx/services";
+import { createDirectoryIfNotExist } from "./mdx/filesystem";
 
 const PRESERVED_DOCS_FILES = ["intro.mdx"];
 
@@ -37,31 +18,40 @@ const CATEGORY_LABELS = {
   wkt: "Well Known Types",
 };
 
-(async () => {
+export async function emitJsonAndMdx(context: LoadContext) {
+  const { siteDir } = context;
+  const {
+    pathToGenerated,
+    pathToGeneratedWkt,
+    pathToMdx,
+    pathToMdxWkt,
+    pathToPluginDictionary,
+  } = getPaths(siteDir);
+
   // This does 2 things:
-  // 1. Delete all files except intro.mdx in `PATH_TO_MDX_FOLDER`.
-  // 2. Delete the dictionary folder `PATH_TO_PLUGIN_DICTIONARY_FOLDER`.
+  // 1. Delete all files except intro.mdx in `pathToMdx`.
+  // 2. Delete the dictionary folder `pathToPluginDictionary`.
   await Promise.all([
-    ...(await deleteDirectoryEntries(PATH_TO_MDX_FOLDER, PRESERVED_DOCS_FILES)),
-    ...(await deleteDirectoryEntries(PATH_TO_PLUGIN_DICTIONARY_FOLDER)),
+    ...(await deleteDirectoryEntries(pathToMdx, PRESERVED_DOCS_FILES)),
+    ...(await deleteDirectoryEntries(pathToPluginDictionary)),
   ]);
 
   // Re-create the folders.
   await Promise.all([
-    createDirectoryIfNotExist(PATH_TO_PLUGIN_DICTIONARY_FOLDER),
-    createDirectoryIfNotExist(PATH_TO_MDX_FOLDER),
-    createDirectoryIfNotExist(PATH_TO_WKT_MDX_FOLDER),
+    createDirectoryIfNotExist(pathToPluginDictionary),
+    createDirectoryIfNotExist(pathToMdx),
+    createDirectoryIfNotExist(pathToMdxWkt),
   ]);
 
   // Generate MDX and dictionary for local types.
   const { allPackages: localPackages, allProtoMessages } =
     await recursivelyReadDirectory({
-      pathToDirectory: PATH_TO_GENERATED,
-      excludedDirectories: [PATH_TO_GENERATED_WKT],
+      pathToDirectory: pathToGenerated,
+      excludedDirectories: [pathToGeneratedWkt],
     });
   const { allPackages: wktPackages, allProtoMessages: allWktProtoMessages } =
     await recursivelyReadDirectory({
-      pathToDirectory: PATH_TO_GENERATED_WKT,
+      pathToDirectory: pathToGeneratedWkt,
     });
 
   const localMessagesDictionary = convertProtoToRecord(allProtoMessages);
@@ -84,11 +74,11 @@ const CATEGORY_LABELS = {
     }));
 
     // Emit messages and services.
-    const pathToMessagesMdx = `${PATH_TO_MDX_FOLDER}/${pkg.name}`;
+    const pathToMessagesMdx = `${pathToMdx}/${pkg.name}`;
     promises.push(emitMdx(pathToMessagesMdx, pkg));
 
     // Emit JSON dictionary for the plugin.
-    const pathToPlugin = `${PATH_TO_PLUGIN_DICTIONARY_FOLDER}/${pkg.name}`;
+    const pathToPlugin = `${pathToPluginDictionary}/${pkg.name}`;
     promises.push(
       emitMessagesJson({
         filePath: pathToPlugin,
@@ -173,14 +163,14 @@ const CATEGORY_LABELS = {
   // Render MDX one-by-one.
   const allWktPackages = Object.values(wktPackagesDictionary);
   const allMdxPromises = allWktPackages.map((pkg) => {
-    const pathToMdx = `${PATH_TO_WKT_MDX_FOLDER}/${pkg.name}`;
+    const pathToMdx = `${pathToMdxWkt}/${pkg.name}`;
     return emitMdx(pathToMdx, pkg);
   });
 
   promises.push(...allMdxPromises);
 
   // Render all WKT JSON in one file.
-  const pathToWktFile = `${PATH_TO_PLUGIN_DICTIONARY_FOLDER}/wkt`;
+  const pathToWktFile = `${pathToPluginDictionary}/wkt`;
   promises.push(
     emitMessagesJson({
       filePath: pathToWktFile,
@@ -190,12 +180,10 @@ const CATEGORY_LABELS = {
   );
 
   // Create the metadata file.
-  promises.push(
-    emitCategoryMetadata(PATH_TO_WKT_MDX_FOLDER, CATEGORY_LABELS.wkt)
-  );
+  promises.push(emitCategoryMetadata(pathToMdxWkt, CATEGORY_LABELS.wkt));
 
   await Promise.all(promises);
-})();
+}
 
 // Helper functions.
 async function recursivelyReadDirectory({
@@ -279,4 +267,23 @@ async function deleteDirectoryEntries(dir: string, exception?: string[]) {
   } catch (err) {
     return [];
   }
+}
+
+function getPaths(siteDir: string) {
+  const pathToGenerated = path.join(siteDir, "../../website/generated");
+  const pathToGeneratedWkt = path.join(siteDir, "../../website/generated/wkt");
+  const pathToMdx = path.join(siteDir, "../../website/docs");
+  const pathToMdxWkt = `${pathToMdx}/wkt`;
+  const pathToPluginDictionary = path.join(
+    siteDir,
+    "../protosaurus-plugin-codeblock/dictionary"
+  );
+
+  return {
+    pathToGenerated,
+    pathToGeneratedWkt,
+    pathToMdx,
+    pathToMdxWkt,
+    pathToPluginDictionary,
+  };
 }
