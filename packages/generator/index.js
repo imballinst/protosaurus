@@ -32,7 +32,8 @@ const BUF_CACHE_DIR = process.env.BUF_CACHE_DIR || path.join(cache, 'buf');
 const PATH = `${bin}:${process.env.PATH}`;
 
 module.exports = {
-  generate
+  generate,
+  generateCacheFile
 };
 
 /**
@@ -59,6 +60,17 @@ async function generate({ workDir, outPath }) {
 
   // Copy all WKT *.json.
   wkt.copyAll(path.join(workDir, outPath, 'wkt'));
+}
+
+async function generateCacheFile({ workDir, outPath }) {
+  await fs.mkdirp(path.join(workDir, outPath));
+
+  const { execa } = await import('execa');
+  const { stdout } = await execa(bufPath, ['ls-files'], { cwd: workDir, env: { PATH, BUF_CACHE_DIR } });
+
+  // TODO(imballinst): use a more reliable way in case that the content of the files changes,
+  // and not just the number/name of files.
+  return fs.writeFile(path.join(workDir, outPath, "buf-ls-files.txt"), stdout);
 }
 
 async function installProtocGenDoc() {

@@ -22,7 +22,7 @@ const darkCodeTheme = require("prism-react-renderer/themes/dracula");
 
 const {
   default: protoMessageRehypePlugin,
-} = require("@protosaurus/docusaurus-plugin-protosaurus-codeblock");
+} = require("@protosaurus/rehype-protosaurus-codeblock");
 
 /** @type {import('@docusaurus/types').Config} */
 const config = {
@@ -54,7 +54,7 @@ const config = {
         },
       }),
     ],
-    ["protosaurus-preset", {}],
+    ["@protosaurus/docusaurus-preset-protosaurus", { siteDir: __dirname }],
   ],
 
   themeConfig:

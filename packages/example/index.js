@@ -17,11 +17,17 @@
 const generator = require('@protosaurus/generator');
 const path = require('path');
 
+const WORK_DIR = process.env.WORK_DIR || path.resolve(path.join(__dirname, '..', '..')); // Paranoid on resolving.
+
 (async() => {
   await generator.generate({
-    workDir: process.env.WORK_DIR || path.resolve(path.join(__dirname, '..', '..')), // Paranoid on resolving.
+    workDir: WORK_DIR,
     // This should be inside the workDir, hence the actual path of the generated directory:
     //   path.join(workDir, outPath).
     outPath: 'website/generated'
+  });
+  await generator.generateCacheFile({
+    workDir: WORK_DIR,
+    outPath: 'website/plugin-resources/.cache'
   });
 })();

@@ -22,9 +22,14 @@ import { getAllDictionaries } from "./dictionary";
 import { getFieldInformation } from "./fields";
 import { getHastElementType } from "./hast";
 
-const { innerMessages, localMessages, wktMessages } = getAllDictionaries();
+interface Options {
+  siteDir: string;
+}
 
-const docusaurusPlugin: Plugin = () => {
+const docusaurusPlugin: Plugin = (opts: Options) => {
+  const { innerMessages, localMessages, wktMessages } =
+    getAllDictionaries(opts);
+
   return (tree: Root) => {
     // During build, we can use `process.env` from `docusaurus.config.js` perhaps
     // to get the directory containing the intermediary JSON.

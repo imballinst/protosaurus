@@ -1,4 +1,19 @@
-import type { LoadContext } from "@docusaurus/types";
+/**
+ * Copyright 2022 Protosaurus Authors
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 import { readdir, rm, stat } from "fs-extra";
 import path from "path";
 
@@ -18,8 +33,7 @@ const CATEGORY_LABELS = {
   wkt: "Well Known Types",
 };
 
-export async function emitJsonAndMdx(context: LoadContext) {
-  const { siteDir } = context;
+export async function emitJsonAndMdx(siteDir: string) {
   const {
     pathToGenerated,
     pathToGeneratedWkt,
@@ -28,6 +42,7 @@ export async function emitJsonAndMdx(context: LoadContext) {
     pathToPluginDictionary,
   } = getPaths(siteDir);
 
+  // TODO(imballinst): cache.
   // This does 2 things:
   // 1. Delete all files except intro.mdx in `pathToMdx`.
   // 2. Delete the dictionary folder `pathToPluginDictionary`.
@@ -270,13 +285,13 @@ async function deleteDirectoryEntries(dir: string, exception?: string[]) {
 }
 
 function getPaths(siteDir: string) {
-  const pathToGenerated = path.join(siteDir, "../../website/generated");
-  const pathToGeneratedWkt = path.join(siteDir, "../../website/generated/wkt");
-  const pathToMdx = path.join(siteDir, "../../website/docs");
+  const pathToGenerated = path.join(siteDir, "generated");
+  const pathToGeneratedWkt = path.join(siteDir, "generated/wkt");
+  const pathToMdx = path.join(siteDir, "docs");
   const pathToMdxWkt = `${pathToMdx}/wkt`;
   const pathToPluginDictionary = path.join(
     siteDir,
-    "../protosaurus-plugin-codeblock/dictionary"
+    "plugin-resources/protosaurus-plugin-codeblock/dictionary"
   );
 
   return {

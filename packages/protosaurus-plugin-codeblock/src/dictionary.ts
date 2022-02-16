@@ -27,7 +27,10 @@ interface Options {
 }
 
 export function getAllDictionaries({ siteDir }: Options) {
-  const pathToDictionary = path.join(siteDir, "plugin-resources/dictionary");
+  const pathToDictionary = path.join(
+    siteDir,
+    "plugin-resources/protosaurus-plugin-codeblock/dictionary"
+  );
 
   // This contains all "local" messages.
   const localMessages: HashRecord = {};

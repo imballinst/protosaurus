@@ -11,7 +11,10 @@ root_dir := $(dir $(abspath $(lastword $(MAKEFILE_LIST))))
 mdx_dir := $(root_dir)/packages/mdx
 
 # Path to the `proto-messages` plugin.
-docusaurus_plugin_dir := $(root_dir)/packages/protosaurus-plugin-codeblock
+# TODO(imballinst): make it an array so that we don't have to define the
+# build step one-by-one.
+rehype_plugin_codeblock_dir := $(root_dir)/packages/protosaurus-plugin-codeblock
+docusaurus_plugin_mdx_dir := $(root_dir)/packages/protosaurus-plugin-mdx
 docusaurus_theme_dir := $(root_dir)/packages/protosaurus-theme
 docusaurus_preset_dir := $(root_dir)/packages/protosaurus-preset
 
@@ -90,8 +93,7 @@ gen: $(BUF_V1_MODULE_DATA) $(yarn) ## Generate files from proto files
 	@$(MAKE) gen-wkt
 	@$(yarn) install --frozen-lockfile
 	@$(yarn) workspace @protosaurus/example generate
-	@$(MAKE) gen-mdx
-	@$(MAKE) gen-docusaurus-preset
+	@$(MAKE) gen-docusaurus-addons
 	@printf "$(ansi_format_bright)" $@ "ok"
 
 generated_dir := packages/wkt/generated/json
@@ -101,31 +103,23 @@ gen-wkt: $(protoc) $(protoc-gen-doc)
 		$(protoc) --doc_out=$(generated_dir) --doc_opt=json,$$proto.json,source_relative $$proto; \
 	done
 
-gen-mdx: $(yarn)
-	@$(yarn) --cwd packages/mdx build
-	@MDX_DIR=$(mdx_dir) $(yarn) --cwd packages/mdx emit
-
-gen-docusaurus-preset: $(yarn)
-	@$(yarn) --cwd $(docusaurus_plugin_dir) build
+gen-docusaurus-addons: $(yarn)
+	@$(yarn) --cwd $(rehype_plugin_codeblock_dir) build
 	@$(yarn) --cwd $(docusaurus_theme_dir) build
 	@$(yarn) --cwd $(docusaurus_preset_dir) build
-
+	@$(yarn) --cwd $(docusaurus_plugin_mdx_dir) build
+	
 start: $(yarn)
 	@$(yarn) --cwd website start
 
 build: $(yarn)
 	@$(yarn) --cwd website build
 
-# This is only used for testing purposes, so that we don't have
-# to build and rebuild every time we change `emit.ts` or other TS files.
-dev-gen-mdx:
-	@MDX_DIR=$(mdx_dir) $(yarn) --cwd packages/mdx ts-node emit.ts
-
 # This is only used for testing purposes. We are using this file: website/plugins/proto-messages/test-remark.ts.
 # Otherwise, there's no way we could rapidly test the output correctness of the plugin
 # without running Docusaurus development server.
 dev-test-plugin:
-	@$(yarn) --cwd $(docusaurus_plugin_dir) test:mdx
+	@$(yarn) --cwd $(rehype_plugin_codeblock_dir) test:mdx
 
 format: $(buf) $(clang-format) ## Format all proto files
 	@$(clang-format) -i $(shell $(buf) ls-files)
