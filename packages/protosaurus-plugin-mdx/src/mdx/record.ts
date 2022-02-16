@@ -14,7 +14,16 @@
  * limitations under the License.
  */
 
-declare module "*.module.css" {
-  const classes: { [key: string]: string };
-  export default classes;
+import { ProtoMessage } from "./types";
+
+export function convertProtoToRecord(
+  messages: ProtoMessage[]
+): Record<string, ProtoMessage> {
+  const record: Record<string, ProtoMessage> = {};
+
+  for (const message of messages) {
+    record[message.name] = message;
+  }
+
+  return record;
 }

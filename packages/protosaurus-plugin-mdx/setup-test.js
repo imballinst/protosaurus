@@ -14,7 +14,6 @@
  * limitations under the License.
  */
 
-declare module "*.module.css" {
-  const classes: { [key: string]: string };
-  export default classes;
-}
+import mocha from "mocha";
+
+global.test = mocha.test;

@@ -14,7 +14,13 @@
  * limitations under the License.
  */
 
-declare module "*.module.css" {
-  const classes: { [key: string]: string };
-  export default classes;
+import { mkdirpSync, statSync } from "fs-extra";
+
+export function createDirectoryIfNotExist(directory: string) {
+  try {
+    statSync(directory);
+  } catch (err) {
+    // Not found.
+    mkdirpSync(directory);
+  }
 }
