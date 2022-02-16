@@ -13,7 +13,7 @@ mdx_dir := $(root_dir)/packages/mdx
 # Path to the `proto-messages` plugin.
 # TODO(imballinst): make it an array so that we don't have to define the
 # build step one-by-one.
-rehype_plugin_codeblock_dir := $(root_dir)/packages/protosaurus-plugin-codeblock
+rehype_plugin_codeblock_dir := $(root_dir)/packages/rehype-plugin-protosaurus-codeblock
 docusaurus_plugin_mdx_dir := $(root_dir)/packages/protosaurus-plugin-mdx
 docusaurus_theme_dir := $(root_dir)/packages/protosaurus-theme
 docusaurus_preset_dir := $(root_dir)/packages/protosaurus-preset
