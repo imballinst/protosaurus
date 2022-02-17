@@ -118,8 +118,8 @@ build: $(yarn)
 # This is only used for testing purposes. We are using this file: website/plugins/proto-messages/test-remark.ts.
 # Otherwise, there's no way we could rapidly test the output correctness of the plugin
 # without running Docusaurus development server.
-dev-test-plugin:
-	@$(yarn) --cwd $(rehype_plugin_codeblock_dir) test:mdx
+dev-test-mdx-plugin:
+	@WORK_DIR=$(root_dir) $(yarn) --cwd $(rehype_plugin_codeblock_dir) test:mdx
 
 format: $(buf) $(clang-format) ## Format all proto files
 	@$(clang-format) -i $(shell $(buf) ls-files)

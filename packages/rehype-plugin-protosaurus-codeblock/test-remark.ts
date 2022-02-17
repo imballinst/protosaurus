@@ -22,7 +22,10 @@ import path from 'path';
 import rehypeProtoPlugin from './src';
 
 const md = fs.readFileSync(
-  path.join(__dirname, '../../../mdx/lib/test-resources/location-messages.mdx'),
+  path.join(
+    __dirname,
+    '../protosaurus-plugin-mdx/src/mdx/test-resources/location-messages.mdx'
+  ),
   'utf-8'
 );
 
@@ -31,7 +34,14 @@ main();
 async function main() {
   // MDX v1, reference: https://github.com/mdx-js/mdx/blob/v1/docs/advanced/plugins.mdx.
   const result = mdx.sync(md, {
-    rehypePlugins: [rehypeProtoPlugin]
+    rehypePlugins: [
+      [
+        rehypeProtoPlugin,
+        {
+          siteDir: process.env.WORK_DIR || path.join(__dirname, '../../website')
+        }
+      ]
+    ]
   });
   // Hide this as needed.
   // console.log(result);
