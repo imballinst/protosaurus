@@ -5,8 +5,9 @@
   "license": "SEE LICENSE IN LICENSE",
   "dependencies": {
     "@protosaurus/go": "0.0.1",
-    "execa": "^6.1.0",
-    "homedir": "^0.6.0"
+    "@protosaurus/wkt": "3.9.2",
+    "execa": "6.1.0",
+    "homedir": "0.6.0"
   },
   "plugins": {
     "protoc-gen-doc": "github.com/3128px/protoc-gen-doc/v2/cmd/protoc-gen-doc@v2.0.1",

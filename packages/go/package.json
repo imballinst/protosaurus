@@ -5,10 +5,10 @@
   "license": "SEE LICENSE IN LICENSE",
   "dependencies": {
     "@protosaurus/home": "0.0.1",
-    "bin-version-check": "^5.0.0",
-    "bin-wrapper": "^4.1.0",
-    "execa": "^6.1.0",
-    "import-lazy": "^4.0.0",
-    "which": "^2.0.2"
+    "bin-version-check": "5.0.0",
+    "bin-wrapper": "4.1.0",
+    "execa": "6.1.0",
+    "import-lazy": "4.0.0",
+    "which": "2.0.2"
   }
 }
