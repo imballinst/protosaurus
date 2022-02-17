@@ -128,6 +128,9 @@ docs: $(yarn) ## Build the docs site
 	$(yarn) --cwd website build
 
 prettier: $(yarn)
+	@$(yarn) prettier packages website -w
+
+prettier-check: $(yarn)
 	@$(yarn) prettier packages website -c
 
 license_files := website packages testdata .github Makefile *.mk buf.*.yaml
