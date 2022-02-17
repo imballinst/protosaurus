@@ -9,7 +9,6 @@
     "test:mdx": "ts-node test-remark.ts"
   },
   "devDependencies": {
-    "@docusaurus/types": "2.0.0-beta.15",
     "@types/hast-format": "2.3.0"
   },
   "peerDependencies": {

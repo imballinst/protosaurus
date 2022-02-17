@@ -4,5 +4,8 @@
   "main": "lib/index.js",
   "scripts": {
     "build": "rm -rf lib && tsc"
+  },
+  "dependencies": {
+    "@protosaurus/docusaurus-theme-protosaurus": "0.0.1"
   }
 }
