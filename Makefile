@@ -127,6 +127,9 @@ format: $(buf) $(clang-format) ## Format all proto files
 docs: $(yarn) ## Build the docs site
 	$(yarn) --cwd website build
 
+format: $(yarn)
+	
+
 license_files := website packages testdata .github Makefile *.mk buf.*.yaml
 license: $(addlicense) ## Add license to files
 	@$(addlicense) $(license_ignore) -c "Protosaurus Authors"  $(license_files) 1>/dev/null 2>&1
