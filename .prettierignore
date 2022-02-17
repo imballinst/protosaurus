@@ -5,4 +5,5 @@ packages/*/lib
 
 website/.docusaurus
 website/generated
+website/docs
 website/plugin-resources

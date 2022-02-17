@@ -127,8 +127,8 @@ format: $(buf) $(clang-format) ## Format all proto files
 docs: $(yarn) ## Build the docs site
 	$(yarn) --cwd website build
 
-format: $(yarn)
-	
+prettier: $(yarn)
+	@$(yarn) prettier packages website -c
 
 license_files := website packages testdata .github Makefile *.mk buf.*.yaml
 license: $(addlicense) ## Add license to files
