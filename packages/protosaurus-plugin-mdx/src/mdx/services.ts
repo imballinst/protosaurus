@@ -14,14 +14,14 @@
  * limitations under the License.
  */
 
-import { ProtoService, ProtoMessage, ServiceMethod } from "./types";
-import { getMessageProtosaurusBlock } from "./messages";
+import { ProtoService, ProtoMessage, ServiceMethod } from './types';
+import { getMessageProtosaurusBlock } from './messages';
 
 export function getServiceString({
   service,
   packageName,
   allProtoMessages,
-  allWktMessages,
+  allWktMessages
 }: {
   service: ProtoService;
   packageName: string;
@@ -36,7 +36,7 @@ export function getServiceString({
         method,
         packageName,
         allProtoMessages,
-        allWktMessages,
+        allWktMessages
       })
     );
   }
@@ -51,7 +51,7 @@ export function getServiceString({
 
 ${service.description}
 
-${serviceBody.join("\n\n")}
+${serviceBody.join('\n\n')}
 
 </Definition>\n\n`;
 }
@@ -61,7 +61,7 @@ function getServiceMethodString({
   method,
   packageName,
   allProtoMessages,
-  allWktMessages,
+  allWktMessages
 }: {
   packageName: string;
   method: ServiceMethod;
@@ -73,7 +73,7 @@ function getServiceMethodString({
     responseType,
     requestStreaming,
     responseStreaming,
-    name,
+    name
   } = method;
   let requestMessage: ProtoMessage;
   let responseMessage: ProtoMessage;
@@ -98,9 +98,9 @@ function getServiceMethodString({
 <RpcDefinition>
 
 <RpcDefinitionHeader
-  requestTypePrefix="${requestStreaming ? "stream" : ""}"
+  requestTypePrefix="${requestStreaming ? 'stream' : ''}"
   requestType="${requestType}"
-  responseTypePrefix="${responseStreaming ? "stream" : ""}"
+  responseTypePrefix="${responseStreaming ? 'stream' : ''}"
   responseType="${responseType}">
 
 #### ${name}
@@ -118,7 +118,7 @@ ${method.description}
 ${getMessageProtosaurusBlock({
   message: requestMessage,
   packageName,
-  level: 1,
+  level: 1
 })}
 
 <RpcMethodText type="response" isStream={${responseStreaming}}>${responseType}</RpcMethodText>
@@ -126,7 +126,7 @@ ${getMessageProtosaurusBlock({
 ${getMessageProtosaurusBlock({
   message: responseMessage,
   packageName,
-  level: 1,
+  level: 1
 })}
 
 </RpcDefinitionDescription>

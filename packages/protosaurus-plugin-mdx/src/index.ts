@@ -14,15 +14,15 @@
  * limitations under the License.
  */
 
-import type { LoadContext, Plugin } from "@docusaurus/types";
-import { readFileSync, writeFileSync } from "fs-extra";
-import { emitJsonAndMdx } from "./emit";
+import type { LoadContext, Plugin } from '@docusaurus/types';
+import { readFileSync, writeFileSync } from 'fs-extra';
+import { emitJsonAndMdx } from './emit';
 
 export default async function protosaurusPluginMdx(
   context: LoadContext
 ): Promise<Plugin> {
   return {
-    name: "docusaurus-plugin-protosaurus-mdx",
+    name: 'docusaurus-plugin-protosaurus-mdx',
     async loadContent() {
       const pathToCache = `${context.siteDir}/plugin-resources/.cache/buf-ls-files.txt`;
       const pathToBuildCache = `${context.siteDir}/plugin-resources/.cache/previous-build-buf-ls-files.txt`;
@@ -36,17 +36,17 @@ export default async function protosaurusPluginMdx(
       }
 
       // Re-create the previous build file (which will be used for next build).
-      const file = readFileSync(pathToCache, "utf-8");
+      const file = readFileSync(pathToCache, 'utf-8');
       writeFileSync(pathToBuildCache, file);
-    },
+    }
   };
 }
 
 // Helper functions.
 function shouldEmitJsonAndMdx(cacheFile: string, buildCacheFile: string) {
   try {
-    const bufLsFileCache = readFileSync(cacheFile, "utf-8");
-    const previousBuildCache = readFileSync(buildCacheFile, "utf-8");
+    const bufLsFileCache = readFileSync(cacheFile, 'utf-8');
+    const previousBuildCache = readFileSync(buildCacheFile, 'utf-8');
 
     // Should emit only if the compared files aren't the same.
     return bufLsFileCache !== previousBuildCache;

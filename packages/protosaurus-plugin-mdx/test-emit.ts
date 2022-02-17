@@ -1,6 +1,6 @@
-import { emitJsonAndMdx } from "./src/emit";
-import path from "path";
+import { emitJsonAndMdx } from './src/emit';
+import path from 'path';
 
 (() => {
-  emitJsonAndMdx(path.join(__dirname, "../../website"));
+  emitJsonAndMdx(path.join(__dirname, '../../website'));
 })();

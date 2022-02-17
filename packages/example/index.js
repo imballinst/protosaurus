@@ -17,9 +17,10 @@
 const generator = require('@protosaurus/generator');
 const path = require('path');
 
-const WORK_DIR = process.env.WORK_DIR || path.resolve(path.join(__dirname, '..', '..')); // Paranoid on resolving.
+const WORK_DIR =
+  process.env.WORK_DIR || path.resolve(path.join(__dirname, '..', '..')); // Paranoid on resolving.
 
-(async() => {
+(async () => {
   await generator.generate({
     workDir: WORK_DIR,
     // This should be inside the workDir, hence the actual path of the generated directory:

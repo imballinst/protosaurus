@@ -1,8 +1,8 @@
 // Copyright 2022 Protosaurus Authors
 // Licensed under the Apache License, Version 2.0 (the "License")
 
-import React, { ReactNode } from "react";
-import styles from "./Definition.module.css";
+import React, { ReactNode } from 'react';
+import styles from './Definition.module.css';
 
 interface DefinitionHeaderProps {
   requestType: string;
@@ -17,11 +17,11 @@ export default function DefinitionHeader({
   requestType,
   responseTypePrefix,
   responseType,
-  children,
+  children
 }: DefinitionHeaderProps) {
   return (
-    <div className={styles["rpc-definition-title"]}>
-      <div className={styles["rpc-definition-name"]}>
+    <div className={styles['rpc-definition-title']}>
+      <div className={styles['rpc-definition-name']}>
         <span>rpc</span> {children}
       </div>
 
@@ -39,7 +39,7 @@ function Type({ prefix, children }: { prefix?: string; children: ReactNode }) {
   if (prefix) {
     prefixJsx = (
       <>
-        <span>{prefix}</span>{" "}
+        <span>{prefix}</span>{' '}
       </>
     );
   }

@@ -14,17 +14,17 @@
  * limitations under the License.
  */
 
-import { expect } from "chai";
-import { getFieldComment } from "./messages";
+import { expect } from 'chai';
+import { getFieldComment } from './messages';
 
-describe("getFieldComment", () => {
-  test("without link", () => {
+describe('getFieldComment', () => {
+  test('without link', () => {
     const sampleText = `
 Hello world! This is a comment without link.
 As a bonus, I give you a multi-line example.
     `.trim();
 
-    expect(getFieldComment(sampleText, "").trim()).to.equal(
+    expect(getFieldComment(sampleText, '').trim()).to.equal(
       `
 // Hello world! This is a comment without link.
 // As a bonus, I give you a multi-line example.
@@ -32,13 +32,13 @@ As a bonus, I give you a multi-line example.
     );
   });
 
-  test("link", () => {
+  test('link', () => {
     const sampleText = `
 Hello world! This is a comment [with link](https://example.com).
 As a bonus, I give you a multi-line example.
     `.trim();
 
-    expect(getFieldComment(sampleText, "").trim()).to.equal(
+    expect(getFieldComment(sampleText, '').trim()).to.equal(
       `
 // Hello world! This is a comment [with link](https://example.com).
 // As a bonus, I give you a multi-line example.
@@ -46,14 +46,14 @@ As a bonus, I give you a multi-line example.
     );
   });
 
-  test("link and new line", () => {
+  test('link and new line', () => {
     const sampleText = `
 Hello world! This is a comment with [link separated
 by a newline](https://example.com).
 As a bonus, I give you a multi-line example.
       `.trim();
 
-    expect(getFieldComment(sampleText, "").trim()).to.equal(
+    expect(getFieldComment(sampleText, '').trim()).to.equal(
       `
 // Hello world! This is a comment with [link separated by a newline](https://example.com).
 // As a bonus, I give you a multi-line example.
@@ -61,14 +61,14 @@ As a bonus, I give you a multi-line example.
     );
   });
 
-  test("link and new line in the middle of a sentence", () => {
+  test('link and new line in the middle of a sentence', () => {
     const sampleText = `
 Hello world! This is a comment with [link separated
 by a newline](https://example.com) in the middle of a sentence.
 As a bonus, I give you a multi-line example.
   `.trim();
 
-    expect(getFieldComment(sampleText, "").trim()).to.equal(
+    expect(getFieldComment(sampleText, '').trim()).to.equal(
       `
 // Hello world! This is a comment with [link separated by a newline](https://example.com)
 // in the middle of a sentence.
@@ -77,7 +77,7 @@ As a bonus, I give you a multi-line example.
     );
   });
 
-  test("a lot of links with new line in the middle of a sentence", () => {
+  test('a lot of links with new line in the middle of a sentence', () => {
     const sampleText = `
 Hello world! This is a comment with [link separated
 by a newline](https://example.com) in the middle of a sentence.
@@ -86,7 +86,7 @@ by a newline](https://example.com) in the middle of a sentence.
 As a bonus, I give you a multi-line example.
   `.trim();
 
-    expect(getFieldComment(sampleText, "").trim()).to.equal(
+    expect(getFieldComment(sampleText, '').trim()).to.equal(
       `
 // Hello world! This is a comment with [link separated by a newline](https://example.com)
 // in the middle of a sentence.

@@ -23,6 +23,6 @@
   margin-bottom: 0;
 }
 
-html[data-theme="dark"] .description-title {
+html[data-theme='dark'] .description-title {
   background: var(--ifm-color-gray-800);
 }

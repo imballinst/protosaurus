@@ -51,12 +51,15 @@ async function generate({ workDir, outPath }) {
   // modules in the same directory.
   // TODO(dio): Validate that buf.work.yaml is there and valid.
   const dir = await fs.mkdtemp(path.join(os.tmpdir(), 'protosaurus_'));
-  const templateFile = path.join(dir, "buf.gen.yaml");
+  const templateFile = path.join(dir, 'buf.gen.yaml');
   await fs.writeFile(templateFile, bufGenYaml(outPath));
 
   // Generate *.json.
   const { execa } = await import('execa');
-  await execa(bufPath, ['generate', '--template', templateFile], { cwd: workDir, env: { PATH, BUF_CACHE_DIR } });
+  await execa(bufPath, ['generate', '--template', templateFile], {
+    cwd: workDir,
+    env: { PATH, BUF_CACHE_DIR }
+  });
 
   // Copy all WKT *.json.
   wkt.copyAll(path.join(workDir, outPath, 'wkt'));
@@ -66,17 +69,22 @@ async function generateCacheFile({ workDir, outPath }) {
   await fs.mkdirp(path.join(workDir, outPath));
 
   const { execa } = await import('execa');
-  const { stdout } = await execa(bufPath, ['ls-files'], { cwd: workDir, env: { PATH, BUF_CACHE_DIR } });
+  const { stdout } = await execa(bufPath, ['ls-files'], {
+    cwd: workDir,
+    env: { PATH, BUF_CACHE_DIR }
+  });
 
   // TODO(imballinst): use a more reliable way in case that the content of the files changes,
   // and not just the number/name of files.
-  return fs.writeFile(path.join(workDir, outPath, "buf-ls-files.txt"), stdout);
+  return fs.writeFile(path.join(workDir, outPath, 'buf-ls-files.txt'), stdout);
 }
 
 async function installProtocGenDoc() {
   const downloaded = await fs.pathExists(protocGenDocPath);
   if (!downloaded) {
-    await go.run(['install', pkg.plugins[protocGenDocName]], { env: { GOBIN: bin } });
+    await go.run(['install', pkg.plugins[protocGenDocName]], {
+      env: { GOBIN: bin }
+    });
   }
 }
 

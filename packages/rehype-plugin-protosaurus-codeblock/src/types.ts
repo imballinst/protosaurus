@@ -15,7 +15,7 @@
  */
 
 export interface TextMatchField {
-  type: "text" | "link" | "image";
+  type: 'text' | 'link' | 'image';
   name: string;
   // When the `href` is undefined, then we don't render a link.
   href?: string;

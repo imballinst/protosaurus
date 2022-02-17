@@ -39,7 +39,7 @@ async function path() {
     return await which('go');
   } catch {
     try {
-      return await download()
+      return await download();
     } catch {
       console.error('failed to find `go`');
     }
@@ -55,7 +55,7 @@ async function download() {
     .src(`${base}/go${VERSION}.windows-amd64.tar.gz`, 'win32')
     // TODO(dio): Add more oses and archs.
     .dest(dest)
-    .use(pathJoin('bin', process.platform === 'win32' ? 'go.exe' : 'go'))
-  await bin.run(["version"])
-  return bin.path()
+    .use(pathJoin('bin', process.platform === 'win32' ? 'go.exe' : 'go'));
+  await bin.run(['version']);
+  return bin.path();
 }

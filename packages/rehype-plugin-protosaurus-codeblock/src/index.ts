@@ -14,13 +14,13 @@
  * limitations under the License.
  */
 
-import type { Plugin } from "@docusaurus/types";
-import { Comment, DocType, Element, Root, Text } from "hast-format";
-import { getLinksFromALine, isLineAComment } from "./comments";
-import { REPEATED_TEXT } from "./constants";
-import { getAllDictionaries } from "./dictionary";
-import { getFieldInformation } from "./fields";
-import { getHastElementType } from "./hast";
+import type { Plugin } from '@docusaurus/types';
+import { Comment, DocType, Element, Root, Text } from 'hast-format';
+import { getLinksFromALine, isLineAComment } from './comments';
+import { REPEATED_TEXT } from './constants';
+import { getAllDictionaries } from './dictionary';
+import { getFieldInformation } from './fields';
+import { getHastElementType } from './hast';
 
 interface Options {
   siteDir: string;
@@ -40,7 +40,7 @@ const docusaurusPlugin: Plugin = (opts: Options) => {
         continue;
       }
 
-      if (child.tagName === "pre") {
+      if (child.tagName === 'pre') {
         const pre = child;
         if (!isElement(pre)) {
           continue;
@@ -56,10 +56,10 @@ const docusaurusPlugin: Plugin = (opts: Options) => {
           continue;
         }
 
-        const codeArray = codeChild.value.split("\n");
+        const codeArray = codeChild.value.split('\n');
         const matchingLanguage = code.properties?.className?.find((c: string) =>
           // TODO(imballinst): specify a better language code, if this is unfit.
-          c.startsWith("language-protosaurus")
+          c.startsWith('language-protosaurus')
         );
 
         if (!matchingLanguage) {
@@ -70,7 +70,7 @@ const docusaurusPlugin: Plugin = (opts: Options) => {
         // This has the purpose to "detect" submessages.
         // With the "booking.v1.Booking" namespace information, we can lookup to the
         // `subMessagesDictionary` variable.
-        const [, namespace] = matchingLanguage.split("--");
+        const [, namespace] = matchingLanguage.split('--');
         const children: (Element | Text)[] = [];
 
         // Discard the last line from the code block (pure newline).
@@ -81,19 +81,19 @@ const docusaurusPlugin: Plugin = (opts: Options) => {
             namespace,
             innerMessages,
             localMessages,
-            wktMessages,
+            wktMessages
           });
 
-          if (type === undefined && line.trim().startsWith("message")) {
+          if (type === undefined && line.trim().startsWith('message')) {
             // If undefined, then we find the built-in syntaxes.
             type = {
               match: {
                 field: {
-                  type: "text",
-                  name: "message",
-                  position: line.indexOf("message"),
-                },
-              },
+                  type: 'text',
+                  name: 'message',
+                  position: line.indexOf('message')
+                }
+              }
             };
           }
 
@@ -102,8 +102,8 @@ const docusaurusPlugin: Plugin = (opts: Options) => {
             // The text before the type, the type, and the text after the type.
             const { match = {}, isRepeated } = type;
             const { field, map } = match;
-            let firstSlice = "";
-            let secondSlice = "";
+            let firstSlice = '';
+            let secondSlice = '';
             let hastTypeElements: (Element | Text)[] = [];
 
             if (map) {
@@ -116,13 +116,13 @@ const docusaurusPlugin: Plugin = (opts: Options) => {
               hastTypeElements.push(
                 getHastElementType(key),
                 {
-                  type: "text" as const,
-                  value: ", ",
+                  type: 'text' as const,
+                  value: ', '
                 },
                 getHastElementType(value),
                 {
-                  type: "text" as const,
-                  value: ">",
+                  type: 'text' as const,
+                  value: '>'
                 }
               );
             } else if (field) {
@@ -135,7 +135,7 @@ const docusaurusPlugin: Plugin = (opts: Options) => {
                 hastTypeElements.push(
                   getHastElementType({
                     name: REPEATED_TEXT,
-                    type: "text",
+                    type: 'text'
                   })
                 );
                 firstSlicePosition = firstSlicePosition - REPEATED_TEXT.length;
@@ -149,13 +149,13 @@ const docusaurusPlugin: Plugin = (opts: Options) => {
 
             children.push(
               {
-                type: "text",
-                value: firstSlice,
+                type: 'text',
+                value: firstSlice
               },
               ...hastTypeElements,
               {
-                type: "text",
-                value: `${secondSlice}\n`,
+                type: 'text',
+                value: `${secondSlice}\n`
               }
             );
           } else {
@@ -182,8 +182,8 @@ const docusaurusPlugin: Plugin = (opts: Options) => {
                 // Push the text before the match. This will always be a non-text.
                 // This is because the line will always start with whitespace + double slashes.
                 hastElements.push({
-                  type: "text" as const,
-                  value: line.slice(previousIndex, position),
+                  type: 'text' as const,
+                  value: line.slice(previousIndex, position)
                 });
                 // Push the link.
                 hastElements.push(getHastElementType(match));
@@ -194,8 +194,8 @@ const docusaurusPlugin: Plugin = (opts: Options) => {
               // If there is still remaining characters in the line, push the rest of them.
               if (previousIndex + 1 <= line.length) {
                 hastElements.push({
-                  type: "text" as const,
-                  value: `${line.slice(previousIndex)}\n`,
+                  type: 'text' as const,
+                  value: `${line.slice(previousIndex)}\n`
                 });
               }
             } else {
@@ -205,31 +205,31 @@ const docusaurusPlugin: Plugin = (opts: Options) => {
               // Add newline if not the last line.
               // This is because previously we are splitting by "\n".
               if (isNotLast) {
-                val += "\n";
+                val += '\n';
 
                 // In case of double space, we need to
                 // add another (as a result of .split()).
                 // We need to add this "zero-width space" otherwise
                 // the MDX renderer will remove the second newline.
-                if (line === "") {
-                  val = "​\n";
+                if (line === '') {
+                  val = '​\n';
                 }
               }
 
               hastElements.push({
-                type: "text" as const,
-                value: val,
+                type: 'text' as const,
+                value: val
               });
             }
 
             if (isAComment) {
               children.push({
-                type: "element",
-                tagName: "span",
+                type: 'element',
+                tagName: 'span',
                 properties: {
-                  className: "comment",
+                  className: 'comment'
                 },
-                children: hastElements,
+                children: hastElements
               });
             } else {
               children.push(...hastElements);
@@ -241,7 +241,7 @@ const docusaurusPlugin: Plugin = (opts: Options) => {
         pre.children = children;
         // Rewrite the tag name from `pre` to `precustom` so we could
         // make a difference between normal `pre` and our `pre`.
-        pre.tagName = "precustom";
+        pre.tagName = 'precustom';
       }
     }
   };
@@ -253,9 +253,9 @@ export default docusaurusPlugin;
 function isElement(
   child: Element | DocType | Comment | Text
 ): child is Element {
-  return child.type === "element";
+  return child.type === 'element';
 }
 
 function isText(child: Element | DocType | Comment | Text): child is Text {
-  return child.type === "text";
+  return child.type === 'text';
 }

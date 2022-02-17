@@ -14,6 +14,6 @@
  * limitations under the License.
  */
 
-declare module "@mdx-js/mdx" {
+declare module '@mdx-js/mdx' {
   export const sync = (...args: any) => any;
 }

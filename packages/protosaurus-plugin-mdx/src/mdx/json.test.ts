@@ -14,41 +14,41 @@
  * limitations under the License.
  */
 
-import { expect } from "chai";
-import { getMessagesJsonDictionary } from "./json";
-import { MessageData } from "./types";
+import { expect } from 'chai';
+import { getMessagesJsonDictionary } from './json';
+import { MessageData } from './types';
 
-describe("getMessagesJsonDictionary", () => {
+describe('getMessagesJsonDictionary', () => {
   const MESSAGES_DATA: MessageData[] = [
     {
-      hash: "samplemessage",
-      name: "SampleMessage",
-      packageName: "booking.v1",
+      hash: 'samplemessage',
+      name: 'SampleMessage',
+      packageName: 'booking.v1',
       // This is unused here.
-      body: "",
+      body: ''
     },
     {
-      hash: "anothermessage",
-      name: "AnotherMessage",
-      packageName: "booking.v1",
+      hash: 'anothermessage',
+      name: 'AnotherMessage',
+      packageName: 'booking.v1',
       // This is unused here.
-      body: "",
-    },
+      body: ''
+    }
   ];
 
-  test("non-wkt", () => {
+  test('non-wkt', () => {
     expect(getMessagesJsonDictionary({ messages: MESSAGES_DATA })).eql({
-      SampleMessage: "/docs/booking.v1#samplemessage",
-      AnotherMessage: "/docs/booking.v1#anothermessage",
+      SampleMessage: '/docs/booking.v1#samplemessage',
+      AnotherMessage: '/docs/booking.v1#anothermessage'
     });
   });
 
-  test("wkt", () => {
+  test('wkt', () => {
     expect(
       getMessagesJsonDictionary({ messages: MESSAGES_DATA, isWkt: true })
     ).eql({
-      SampleMessage: "/docs/wkt/booking.v1#samplemessage",
-      AnotherMessage: "/docs/wkt/booking.v1#anothermessage",
+      SampleMessage: '/docs/wkt/booking.v1#samplemessage',
+      AnotherMessage: '/docs/wkt/booking.v1#anothermessage'
     });
   });
 });

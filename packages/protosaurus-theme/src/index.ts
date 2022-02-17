@@ -14,16 +14,16 @@
  * limitations under the License.
  */
 
-import type { Plugin } from "@docusaurus/types";
-import path from "path";
+import type { Plugin } from '@docusaurus/types';
+import path from 'path';
 
-const SRC_THEME_PATH = path.join(__dirname, "../src/theme");
+const SRC_THEME_PATH = path.join(__dirname, '../src/theme');
 const LIB_PATH = path.join(__dirname);
-const LIB_THEME_PATH = path.join(__dirname, "./theme");
+const LIB_THEME_PATH = path.join(__dirname, './theme');
 
 export default function protosaurusTheme(): Plugin<void> {
   return {
-    name: "@protosaurus/docusaurus-theme-protosaurus",
+    name: '@protosaurus/docusaurus-theme-protosaurus',
     getThemePath() {
       return LIB_THEME_PATH;
     },
@@ -32,6 +32,6 @@ export default function protosaurusTheme(): Plugin<void> {
     },
     getClientModules() {
       return [`${LIB_PATH}/custom.css`];
-    },
+    }
   };
 }
