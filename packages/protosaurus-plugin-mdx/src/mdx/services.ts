@@ -121,7 +121,9 @@ ${getMessageProtosaurusBlock({
   level: 1
 })}
 
-<RpcMethodText type="response" isStream={${responseStreaming}}>${responseType}</RpcMethodText>
+<RpcMethodText type="response" isStream={${responseStreaming}}>
+  ${responseType}
+</RpcMethodText>
 
 ${getMessageProtosaurusBlock({
   message: responseMessage,

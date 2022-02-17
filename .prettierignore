@@ -2,6 +2,7 @@ node_modules
 # This is so that the MDX aren't formatted when we save it.
 packages/wkt/generated
 packages/*/lib
+packages/protosaurus-plugin-mdx/src/mdx/test-resources
 
 website/.docusaurus
 website/generated

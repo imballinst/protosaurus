@@ -36,9 +36,7 @@ describe('readPackageData', () => {
   );
 
   test('messages', async () => {
-    const { packageData: packages } = await readPackageData(
-      BOOKING_DOC_JSON_PATH
-    );
+    const { packageData: packages } = readPackageData(BOOKING_DOC_JSON_PATH);
     const allMessages: string[] = [];
 
     for (const pkg of packages) {
@@ -67,9 +65,7 @@ describe('readPackageData', () => {
   );
 
   test('inner messages', async () => {
-    const { packageData: packages } = await readPackageData(
-      LOCATION_DOC_JSON_PATH
-    );
+    const { packageData: packages } = readPackageData(LOCATION_DOC_JSON_PATH);
     const allMessages: string[] = [];
 
     for (const pkg of packages) {
@@ -94,7 +90,7 @@ describe('readPackageData', () => {
   );
 
   test('services', async () => {
-    const { packageData: packages, rawProtoMessages } = await readPackageData(
+    const { packageData: packages, rawProtoMessages } = readPackageData(
       BOOKING_DOC_JSON_PATH
     );
     const localProtoMessagesDictionary = convertProtoToRecord(rawProtoMessages);
