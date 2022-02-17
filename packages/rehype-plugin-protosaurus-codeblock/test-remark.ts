@@ -22,10 +22,12 @@ import path from 'path';
 import rehypeProtoPlugin from './src';
 
 const md = fs.readFileSync(
-  path.join(
-    __dirname,
-    '../protosaurus-plugin-mdx/src/mdx/test-resources/location-messages.mdx'
-  ),
+  process.env.WORK_DIR
+    ? `${process.env.WORK_DIR}/packages/protosaurus-plugin-mdx/src/mdx/test-resources/location-messages.mdx`
+    : path.join(
+        __dirname,
+        '../protosaurus-plugin-mdx/src/mdx/test-resources/location-messages.mdx'
+      ),
   'utf-8'
 );
 
@@ -38,7 +40,9 @@ async function main() {
       [
         rehypeProtoPlugin,
         {
-          siteDir: process.env.WORK_DIR || path.join(__dirname, '../../website')
+          siteDir: process.env.WORK_DIR
+            ? `${process.env.WORK_DIR}/website`
+            : path.join(__dirname, '../../website')
         }
       ]
     ]
