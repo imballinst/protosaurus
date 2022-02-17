@@ -14,13 +14,13 @@
  * limitations under the License.
  */
 
-import { BUILTIN_TYPES } from "./constants";
+import { BUILTIN_TYPES } from './constants';
 import {
   findMessageInDictionaries,
   HashRecord,
-  NamespaceHashRecord,
-} from "./dictionary";
-import { FieldType, TextMatch } from "./types";
+  NamespaceHashRecord
+} from './dictionary';
+import { FieldType, TextMatch } from './types';
 
 interface GetFieldInformationParameter {
   line: string;
@@ -37,10 +37,10 @@ export function getFieldInformation({
   whitespaces,
   localMessages,
   innerMessages,
-  wktMessages,
+  wktMessages
 }: GetFieldInformationParameter): FieldType | undefined {
   const trimmed = line.trim();
-  const segments = trimmed.split(" ");
+  const segments = trimmed.split(' ');
   // For example:
   //
   // repeated string test_string = 1; --> [repeated, string, test_string, =, 1].
@@ -48,14 +48,14 @@ export function getFieldInformation({
   //
   // In the above example, then the first one `repeated = true`, and
   // for the second `repeated = false`.
-  const isRepeated = segments[0] === "repeated";
+  const isRepeated = segments[0] === 'repeated';
   let match = findMessageInDictionaries({
     line,
     whitespaces,
     isRepeated,
     innerMessages: innerMessages[namespace],
     localMessages,
-    wktMessages,
+    wktMessages
   });
 
   // If `match` is undefined (not found in dictionary), then it's most likely a built-in type.
@@ -65,7 +65,7 @@ export function getFieldInformation({
       namespace,
       innerMessages,
       localMessages,
-      wktMessages,
+      wktMessages
     });
   }
 
@@ -78,18 +78,18 @@ function getBuiltInType({
   namespace,
   localMessages,
   innerMessages,
-  wktMessages,
+  wktMessages
 }: GetFieldInformationParameter) {
-  const segments = line.trim().split(" ");
+  const segments = line.trim().split(' ');
   let textMatch: TextMatch | undefined;
 
   if (BUILTIN_TYPES.includes(segments[0])) {
     textMatch = {
       field: {
-        type: "text",
+        type: 'text',
         name: segments[0],
-        position: line.indexOf(segments[0]),
-      },
+        position: line.indexOf(segments[0])
+      }
     };
   } else {
     // Test map.
@@ -98,7 +98,7 @@ function getBuiltInType({
       namespace,
       localMessages,
       innerMessages,
-      wktMessages,
+      wktMessages
     });
 
     if (result) {
@@ -123,49 +123,49 @@ function getMapFieldTypes({
   namespace,
   localMessages,
   innerMessages,
-  wktMessages,
-}: Omit<GetFieldInformationParameter, "whitespaces">) {
-  let match: TextMatch["map"];
+  wktMessages
+}: Omit<GetFieldInformationParameter, 'whitespaces'>) {
+  let match: TextMatch['map'];
 
-  if (line.trim().startsWith("map<")) {
-    const mapOpenTagIndex = line.indexOf("<");
+  if (line.trim().startsWith('map<')) {
+    const mapOpenTagIndex = line.indexOf('<');
     // Get first index of the closing `>`.
     // This should be safe because the value can't be another map.
     // Map also cannot be repeated.
     // Reference: https://developers.google.com/protocol-buffers/docs/proto3#maps.
-    const mapCloseTagIndex = line.indexOf(">");
+    const mapCloseTagIndex = line.indexOf('>');
     const sliced = line.slice(mapOpenTagIndex + 1, mapCloseTagIndex);
 
     const [keyType, valueType] = sliced.split(MAP_KEY_VALUE_REGEX);
     const keyMatch = findMessageInDictionaries({
       line: keyType,
-      whitespaces: "",
+      whitespaces: '',
       innerMessages: innerMessages[namespace],
       localMessages,
-      wktMessages,
+      wktMessages
     });
     const valueMatch = findMessageInDictionaries({
       line: valueType,
-      whitespaces: "",
+      whitespaces: '',
       innerMessages: innerMessages[namespace],
       localMessages,
-      wktMessages,
+      wktMessages
     });
 
     match = {
       key: keyMatch?.field || {
         name: keyType,
-        type: "text",
+        type: 'text',
         href: undefined,
-        position: line.indexOf(keyType),
+        position: line.indexOf(keyType)
       },
       value: valueMatch?.field || {
         name: valueType,
-        type: "text",
+        type: 'text',
         href: undefined,
-        position: line.indexOf(valueType),
+        position: line.indexOf(valueType)
       },
-      mapClosingTagIndex: line.indexOf(">"),
+      mapClosingTagIndex: line.indexOf('>')
     };
   }
 

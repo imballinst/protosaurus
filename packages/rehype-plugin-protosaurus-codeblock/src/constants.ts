@@ -16,21 +16,21 @@
 
 export const BUILTIN_TYPES = [
   // Source: https://developers.google.com/protocol-buffers/docs/proto.
-  "bool",
-  "bytes",
-  "double",
-  "fixed32",
-  "sfixed32",
-  "fixed64",
-  "sfixed64",
-  "float",
-  "int32",
-  "sint32",
-  "uint32",
-  "int64",
-  "sint64",
-  "uint64",
-  "string",
+  'bool',
+  'bytes',
+  'double',
+  'fixed32',
+  'sfixed32',
+  'fixed64',
+  'sfixed64',
+  'float',
+  'int32',
+  'sint32',
+  'uint32',
+  'int64',
+  'sint64',
+  'uint64',
+  'string'
 ];
 
-export const REPEATED_TEXT = "repeated ";
+export const REPEATED_TEXT = 'repeated ';

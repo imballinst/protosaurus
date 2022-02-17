@@ -14,10 +14,10 @@
  * limitations under the License.
  */
 
-import fs from "fs";
-import path from "path";
-import { REPEATED_TEXT } from "./constants";
-import { TextMatch, TextMatchField } from "./types";
+import fs from 'fs';
+import path from 'path';
+import { REPEATED_TEXT } from './constants';
+import { TextMatch, TextMatchField } from './types';
 
 export type HashRecord = Record<string, string>;
 export type NamespaceHashRecord = Record<string, HashRecord>;
@@ -29,7 +29,7 @@ interface Options {
 export function getAllDictionaries({ siteDir }: Options) {
   const pathToDictionary = path.join(
     siteDir,
-    "plugin-resources/protosaurus-plugin-codeblock/dictionary"
+    'plugin-resources/protosaurus-plugin-codeblock/dictionary'
   );
 
   // This contains all "local" messages.
@@ -40,30 +40,30 @@ export function getAllDictionaries({ siteDir }: Options) {
   let wktMessages: HashRecord = {};
 
   const entries = fs.readdirSync(pathToDictionary, {
-    encoding: "utf-8",
-    withFileTypes: true,
+    encoding: 'utf-8',
+    withFileTypes: true
   });
 
   for (const entry of entries) {
     const ext = path.extname(entry.name);
     const basename = path.basename(entry.name, ext);
 
-    if (ext === ".json") {
+    if (ext === '.json') {
       const file = fs.readFileSync(
         path.join(pathToDictionary, entry.name),
-        "utf-8"
+        'utf-8'
       );
       const json = JSON.parse(file);
 
-      if (basename === "wkt") {
+      if (basename === 'wkt') {
         // For well known types, we assume that they will never intersect (perhaps).
         wktMessages = json;
       } else {
         // Whereas, for local types, there are chances that "local" messages inside a message
         // can be a conflict to another. Hence, we need to group them by
         for (const key in json) {
-          if (key.indexOf(".") > -1) {
-            const [parentMessage, name] = key.split(".");
+          if (key.indexOf('.') > -1) {
+            const [parentMessage, name] = key.split('.');
             const innerMessageKey = `${basename}.${parentMessage}`;
 
             // Sub message.
@@ -84,7 +84,7 @@ export function getAllDictionaries({ siteDir }: Options) {
   return {
     localMessages,
     innerMessages,
-    wktMessages,
+    wktMessages
   };
 }
 
@@ -94,7 +94,7 @@ export function findMessageInDictionaries({
   isRepeated,
   localMessages,
   innerMessages,
-  wktMessages,
+  wktMessages
 }: {
   line: string;
   whitespaces?: string;
@@ -110,7 +110,7 @@ export function findMessageInDictionaries({
     line,
     whitespaces,
     isRepeated,
-    isInnerMessage: true,
+    isInnerMessage: true
   });
 
   // If no submessage found, test against dictionary.
@@ -119,7 +119,7 @@ export function findMessageInDictionaries({
       source: localMessages,
       line,
       whitespaces,
-      isRepeated,
+      isRepeated
     });
   }
 
@@ -129,7 +129,7 @@ export function findMessageInDictionaries({
       source: wktMessages,
       line,
       whitespaces,
-      isRepeated,
+      isRepeated
     });
   }
 
@@ -140,9 +140,9 @@ export function findMessageInDictionaries({
 function findMatchingMessageInDictionary({
   source,
   line,
-  whitespaces = "\\s+",
+  whitespaces = '\\s+',
   isRepeated,
-  isInnerMessage,
+  isInnerMessage
 }: {
   source: HashRecord;
   line: string;
@@ -152,7 +152,7 @@ function findMatchingMessageInDictionary({
 }): TextMatch | undefined {
   // "Shift" the line when it contains "repeated" label.
   // Otherwise, it won't parse the linked types properly.
-  const restOfLine = isRepeated ? line.replace(REPEATED_TEXT, "") : line;
+  const restOfLine = isRepeated ? line.replace(REPEATED_TEXT, '') : line;
   let fieldMatch: TextMatchField | undefined;
 
   for (const type in source) {
@@ -167,10 +167,10 @@ function findMatchingMessageInDictionary({
       // When found, we get the index of the type word in the line,
       // and store the type name as well.
       fieldMatch = {
-        type: !isInnerMessage ? "link" : "text",
+        type: !isInnerMessage ? 'link' : 'text',
         position: line.indexOf(type),
         href: !isInnerMessage ? source[type] : undefined,
-        name: type,
+        name: type
       };
       break;
     }

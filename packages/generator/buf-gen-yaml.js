@@ -35,5 +35,5 @@ plugins:
   - name: doc
     out: ${outDir}
     opt: json,doc.json,source_relative
-`
-}
+`;
+};

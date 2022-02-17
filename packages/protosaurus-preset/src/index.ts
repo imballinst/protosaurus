@@ -14,14 +14,14 @@
  * limitations under the License.
  */
 
-import type { Preset } from "@docusaurus/types";
+import type { Preset } from '@docusaurus/types';
 
 export type ProtosaurusPresetEntry = [
-  "@protosaurus/docusaurus-preset-protosaurus"
+  '@protosaurus/docusaurus-preset-protosaurus'
 ];
 
 export default function protosaurusPreset(): Preset {
   return {
-    themes: [require.resolve("@protosaurus/docusaurus-theme-protosaurus")],
+    themes: [require.resolve('@protosaurus/docusaurus-theme-protosaurus')]
   };
 }

@@ -14,6 +14,6 @@
  * limitations under the License.
  */
 
-import mocha from "mocha";
+import mocha from 'mocha';
 
 global.test = mocha.test;

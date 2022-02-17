@@ -20,7 +20,8 @@ const path = require('path');
 const homeDir = require('homedir');
 const fs = require('fs-extra');
 
-const protosaurusHome = process.env.PROTOSAURUS_HOME || path.join(homeDir(), '.protosaurus');
+const protosaurusHome =
+  process.env.PROTOSAURUS_HOME || path.join(homeDir(), '.protosaurus');
 const protosaurusBin = path.join(protosaurusHome, path.join('tools', 'go'));
 const protosaurusCache = path.join(protosaurusHome, 'buf');
 fs.mkdirpSync(protosaurusHome);
@@ -30,4 +31,4 @@ module.exports = {
   home: protosaurusHome,
   bin: protosaurusBin,
   cache: protosaurusCache
-}
+};

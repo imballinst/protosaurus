@@ -14,25 +14,25 @@
  * limitations under the License.
  */
 
-import { readFileSync } from "fs-extra";
+import { readFileSync } from 'fs-extra';
 import {
   Protofile,
   PackageData,
   ProtoMessage,
   MessageData,
   MessagesRecord,
-  InnerMessagesRecord,
-} from "./types";
+  InnerMessagesRecord
+} from './types';
 import {
   getMessageFieldsBlock,
   getMessageDescription,
   getMessageDefinition,
   getMessageHeader,
-  getMessageProtosaurusBlock,
-} from "./messages";
+  getMessageProtosaurusBlock
+} from './messages';
 
 export function readPackageData(packagePath: string) {
-  const content = readFileSync(packagePath, "utf-8");
+  const content = readFileSync(packagePath, 'utf-8');
   const json: {
     files: Protofile[];
   } = JSON.parse(content);
@@ -51,7 +51,7 @@ export function readPackageData(packagePath: string) {
     const messagesRecord: MessagesRecord = {};
 
     for (const message of file.messages) {
-      const messageNameArray = message.longName.split(".");
+      const messageNameArray = message.longName.split('.');
       const isInnerMessage = messageNameArray.length > 1;
 
       if (isInnerMessage) {
@@ -60,8 +60,8 @@ export function readPackageData(packagePath: string) {
           rawMessage: message,
           messageBlock: getMessageFieldsBlock({
             message,
-            level: 2,
-          }),
+            level: 2
+          })
         };
       } else {
         // Store non-inner messages.
@@ -73,7 +73,7 @@ export function readPackageData(packagePath: string) {
     // Process actual messages for real.
     for (const key in messagesRecord) {
       const message = messagesRecord[key];
-      const description = getMessageDescription(message) + "\n\n";
+      const description = getMessageDescription(message) + '\n\n';
 
       messagesData.push({
         name: message.longName,
@@ -88,9 +88,9 @@ export function readPackageData(packagePath: string) {
               level: 1,
               message,
               innerMessagesRecord,
-              messagesRecord,
-            }),
-        }),
+              messagesRecord
+            })
+        })
       });
     }
 
@@ -100,7 +100,7 @@ export function readPackageData(packagePath: string) {
       messagesData,
       innerMessagesRecord,
       servicesData: [],
-      rawProtoServices: file.services,
+      rawProtoServices: file.services
     });
     rawProtoMessages.push(...file.messages);
   }
@@ -110,8 +110,8 @@ export function readPackageData(packagePath: string) {
 
 // Helper functions.
 function getPackageDescription(description: string) {
-  if (description === "") {
-    return "";
+  if (description === '') {
+    return '';
   }
 
   return `

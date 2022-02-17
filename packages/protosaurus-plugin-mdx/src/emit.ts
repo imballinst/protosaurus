@@ -14,23 +14,23 @@
  * limitations under the License.
  */
 
-import { readdirSync, rmSync, statSync } from "fs-extra";
-import path from "path";
+import { readdirSync, rmSync, statSync } from 'fs-extra';
+import path from 'path';
 
-import { emitMdx } from "./mdx/mdx";
-import { convertProtoToRecord } from "./mdx/record";
-import { PackageData, ProtoMessage } from "./mdx/types";
-import { emitMessagesJson } from "./mdx/json";
-import { emitCategoryMetadata } from "./mdx/metadata";
-import { readPackageData } from "./mdx/packages";
-import { getServiceString } from "./mdx/services";
-import { createDirectoryIfNotExist } from "./mdx/filesystem";
+import { emitMdx } from './mdx/mdx';
+import { convertProtoToRecord } from './mdx/record';
+import { PackageData, ProtoMessage } from './mdx/types';
+import { emitMessagesJson } from './mdx/json';
+import { emitCategoryMetadata } from './mdx/metadata';
+import { readPackageData } from './mdx/packages';
+import { getServiceString } from './mdx/services';
+import { createDirectoryIfNotExist } from './mdx/filesystem';
 
-const PRESERVED_DOCS_FILES = ["intro.mdx"];
+const PRESERVED_DOCS_FILES = ['intro.mdx'];
 
 // Labels for the local types and the well-known types.
 const CATEGORY_LABELS = {
-  wkt: "Well Known Types",
+  wkt: 'Well Known Types'
 };
 
 export function emitJsonAndMdx(siteDir: string) {
@@ -39,7 +39,7 @@ export function emitJsonAndMdx(siteDir: string) {
     pathToGeneratedWkt,
     pathToMdx,
     pathToMdxWkt,
-    pathToPluginDictionary,
+    pathToPluginDictionary
   } = getPaths(siteDir);
 
   // TODO(imballinst): cache.
@@ -58,11 +58,11 @@ export function emitJsonAndMdx(siteDir: string) {
   const { allPackages: localPackages, allProtoMessages } =
     recursivelyReadDirectory({
       pathToDirectory: pathToGenerated,
-      excludedDirectories: [pathToGeneratedWkt],
+      excludedDirectories: [pathToGeneratedWkt]
     });
   const { allPackages: wktPackages, allProtoMessages: allWktProtoMessages } =
     recursivelyReadDirectory({
-      pathToDirectory: pathToGeneratedWkt,
+      pathToDirectory: pathToGeneratedWkt
     });
 
   const localMessagesDictionary = convertProtoToRecord(allProtoMessages);
@@ -79,8 +79,8 @@ export function emitJsonAndMdx(siteDir: string) {
         service,
         allProtoMessages: localMessagesDictionary,
         allWktMessages: wktMessagesDictionary,
-        packageName: pkg.name,
-      }),
+        packageName: pkg.name
+      })
     }));
 
     // Emit messages and services.
@@ -145,12 +145,12 @@ export function emitJsonAndMdx(siteDir: string) {
         Object.values(pkg.innerMessagesRecord).map((message) => ({
           // We can set the body as empty here because this function emits JSON,
           // not emitting MDX, and hence, not used.
-          body: "",
+          body: '',
           name: message.rawMessage.longName,
           packageName: pkg.name,
-          hash: message.rawMessage.longName.toLowerCase(),
+          hash: message.rawMessage.longName.toLowerCase()
         }))
-      ),
+      )
     });
   }
 
@@ -161,7 +161,7 @@ export function emitJsonAndMdx(siteDir: string) {
     if (wktPackagesDictionary[pkg.name] === undefined) {
       wktPackagesDictionary[pkg.name] = {
         ...pkg,
-        messagesData: [],
+        messagesData: []
       };
     }
 
@@ -181,7 +181,7 @@ export function emitJsonAndMdx(siteDir: string) {
   emitMessagesJson({
     filePath: pathToWktFile,
     messages: allWktPackages.map((pkg) => pkg.messagesData).flat(),
-    isWkt: true,
+    isWkt: true
   });
 
   // Create the metadata file.
@@ -191,7 +191,7 @@ export function emitJsonAndMdx(siteDir: string) {
 // Helper functions.
 function recursivelyReadDirectory({
   pathToDirectory,
-  excludedDirectories,
+  excludedDirectories
 }: {
   // Path to the directory to read.
   pathToDirectory: string;
@@ -210,8 +210,8 @@ function recursivelyReadDirectory({
   }
 
   const entries = readdirSync(pathToDirectory, {
-    encoding: "utf-8",
-    withFileTypes: true,
+    encoding: 'utf-8',
+    withFileTypes: true
   });
 
   for (const entry of entries) {
@@ -231,7 +231,7 @@ function recursivelyReadDirectory({
     const { allPackages: packages, allProtoMessages: rawProtoMessages } =
       recursivelyReadDirectory({
         pathToDirectory: pathToEntry,
-        excludedDirectories,
+        excludedDirectories
       });
     allProtoMessages.push(...rawProtoMessages);
     allPackages.push(...packages);
@@ -248,8 +248,8 @@ function deleteDirectoryEntries(dir: string, exception?: string[]) {
 
     // If directory exists, proceed.
     const entries = readdirSync(dir, {
-      encoding: "utf-8",
-      withFileTypes: true,
+      encoding: 'utf-8',
+      withFileTypes: true
     });
 
     // Delete without exception.
@@ -272,13 +272,13 @@ function deleteDirectoryEntries(dir: string, exception?: string[]) {
 }
 
 function getPaths(siteDir: string) {
-  const pathToGenerated = path.join(siteDir, "generated");
-  const pathToGeneratedWkt = path.join(siteDir, "generated/wkt");
-  const pathToMdx = path.join(siteDir, "docs");
+  const pathToGenerated = path.join(siteDir, 'generated');
+  const pathToGeneratedWkt = path.join(siteDir, 'generated/wkt');
+  const pathToMdx = path.join(siteDir, 'docs');
   const pathToMdxWkt = `${pathToMdx}/wkt`;
   const pathToPluginDictionary = path.join(
     siteDir,
-    "plugin-resources/protosaurus-plugin-codeblock/dictionary"
+    'plugin-resources/protosaurus-plugin-codeblock/dictionary'
   );
 
   return {
@@ -286,6 +286,6 @@ function getPaths(siteDir: string) {
     pathToGeneratedWkt,
     pathToMdx,
     pathToMdxWkt,
-    pathToPluginDictionary,
+    pathToPluginDictionary
   };
 }

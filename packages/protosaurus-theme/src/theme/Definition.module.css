@@ -40,7 +40,7 @@
 }
 
 .rpc-definition-title > div:not(:first-of-type)::before {
-  content: " ";
+  content: ' ';
 }
 
 .rpc-definition-name h4 {

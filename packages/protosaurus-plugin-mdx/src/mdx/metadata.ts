@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import { writeFile } from "fs-extra";
+import { writeFile } from 'fs-extra';
 
 export async function emitCategoryMetadata(directory: string, label: string) {
   const metadata = `

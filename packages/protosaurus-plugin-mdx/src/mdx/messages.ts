@@ -18,12 +18,12 @@ import {
   Field,
   InnerMessagesRecord,
   MessagesRecord,
-  ProtoMessage,
-} from "./types";
+  ProtoMessage
+} from './types';
 
 export function getMessageDefinition({
   header,
-  body,
+  body
 }: {
   header: string;
   body: string;
@@ -56,7 +56,7 @@ export function getMessageProtosaurusBlock({
   message,
   innerMessagesRecord,
   messagesRecord,
-  level,
+  level
 }: {
   packageName: string;
   message: ProtoMessage;
@@ -70,7 +70,7 @@ ${getMessageFieldsBlock({
   message,
   innerMessagesRecord,
   messagesRecord,
-  level,
+  level
 })}
 \`\`\`
   `.trim();
@@ -80,7 +80,7 @@ export function getMessageFieldsBlock({
   message,
   innerMessagesRecord,
   messagesRecord,
-  level,
+  level
 }: {
   message: ProtoMessage;
   // An optional parameter so that the inner message can be rendered
@@ -91,10 +91,10 @@ export function getMessageFieldsBlock({
 }) {
   const { fields, name } = message;
   const prefixSpaces = getIndentation(level - 1);
-  let fieldsBlock = "";
+  let fieldsBlock = '';
 
   if (fields.length === 0) {
-    fieldsBlock = "{}";
+    fieldsBlock = '{}';
   } else {
     const fieldStringArray: string[] = [];
 
@@ -105,9 +105,9 @@ export function getMessageFieldsBlock({
         num: i + 1,
         level,
         messagesRecord,
-        innerMessagesRecord,
+        innerMessagesRecord
       });
-      let innerMessageBlock = "";
+      let innerMessageBlock = '';
 
       if (
         innerMessagesRecord &&
@@ -121,33 +121,33 @@ export function getMessageFieldsBlock({
           }\n\n`;
 
           // Clear inner message so that it won't be used by the next fields.
-          innerMessagesRecord[field.longType].messageBlock = "";
+          innerMessagesRecord[field.longType].messageBlock = '';
         }
       }
 
       fieldStringArray.push(innerMessageBlock + fieldBlock);
     }
 
-    fieldsBlock = `{\n${fieldStringArray.join("\n")}\n${prefixSpaces}}`;
+    fieldsBlock = `{\n${fieldStringArray.join('\n')}\n${prefixSpaces}}`;
   }
 
   return `${prefixSpaces}message ${name} ${fieldsBlock}`;
 }
 
 export function getFieldComment(comment: string, linePrefix: string) {
-  if (comment === "") {
-    return "";
+  if (comment === '') {
+    return '';
   }
 
   const parsed = processCommentForLinksAndImages(comment);
-  const lines = parsed.split("\n");
+  const lines = parsed.split('\n');
   const length = lines.length;
 
   for (let i = 0; i < length; i++) {
     lines[i] = `${linePrefix}// ${lines[i]}`;
   }
 
-  return `${lines.join("\n")}\n`;
+  return `${lines.join('\n')}\n`;
 }
 
 // Helper functions.
@@ -156,7 +156,7 @@ function getFieldBlock({
   num,
   level,
   innerMessagesRecord,
-  messagesRecord,
+  messagesRecord
 }: {
   field: Field;
   num: number;
@@ -168,7 +168,7 @@ function getFieldBlock({
   const fieldType = getFieldType({
     field,
     innerMessagesRecord,
-    messagesRecord,
+    messagesRecord
   });
 
   return (
@@ -180,7 +180,7 @@ function getFieldBlock({
 function getFieldType({
   field,
   innerMessagesRecord,
-  messagesRecord,
+  messagesRecord
 }: {
   field: Field;
   innerMessagesRecord?: InnerMessagesRecord;
@@ -202,14 +202,14 @@ function getFieldType({
     return `map<${keyType}, ${valueType}>`;
   }
 
-  return `${field.label === "repeated" ? "repeated " : ""}${field.type}`;
+  return `${field.label === 'repeated' ? 'repeated ' : ''}${field.type}`;
 }
 
 function getIndentation(level: number) {
-  let prefixSpaces = "";
+  let prefixSpaces = '';
 
   for (let i = 0; i < level; i++) {
-    prefixSpaces += "  ";
+    prefixSpaces += '  ';
   }
 
   return prefixSpaces;
@@ -220,7 +220,7 @@ function getIndentation(level: number) {
 // The hyperlinked text can contain anything, except double newlines.
 function processCommentForLinksAndImages(line: string) {
   const length = line.length;
-  let result = "";
+  let result = '';
   let i = 0;
 
   while (i < length) {
@@ -230,16 +230,16 @@ function processCommentForLinksAndImages(line: string) {
     let nextIndex = i + 1;
     let textToAdd = line.charAt(i);
 
-    if (textToAdd === "[") {
+    if (textToAdd === '[') {
       // The "[" is the biggest indicator of a link.
-      const bracketParenthesisIndex = line.indexOf("](", i);
-      let text = "";
-      let link = "";
+      const bracketParenthesisIndex = line.indexOf('](', i);
+      let text = '';
+      let link = '';
 
       if (bracketParenthesisIndex > -1) {
         // Bracket and parenthesis exist.
         // We then check for the closing parenthesis.
-        const closingParenthesisIndex = line.indexOf(")", i);
+        const closingParenthesisIndex = line.indexOf(')', i);
 
         if (
           i < bracketParenthesisIndex &&
@@ -255,13 +255,13 @@ function processCommentForLinksAndImages(line: string) {
 
           const isTextValid = !isCharacterRepeatedNTimesInARow({
             text,
-            character: "\n",
-            maxTimesInARow: 2,
+            character: '\n',
+            maxTimesInARow: 2
           });
           const isLinkValid = !isCharacterRepeatedNTimesInARow({
             text: link,
-            character: " ",
-            maxTimesInARow: 1,
+            character: ' ',
+            maxTimesInARow: 1
           });
 
           if (isTextValid && isLinkValid) {
@@ -270,8 +270,8 @@ function processCommentForLinksAndImages(line: string) {
             textToAdd = `[${text}](${link})`;
             nextIndex = closingParenthesisIndex + 1;
 
-            if (textToAdd.includes("\n")) {
-              textToAdd = textToAdd.replace("\n", " ");
+            if (textToAdd.includes('\n')) {
+              textToAdd = textToAdd.replace('\n', ' ');
 
               // Replace the next whitespace to a newline to offset the newline we removed.
               const match = /\s/.exec(line.slice(nextIndex));
@@ -281,7 +281,7 @@ function processCommentForLinksAndImages(line: string) {
                 // Append with the text until the next whitespace.
                 textToAdd += line.slice(nextIndex, nextIndex + offset);
                 // Append the newline.
-                textToAdd += "\n";
+                textToAdd += '\n';
                 // Increase the next index by offset + 1 so that the whitespace
                 // won't be included in the next iteration.
                 nextIndex += offset + 1;
@@ -302,21 +302,21 @@ function processCommentForLinksAndImages(line: string) {
 function isCharacterRepeatedNTimesInARow({
   text,
   character,
-  maxTimesInARow,
+  maxTimesInARow
 }: {
   text: string;
   character: string;
   maxTimesInARow: number;
 }) {
   let count = 0;
-  let previousCharacter = "";
+  let previousCharacter = '';
   let i = 0;
 
   while (i < text.length) {
     const currentChar = text.charAt(i);
     if (
       character === currentChar &&
-      (previousCharacter === "" || previousCharacter === currentChar)
+      (previousCharacter === '' || previousCharacter === currentChar)
     ) {
       count++;
 

@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import { LinkMatch } from "./types";
+import { LinkMatch } from './types';
 
 // Here, we are at HAST stage.
 // All things considered, like multi-line text links were already handled by the `mdx` module
@@ -36,14 +36,14 @@ export function getLinksFromALine(line: string) {
     let nextIndex = i + 1;
     let textToAdd = line.charAt(i);
 
-    if (textToAdd === "[") {
+    if (textToAdd === '[') {
       // The "[" is the biggest indicator of a link.
-      const bracketParenthesisIndex = line.indexOf("](", i);
+      const bracketParenthesisIndex = line.indexOf('](', i);
 
       if (bracketParenthesisIndex > -1) {
         // Bracket and parenthesis exist.
         // We then check for the closing parenthesis.
-        const closingParenthesisIndex = line.indexOf(")", i);
+        const closingParenthesisIndex = line.indexOf(')', i);
 
         if (
           i < bracketParenthesisIndex &&
@@ -56,7 +56,7 @@ export function getLinksFromALine(line: string) {
             bracketParenthesisIndex + 2,
             closingParenthesisIndex
           );
-          const type = line.charAt(i - 1) === "!" ? "image" : "link";
+          const type = line.charAt(i - 1) === '!' ? 'image' : 'link';
 
           textToAdd = `[${text}](${link})`;
           nextIndex = closingParenthesisIndex + 1;
@@ -65,18 +65,18 @@ export function getLinksFromALine(line: string) {
             name: text,
             href: link,
             // Consider the previous "!", so we decrement the index by 1.
-            position: type === "link" ? i : i - 1,
+            position: type === 'link' ? i : i - 1,
             // Consider the above decrement, and so, we need to offset it by adding a space.
-            originalText: type === "link" ? textToAdd : `${textToAdd} `,
-            type,
+            originalText: type === 'link' ? textToAdd : `${textToAdd} `,
+            type
           });
         }
       }
-    } else if (textToAdd === ":") {
+    } else if (textToAdd === ':') {
       // Look ahead and see if it's a "://".
       // Not sure what's it called, it's not a scheme... it's not the protocol either.
       // So, let's just call it "separator".
-      const isProtocolAndDomainSeparator = line.slice(i, i + 3) === "://";
+      const isProtocolAndDomainSeparator = line.slice(i, i + 3) === '://';
 
       if (isProtocolAndDomainSeparator) {
         const firstWordCharacterIndex = findPreviousWordBoundary(line, i);
@@ -92,7 +92,7 @@ export function getLinksFromALine(line: string) {
           position: firstWordCharacterIndex,
           href: lineText,
           originalText: lineText,
-          type: "link",
+          type: 'link'
         });
 
         nextIndex = i + lineText.length;
@@ -106,7 +106,7 @@ export function getLinksFromALine(line: string) {
 }
 
 export function isLineAComment(line: string) {
-  return line.trim().startsWith("//");
+  return line.trim().startsWith('//');
 }
 
 // Helper functions.
@@ -136,7 +136,7 @@ function findNextWhitespace(line: string, startIndex: number) {
 
   // TODO(imballinst): consider other edge cases.
   // This handles edge case: end of sentence period.
-  if (line.charAt(nextWhitespaceIndex - 1) === ".") {
+  if (line.charAt(nextWhitespaceIndex - 1) === '.') {
     nextWhitespaceIndex--;
   }
 

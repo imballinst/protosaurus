@@ -115,17 +115,24 @@ start: $(yarn)
 build: $(yarn)
 	@$(yarn) --cwd website build
 
-# This is only used for testing purposes. We are using this file: website/plugins/proto-messages/test-remark.ts.
-# Otherwise, there's no way we could rapidly test the output correctness of the plugin
-# without running Docusaurus development server.
-dev-test-plugin:
-	@$(yarn) --cwd $(rehype_plugin_codeblock_dir) test:mdx
+# These are only used for testing purposes, so we don't have to rebuild to JavaScript then test over and over.
+dev-test-mdx-plugin:
+	@WORK_DIR=$(root_dir) $(yarn) --cwd $(docusaurus_plugin_mdx_dir) emit:test
+
+dev-test-rehype-plugin:
+	@WORK_DIR=$(root_dir) $(yarn) --cwd $(rehype_plugin_codeblock_dir) test:mdx
 
 format: $(buf) $(clang-format) ## Format all proto files
 	@$(clang-format) -i $(shell $(buf) ls-files)
 
 docs: $(yarn) ## Build the docs site
 	$(yarn) --cwd website build
+
+prettier: $(yarn)
+	@$(yarn) prettier packages website -w
+
+prettier-check: $(yarn)
+	@$(yarn) prettier packages website -c
 
 license_files := website packages testdata .github Makefile *.mk buf.*.yaml
 license: $(addlicense) ## Add license to files

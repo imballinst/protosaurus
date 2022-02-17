@@ -16,14 +16,19 @@
 
 // We use `require` because this MDX v1 doesn't have typings
 // and hence will cause error during TypeScript compilation.
-const mdx = require("@mdx-js/mdx");
-import fs from "fs";
-import path from "path";
-import rehypeProtoPlugin from "./src";
+const mdx = require('@mdx-js/mdx');
+import fs from 'fs';
+import path from 'path';
+import rehypeProtoPlugin from './src';
 
 const md = fs.readFileSync(
-  path.join(__dirname, "../../../mdx/lib/test-resources/location-messages.mdx"),
-  "utf-8"
+  process.env.WORK_DIR
+    ? `${process.env.WORK_DIR}/packages/protosaurus-plugin-mdx/src/mdx/test-resources/location-messages.mdx`
+    : path.join(
+        __dirname,
+        '../protosaurus-plugin-mdx/src/mdx/test-resources/location-messages.mdx'
+      ),
+  'utf-8'
 );
 
 main();
@@ -31,7 +36,16 @@ main();
 async function main() {
   // MDX v1, reference: https://github.com/mdx-js/mdx/blob/v1/docs/advanced/plugins.mdx.
   const result = mdx.sync(md, {
-    rehypePlugins: [rehypeProtoPlugin],
+    rehypePlugins: [
+      [
+        rehypeProtoPlugin,
+        {
+          siteDir: process.env.WORK_DIR
+            ? `${process.env.WORK_DIR}/website`
+            : path.join(__dirname, '../../website')
+        }
+      ]
+    ]
   });
   // Hide this as needed.
   // console.log(result);

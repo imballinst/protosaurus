@@ -14,13 +14,13 @@
  * limitations under the License.
  */
 
-import { writeFileSync } from "fs-extra";
-import { MessageData } from "./types";
+import { writeFileSync } from 'fs-extra';
+import { MessageData } from './types';
 
 export function emitMessagesJson({
   filePath,
   messages,
-  isWkt,
+  isWkt
 }: {
   filePath: string;
   messages: MessageData[];
@@ -33,7 +33,7 @@ export function emitMessagesJson({
 
 export function getMessagesJsonDictionary({
   messages,
-  isWkt,
+  isWkt
 }: {
   messages: MessageData[];
   isWkt?: boolean;
@@ -45,7 +45,7 @@ export function getMessagesJsonDictionary({
     // For example:
     // If it's not WKT, then it's /docs/booking.v1#Booking.
     // If it's WKT, then it's /docs/wkt/google.protobuf#Int32.
-    map[name] = `/docs/${isWkt ? "wkt/" : ""}${packageName}#${hash}`;
+    map[name] = `/docs/${isWkt ? 'wkt/' : ''}${packageName}#${hash}`;
   }
 
   return map;

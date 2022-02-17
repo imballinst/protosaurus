@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import { mkdirpSync, statSync } from "fs-extra";
+import { mkdirpSync, statSync } from 'fs-extra';
 
 export function createDirectoryIfNotExist(directory: string) {
   try {

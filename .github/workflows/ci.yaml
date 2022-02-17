@@ -20,11 +20,11 @@ defaults:
 env:
   # This will be added to the docusaurus.baseUrl, i.e. /protosaurus/${BASE_DIR}.
   # Reference: https://docusaurus.io/docs/api/docusaurus-config#baseurl.
-  BASE_DIR: "main"
+  BASE_DIR: 'main'
 
 jobs:
   gen:
-    name: "gen" # TODO(dio): We should do check instead.
+    name: 'gen' # TODO(dio): We should do check instead.
     runs-on: ubuntu-20.04
     timeout-minutes: 90 # instead of 360 by default.
     steps:
@@ -44,9 +44,9 @@ jobs:
           go-version: 1.17.x
       - uses: actions/setup-node@v2
         with:
-          node-version: "16.x"
-          cache: "yarn"
-          cache-dependency-path: "**/yarn.lock"
+          node-version: '16.x'
+          cache: 'yarn'
+          cache-dependency-path: '**/yarn.lock'
       - uses: actions/cache@v2
         with:
           path: ./.cache/tools
@@ -59,6 +59,8 @@ jobs:
 
       - run: make gen
 
+      # Check for code formatting.
+      - run: make prettier-check
       # TODO(imballinst): not sure whether to put this test here or to create a new job.
       - run: make test
 
