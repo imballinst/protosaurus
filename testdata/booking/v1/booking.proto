@@ -97,6 +97,7 @@ message Booking {
 }
 
 // Test enum outside.
+// 
 // We have tested enum inside Message, but we haven't for outside.
 enum TestEnumOutside {
   HELLO = 0;

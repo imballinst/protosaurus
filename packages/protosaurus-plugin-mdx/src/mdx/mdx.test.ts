@@ -83,6 +83,31 @@ describe('readPackageData', () => {
     expect(msgResult.trim()).equal(expectedMsg.trim());
   });
 
+  // Test enums.
+  const BOOKING_MDX_EXPECTED_ENUMS_PATH = path.join(
+    __dirname,
+    'test-resources/booking-enums.mdx'
+  );
+
+  test('enums', async () => {
+    const { packageData: packages } = readPackageData(BOOKING_DOC_JSON_PATH);
+    const allEnums: string[] = [];
+
+    for (const pkg of packages) {
+      for (const msgData of pkg.enumsData) {
+        allEnums.push(msgData.body);
+      }
+    }
+
+    const enumsResult = allEnums.join('\n\n');
+    const expectedEnum = await readFile(
+      BOOKING_MDX_EXPECTED_ENUMS_PATH,
+      'utf-8'
+    );
+
+    expect(enumsResult.trim()).equal(expectedEnum.trim());
+  });
+
   // Test services.
   const BOOKING_MDX_EXPECTED_SERVICES_PATH = path.join(
     __dirname,

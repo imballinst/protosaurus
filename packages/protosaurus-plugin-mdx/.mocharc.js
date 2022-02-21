@@ -26,6 +26,6 @@ module.exports = {
   // For some reasons we cannot use `global` field for `test` etc.
   // We need to add them to `global.test` in the `setup-test.js` file.
   file: ['./setup-test.js'],
-  spec: ['src/**/*.test.ts'],
+  spec: ['src/**/mdx.test.ts'],
   require: 'ts-node/register'
 };
