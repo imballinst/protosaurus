@@ -1,5 +1,5 @@
 {
-  "name": "@protosaurus/docusaurus-theme-protosaurus",
+  "name": "@protosaurus/docusaurus-theme",
   "version": "0.0.1",
   "main": "lib/index.js",
   "scripts": {

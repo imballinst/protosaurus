@@ -16,12 +16,10 @@
 
 import type { Preset } from '@docusaurus/types';
 
-export type ProtosaurusPresetEntry = [
-  '@protosaurus/docusaurus-preset-protosaurus'
-];
+export type ProtosaurusPresetEntry = ['docusaurus-preset'];
 
 export default function protosaurusPreset(): Preset {
   return {
-    themes: [require.resolve('@protosaurus/docusaurus-theme-protosaurus')]
+    themes: [require.resolve('@protosaurus/docusaurus-theme')]
   };
 }

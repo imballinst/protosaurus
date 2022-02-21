@@ -23,7 +23,7 @@ const LIB_THEME_PATH = path.join(__dirname, './theme');
 
 export default function protosaurusTheme(): Plugin<void> {
   return {
-    name: '@protosaurus/docusaurus-theme-protosaurus',
+    name: 'docusaurus-theme',
     getThemePath() {
       return LIB_THEME_PATH;
     },

@@ -1,6 +1,6 @@
 {
-  "name": "@protosaurus/docusaurus-plugin-protosaurus-mdx",
-  "version": "0.0.1",
+  "name": "@protosaurus/docusaurus-plugin-mdx",
+  "version": "0.0.2",
   "main": "lib/index.js",
   "dependencies": {
     "fs-extra": "10.0.0"

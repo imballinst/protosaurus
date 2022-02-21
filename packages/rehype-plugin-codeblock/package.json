@@ -1,5 +1,5 @@
 {
-  "name": "@protosaurus/rehype-plugin-protosaurus-codeblock",
+  "name": "@protosaurus/rehype-plugin-codeblock",
   "version": "0.0.1",
   "main": "lib/index.js",
   "license": "MIT",
