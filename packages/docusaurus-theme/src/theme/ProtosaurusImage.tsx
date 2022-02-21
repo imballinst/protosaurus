@@ -75,7 +75,6 @@ export default function ProtosaurusImage() {
       <Modal
         isOpen
         onRequestClose={() => {
-          console.log('heh');
           setModalInfo(undefined);
         }}
         overlayClassName={styles['backdrop']}

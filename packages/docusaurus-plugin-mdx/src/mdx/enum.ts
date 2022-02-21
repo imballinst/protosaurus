@@ -62,7 +62,6 @@ export function getEnumFieldsBlock({
     }
 
     fieldsBlock = `{\n${fieldStringArray.join('\n')}\n${prefixSpaces}}`;
-    console.log(fieldsBlock);
   }
 
   return `${prefixSpaces}enum ${name} ${fieldsBlock}`;

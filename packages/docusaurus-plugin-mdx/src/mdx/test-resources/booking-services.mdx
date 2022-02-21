@@ -63,6 +63,7 @@ message Booking {
   BookingPriority priority = 10;
 
   enum JourneyStatus {
+    option allow_alias = true;
     UNKNOWN = 0;
     STARTED = 1;
     DEPARTED = 1;
@@ -71,6 +72,8 @@ message Booking {
 
   // Describes the status of the journey.
   JourneyStatus journey_status = 11;
+  // Use outside enum.
+  TestEnumOutside test_enum_outside = 12;
 }
 ```
 
