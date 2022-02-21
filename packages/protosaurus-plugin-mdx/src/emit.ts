@@ -142,7 +142,7 @@ export function emitJsonAndMdx(siteDir: string) {
         //    </Definition>
         //   `;
         // }
-        Object.values(pkg.innerMessagesRecord).map((message) => ({
+        Object.values(pkg.innerObjectsRecord).map((message) => ({
           // We can set the body as empty here because this function emits JSON,
           // not emitting MDX, and hence, not used.
           body: '',

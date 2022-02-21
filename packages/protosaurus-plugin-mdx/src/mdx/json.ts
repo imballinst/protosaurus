@@ -15,7 +15,7 @@
  */
 
 import { writeFileSync } from 'fs-extra';
-import { MessageData } from './types';
+import { ObjectData } from './types';
 
 export function emitMessagesJson({
   filePath,
@@ -23,7 +23,7 @@ export function emitMessagesJson({
   isWkt
 }: {
   filePath: string;
-  messages: MessageData[];
+  messages: ObjectData[];
   isWkt?: boolean;
 }) {
   const map = getMessagesJsonDictionary({ messages, isWkt });
@@ -35,7 +35,7 @@ export function getMessagesJsonDictionary({
   messages,
   isWkt
 }: {
-  messages: MessageData[];
+  messages: ObjectData[];
   isWkt?: boolean;
 }) {
   const map: Record<string, string> = {};

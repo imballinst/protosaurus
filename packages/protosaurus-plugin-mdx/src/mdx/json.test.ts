@@ -16,10 +16,10 @@
 
 import { expect } from 'chai';
 import { getMessagesJsonDictionary } from './json';
-import { MessageData } from './types';
+import { ObjectData } from './types';
 
 describe('getMessagesJsonDictionary', () => {
-  const MESSAGES_DATA: MessageData[] = [
+  const MESSAGES_DATA: ObjectData[] = [
     {
       hash: 'samplemessage',
       name: 'SampleMessage',

@@ -23,8 +23,7 @@ export interface Protofile {
   hasExtensions: boolean;
   hasMessages: boolean;
   hasServices: boolean;
-  // TODO(imballinst): create proper typing.
-  enums: any;
+  enums: ProtoEnum[];
   extensions: any;
   messages: ProtoMessage[];
   services: ProtoService[];
@@ -40,6 +39,20 @@ export interface ProtoMessage {
   hasOneofs: boolean;
   extensions: any[];
   fields: Field[];
+}
+
+export interface ProtoEnum {
+  name: string;
+  longName: string;
+  fullName: string;
+  description: string;
+  values: ProtoEnumValue[];
+}
+
+export interface ProtoEnumValue {
+  name: string;
+  number: string;
+  description: string;
 }
 
 export interface Field {
@@ -80,7 +93,7 @@ export interface ProtoService {
   methods: ServiceMethod[];
 }
 
-export interface MessageData {
+export interface ObjectData {
   name: string;
   packageName: string;
   hash: string;
@@ -93,20 +106,28 @@ export interface ServiceData {
   body: string;
 }
 
-export type InnerMessagesRecord = Record<
+export type InnerObjectsRecord = Record<
   string,
   {
     messageBlock: string;
-    rawMessage: ProtoMessage;
+    rawMessage?: ProtoMessage;
+    rawEnum?: ProtoEnum;
   }
 >;
-export type MessagesRecord = Record<string, ProtoMessage>;
+export type ObjectsRecord = Record<
+  string,
+  {
+    rawMessage?: ProtoMessage;
+    rawEnum?: ProtoEnum;
+  }
+>;
 
 export interface PackageData {
   name: string;
   descriptionMdx: string;
-  messagesData: MessageData[];
-  innerMessagesRecord: InnerMessagesRecord;
+  enumsData: ObjectData[];
+  messagesData: ObjectData[];
+  innerObjectsRecord: InnerObjectsRecord;
   servicesData: ServiceData[];
   // Raw proto services.
   rawProtoServices: ProtoService[];

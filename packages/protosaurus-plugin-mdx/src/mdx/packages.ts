@@ -19,9 +19,9 @@ import {
   Protofile,
   PackageData,
   ProtoMessage,
-  MessageData,
-  MessagesRecord,
-  InnerMessagesRecord
+  ObjectData,
+  InnerObjectsRecord,
+  ObjectsRecord
 } from './types';
 import {
   getMessageFieldsBlock,
@@ -30,6 +30,7 @@ import {
   getMessageHeader,
   getMessageProtosaurusBlock
 } from './messages';
+import { getEnumFieldsBlock, getEnumProtosaurusBlock } from './enum';
 
 export function readPackageData(packagePath: string) {
   const content = readFileSync(packagePath, 'utf-8');
@@ -44,19 +45,19 @@ export function readPackageData(packagePath: string) {
       continue;
     }
 
-    const messagesData: MessageData[] = [];
+    const messagesData: ObjectData[] = [];
+    const enumsData: ObjectData[] = [];
 
     // Store inner messages.
-    const innerMessagesRecord: InnerMessagesRecord = {};
-    const messagesRecord: MessagesRecord = {};
+    const innerObjectsRecord: InnerObjectsRecord = {};
+    const objectsRecord: ObjectsRecord = {};
 
     for (const message of file.messages) {
       const messageNameArray = message.longName.split('.');
       const isInnerMessage = messageNameArray.length > 1;
 
       if (isInnerMessage) {
-        // We will use this later to "patch" `messagesRecord`.
-        innerMessagesRecord[message.longName] = {
+        innerObjectsRecord[message.longName] = {
           rawMessage: message,
           messageBlock: getMessageFieldsBlock({
             message,
@@ -65,40 +66,80 @@ export function readPackageData(packagePath: string) {
         };
       } else {
         // Store non-inner messages.
-        // We need to "patch" it with `innerMessagesRecord` later.
-        messagesRecord[message.longName] = message;
+        objectsRecord[message.longName].rawMessage = message;
+      }
+    }
+
+    // Store enums.
+    for (const enumObj of file.enums) {
+      const messageNameArray = enumObj.longName.split('.');
+      const isInnerMessage = messageNameArray.length > 1;
+
+      if (isInnerMessage) {
+        innerObjectsRecord[enumObj.longName] = {
+          rawEnum: enumObj,
+          messageBlock: getEnumFieldsBlock({
+            enumObj,
+            level: 2
+          })
+        };
+      } else {
+        // Store non-inner enums.
+        objectsRecord[enumObj.longName].rawEnum = enumObj;
       }
     }
 
     // Process actual messages for real.
-    for (const key in messagesRecord) {
-      const message = messagesRecord[key];
-      const description = getMessageDescription(message) + '\n\n';
+    for (const key in objectsRecord) {
+      const { rawMessage, rawEnum } = objectsRecord[key];
 
-      messagesData.push({
-        name: message.longName,
-        packageName: file.package,
-        hash: message.longName.toLowerCase(),
-        body: getMessageDefinition({
-          header: getMessageHeader(message.name),
-          body:
-            description +
-            getMessageProtosaurusBlock({
-              packageName: file.package,
-              level: 1,
-              message,
-              innerMessagesRecord,
-              messagesRecord
-            })
-        })
-      });
+      if (rawMessage) {
+        const description = getMessageDescription(rawMessage) + '\n\n';
+
+        messagesData.push({
+          name: rawMessage.longName,
+          packageName: file.package,
+          hash: rawMessage.longName.toLowerCase(),
+          body: getMessageDefinition({
+            header: getMessageHeader(rawMessage.name),
+            body:
+              description +
+              getMessageProtosaurusBlock({
+                packageName: file.package,
+                level: 1,
+                message: rawMessage,
+                innerObjectsRecord,
+                objectsRecord
+              })
+          })
+        });
+      } else if (rawEnum) {
+        const description = (rawEnum.description || '') + '\n\n';
+
+        enumsData.push({
+          name: rawEnum.longName,
+          packageName: file.package,
+          hash: rawEnum.longName.toLowerCase(),
+          body: getMessageDefinition({
+            header: getMessageHeader(rawEnum.name),
+            body:
+              description +
+              getEnumProtosaurusBlock({
+                packageName: file.package,
+                level: 1,
+                enumObj: rawEnum
+              })
+          })
+        });
+      }
     }
 
     packageData.push({
       name: file.package,
       descriptionMdx: getPackageDescription(file.description),
+      enumsData,
       messagesData,
-      innerMessagesRecord,
+      innerObjectsRecord,
       servicesData: [],
       rawProtoServices: file.services
     });
