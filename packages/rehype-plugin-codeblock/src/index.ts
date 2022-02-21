@@ -95,6 +95,17 @@ const docusaurusPlugin: Plugin = (opts: Options) => {
                 }
               }
             };
+          } else if (type === undefined && line.trim().startsWith('enum')) {
+            // If undefined, then we find the built-in syntaxes.
+            type = {
+              match: {
+                field: {
+                  type: 'text',
+                  name: 'enum',
+                  position: line.indexOf('enum')
+                }
+              }
+            };
           }
 
           if (type !== undefined) {

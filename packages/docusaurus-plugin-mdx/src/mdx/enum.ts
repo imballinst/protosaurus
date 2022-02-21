@@ -36,6 +36,7 @@ export function getEnumFieldsBlock({
     fieldsBlock = '{}';
   } else {
     const fieldStringArray: string[] = [];
+    const numberCount: Record<string, number> = {};
 
     for (let i = 0; i < values.length; i++) {
       const field = values[i];
@@ -44,10 +45,24 @@ export function getEnumFieldsBlock({
         level
       });
 
+      if (numberCount[field.number] === undefined) {
+        numberCount[field.number] = 0;
+      }
+
+      numberCount[field.number]++;
       fieldStringArray.push(fieldBlock);
     }
 
+    const allowAlias = Object.keys(numberCount).find((k) => numberCount[k] > 1);
+
+    if (allowAlias !== undefined) {
+      fieldStringArray.unshift(
+        getIndentation(level) + 'option allow_alias = true;'
+      );
+    }
+
     fieldsBlock = `{\n${fieldStringArray.join('\n')}\n${prefixSpaces}}`;
+    console.log(fieldsBlock);
   }
 
   return `${prefixSpaces}enum ${name} ${fieldsBlock}`;
