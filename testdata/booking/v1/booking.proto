@@ -96,6 +96,13 @@ message Booking {
   JourneyStatus journey_status = 11;
 }
 
+// Test enum outside.
+// We have tested enum inside Message, but we haven't for outside.
+enum TestEnumOutside {
+  HELLO = 0;
+  WORLD = 1;
+}
+
 // An empty message for testing
 message EmptyBookingMessage {}
 
