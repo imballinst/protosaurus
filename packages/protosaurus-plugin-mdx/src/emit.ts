@@ -84,7 +84,8 @@ export function emitJsonAndMdx(siteDir: string) {
         messagesRecord: localMessagesDictionary,
         enumsRecord: enumsDictionary,
         wktMessagesRecord: wktMessagesDictionary,
-        packageName: pkg.name
+        packageName: pkg.name,
+        innerObjectsRecord: pkg.innerObjectsRecord
       })
     }));
 
