@@ -14,22 +14,30 @@ Vehicles are some cool shit. But drive carefully.
 message Booking {
   // ID of booked vehicle.
   int32 vehicle_id = 1;
+
   // Customer that booked the vehicle.
   int32 customer_id = 2;
+
   // Status of the booking.
   BookingStatus status = 3;
+
   // Has booking confirmation been sent.
   bool confirmation_sent = 4;
+
   // Has payment been received.
   bool payment_received = 5;
+
   // Color preference of the customer.
   string color_preference = 6;
+
   // Pick-up location.
   // This is a coordinate.
   Location pickup_location = 7;
+
   // Destination location.
   // This is a coordinate.
   Location destination_location = 8;
+
   // Intermediate locations.
   repeated Location intermediate_locations = 9;
 
@@ -53,6 +61,7 @@ message Booking {
 
   // Describes the status of the journey.
   JourneyStatus journey_status = 11;
+
   // Use outside enum.
   TestEnumOutside test_enum_outside = 12;
 }
@@ -74,8 +83,10 @@ Represents the status of a vehicle booking.
 message BookingStatus {
   // Unique booking status ID.
   int32 id = 1;
+
   // Booking status description. E.g. "Active".
   string description = 2;
+
   // Duration.
   Duration duration = 3;
 }

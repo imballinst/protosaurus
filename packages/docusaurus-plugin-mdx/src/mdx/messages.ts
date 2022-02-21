@@ -140,7 +140,7 @@ export function getMessageFieldsBlock({
       fieldStringArray.push(innerMessageBlock + fieldBlock);
     }
 
-    fieldsBlock = `{\n${fieldStringArray.join('\n')}\n${prefixSpaces}}`;
+    fieldsBlock = `{\n${fieldStringArray.join('\n\n')}\n${prefixSpaces}}`;
   }
 
   return `${prefixSpaces}message ${name} ${fieldsBlock}`;
