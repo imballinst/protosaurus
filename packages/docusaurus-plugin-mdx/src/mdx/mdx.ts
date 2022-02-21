@@ -23,8 +23,12 @@ export function emitMdx(filePath: string, pkg: PackageData) {
   const messages = pkg.messagesData.map((m) => m.body).join('\n\n');
   const enums = pkg.enumsData.map((m) => m.body).join('\n\n');
 
-  const servicesString = services.length ? `## Services\n\n${services}` : '';
-  const messagesString = messages.length ? `## Messages\n\n${messages}` : '';
+  const servicesString = services.length
+    ? `## Services\n\n${services}\n\n`
+    : '';
+  const messagesString = messages.length
+    ? `## Messages\n\n${messages}\n\n`
+    : '';
   const enumsString = enums.length ? `## Enums\n\n${enums}` : '';
 
   return writeFileSync(

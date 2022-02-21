@@ -68,7 +68,7 @@ ${service.description}
 
 ${serviceBody.join('\n\n')}
 
-</Definition>\n\n`;
+</Definition>`;
 }
 
 // Services.
