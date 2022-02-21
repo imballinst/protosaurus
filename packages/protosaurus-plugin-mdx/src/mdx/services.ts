@@ -14,19 +14,32 @@
  * limitations under the License.
  */
 
-import { ProtoService, ProtoMessage, ServiceMethod } from './types';
+import {
+  ProtoService,
+  ProtoMessage,
+  ServiceMethod,
+  ProtoEnum,
+  InnerObjectsRecord,
+  EnumsRecord,
+  MessagesRecord
+} from './types';
 import { getMessageProtosaurusBlock } from './messages';
+import { getEnumProtosaurusBlock } from './enum';
 
 export function getServiceString({
   service,
   packageName,
-  allProtoMessages,
-  allWktMessages
+  messagesRecord,
+  enumsRecord,
+  wktMessagesRecord,
+  innerObjectsRecord
 }: {
   service: ProtoService;
   packageName: string;
-  allProtoMessages: Record<string, ProtoMessage>;
-  allWktMessages: Record<string, ProtoMessage>;
+  messagesRecord: Record<string, ProtoMessage>;
+  enumsRecord: Record<string, ProtoEnum>;
+  wktMessagesRecord: Record<string, ProtoMessage>;
+  innerObjectsRecord: InnerObjectsRecord;
 }) {
   const serviceBody: string[] = [];
 
@@ -35,8 +48,10 @@ export function getServiceString({
       getServiceMethodString({
         method,
         packageName,
-        allProtoMessages,
-        allWktMessages
+        messagesRecord,
+        enumsRecord,
+        wktMessagesRecord,
+        innerObjectsRecord
       })
     );
   }
@@ -60,13 +75,17 @@ ${serviceBody.join('\n\n')}
 function getServiceMethodString({
   method,
   packageName,
-  allProtoMessages,
-  allWktMessages
+  messagesRecord,
+  enumsRecord,
+  wktMessagesRecord,
+  innerObjectsRecord
 }: {
   packageName: string;
   method: ServiceMethod;
-  allProtoMessages: Record<string, ProtoMessage>;
-  allWktMessages: Record<string, ProtoMessage>;
+  messagesRecord: MessagesRecord;
+  enumsRecord: EnumsRecord;
+  wktMessagesRecord: MessagesRecord;
+  innerObjectsRecord: InnerObjectsRecord;
 }) {
   const {
     requestType,
@@ -75,23 +94,53 @@ function getServiceMethodString({
     responseStreaming,
     name
   } = method;
-  let requestMessage: ProtoMessage;
-  let responseMessage: ProtoMessage;
+  let requestMessage = '';
+  let responseMessage = '';
 
   // Set request message.
-  if (allProtoMessages?.[requestType]) {
-    requestMessage = allProtoMessages?.[requestType];
-  } else {
-    // WKT.
-    requestMessage = allWktMessages[requestType];
+  const requestMessageType =
+    messagesRecord?.[requestType] || wktMessagesRecord[requestType];
+
+  if (requestMessageType) {
+    // Local message or WKT.
+    requestMessage = getMessageProtosaurusBlock({
+      message: requestMessageType,
+      packageName,
+      enumsRecord,
+      messagesRecord,
+      innerObjectsRecord,
+      level: 1
+    });
+  } else if (enumsRecord?.[requestType]) {
+    // Enum.
+    requestMessage = getEnumProtosaurusBlock({
+      enumObj: enumsRecord?.[requestType],
+      packageName,
+      level: 1
+    });
   }
 
   // Set response message.
-  if (allProtoMessages?.[responseType]) {
-    responseMessage = allProtoMessages?.[responseType];
-  } else {
-    // WKT.
-    responseMessage = allWktMessages[responseType];
+  const responseMessageType =
+    messagesRecord?.[responseType] || wktMessagesRecord[responseType];
+
+  if (responseMessageType) {
+    // Local message or WKT.
+    responseMessage = getMessageProtosaurusBlock({
+      message: responseMessageType,
+      packageName,
+      enumsRecord,
+      messagesRecord,
+      innerObjectsRecord,
+      level: 1
+    });
+  } else if (enumsRecord?.[responseType]) {
+    // Enum.
+    responseMessage = getEnumProtosaurusBlock({
+      enumObj: enumsRecord?.[responseType],
+      packageName,
+      level: 1
+    });
   }
 
   return `
@@ -115,21 +164,13 @@ ${method.description}
   ${requestType}
 </RpcMethodText>
 
-${getMessageProtosaurusBlock({
-  message: requestMessage,
-  packageName,
-  level: 1
-})}
+${requestMessage}
 
 <RpcMethodText type="response" isStream={${responseStreaming}}>
   ${responseType}
 </RpcMethodText>
 
-${getMessageProtosaurusBlock({
-  message: responseMessage,
-  packageName,
-  level: 1
-})}
+${responseMessage}
 
 </RpcDefinitionDescription>
 

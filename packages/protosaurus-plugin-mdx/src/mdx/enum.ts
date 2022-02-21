@@ -50,7 +50,7 @@ export function getEnumFieldsBlock({
     fieldsBlock = `{\n${fieldStringArray.join('\n')}\n${prefixSpaces}}`;
   }
 
-  return `${prefixSpaces}enumObj ${name} ${fieldsBlock}`;
+  return `${prefixSpaces}enum ${name} ${fieldsBlock}`;
 }
 
 // Helper functions.

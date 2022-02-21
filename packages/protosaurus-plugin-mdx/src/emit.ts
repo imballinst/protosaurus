@@ -18,8 +18,8 @@ import { readdirSync, rmSync, statSync } from 'fs-extra';
 import path from 'path';
 
 import { emitMdx } from './mdx/mdx';
-import { convertProtoToRecord } from './mdx/record';
-import { PackageData, ProtoMessage } from './mdx/types';
+import { convertProtoArrayToRecord } from './mdx/record';
+import { PackageData, ProtoEnum, ProtoMessage } from './mdx/types';
 import { emitMessagesJson } from './mdx/json';
 import { emitCategoryMetadata } from './mdx/metadata';
 import { readPackageData } from './mdx/packages';
@@ -55,18 +55,22 @@ export function emitJsonAndMdx(siteDir: string) {
   createDirectoryIfNotExist(pathToMdxWkt);
 
   // Generate MDX and dictionary for local types.
-  const { allPackages: localPackages, allProtoMessages } =
-    recursivelyReadDirectory({
-      pathToDirectory: pathToGenerated,
-      excludedDirectories: [pathToGeneratedWkt]
-    });
+  const {
+    allPackages: localPackages,
+    allProtoMessages,
+    allProtoEnums
+  } = recursivelyReadDirectory({
+    pathToDirectory: pathToGenerated,
+    excludedDirectories: [pathToGeneratedWkt]
+  });
   const { allPackages: wktPackages, allProtoMessages: allWktProtoMessages } =
     recursivelyReadDirectory({
       pathToDirectory: pathToGeneratedWkt
     });
 
-  const localMessagesDictionary = convertProtoToRecord(allProtoMessages);
-  const wktMessagesDictionary = convertProtoToRecord(allWktProtoMessages);
+  const localMessagesDictionary = convertProtoArrayToRecord(allProtoMessages);
+  const wktMessagesDictionary = convertProtoArrayToRecord(allWktProtoMessages);
+  const enumsDictionary = convertProtoArrayToRecord(allProtoEnums);
 
   for (const pkg of localPackages) {
     // Since services require the information of all messages, then
@@ -77,8 +81,9 @@ export function emitJsonAndMdx(siteDir: string) {
       packageName: pkg.name,
       body: getServiceString({
         service,
-        allProtoMessages: localMessagesDictionary,
-        allWktMessages: wktMessagesDictionary,
+        messagesRecord: localMessagesDictionary,
+        enumsRecord: enumsDictionary,
+        wktMessagesRecord: wktMessagesDictionary,
         packageName: pkg.name
       })
     }));
@@ -142,14 +147,25 @@ export function emitJsonAndMdx(siteDir: string) {
         //    </Definition>
         //   `;
         // }
-        Object.values(pkg.innerObjectsRecord).map((message) => ({
+        Object.values(pkg.innerObjectsRecord).map((message) => {
           // We can set the body as empty here because this function emits JSON,
           // not emitting MDX, and hence, not used.
-          body: '',
-          name: message.rawMessage.longName,
-          packageName: pkg.name,
-          hash: message.rawMessage.longName.toLowerCase()
-        }))
+          if (message.rawMessage) {
+            return {
+              body: '',
+              name: message.rawMessage.longName,
+              packageName: pkg.name,
+              hash: message.rawMessage.longName.toLowerCase()
+            };
+          }
+
+          return {
+            body: '',
+            name: message.rawEnum!.longName,
+            packageName: pkg.name,
+            hash: message.rawEnum!.longName.toLowerCase()
+          };
+        })
       )
     });
   }
@@ -201,12 +217,14 @@ function recursivelyReadDirectory({
 }): {
   allPackages: PackageData[];
   allProtoMessages: ProtoMessage[];
+  allProtoEnums: ProtoEnum[];
 } {
   const allPackages: PackageData[] = [];
   const allProtoMessages: ProtoMessage[] = [];
+  const allProtoEnums: ProtoEnum[] = [];
 
   if (excludedDirectories && excludedDirectories.includes(pathToDirectory)) {
-    return { allPackages, allProtoMessages };
+    return { allPackages, allProtoMessages, allProtoEnums };
   }
 
   const entries = readdirSync(pathToDirectory, {
@@ -228,16 +246,20 @@ function recursivelyReadDirectory({
     }
 
     // Otherwise, keep reading recursively.
-    const { allPackages: packages, allProtoMessages: rawProtoMessages } =
-      recursivelyReadDirectory({
-        pathToDirectory: pathToEntry,
-        excludedDirectories
-      });
+    const {
+      allPackages: packages,
+      allProtoMessages: rawProtoMessages,
+      allProtoEnums: rawProtoEnums
+    } = recursivelyReadDirectory({
+      pathToDirectory: pathToEntry,
+      excludedDirectories
+    });
     allProtoMessages.push(...rawProtoMessages);
+    allProtoEnums.push(...rawProtoEnums);
     allPackages.push(...packages);
   }
 
-  return { allPackages, allProtoMessages };
+  return { allPackages, allProtoMessages, allProtoEnums };
 }
 
 function deleteDirectoryEntries(dir: string, exception?: string[]) {

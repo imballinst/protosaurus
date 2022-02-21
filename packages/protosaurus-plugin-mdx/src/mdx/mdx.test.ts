@@ -18,7 +18,7 @@ import path from 'path';
 import { expect } from 'chai';
 import { readFile } from 'fs-extra';
 
-import { convertProtoToRecord } from './record';
+import { convertProtoArrayToRecord } from './record';
 import { readPackageData } from './packages';
 import { getServiceString } from './services';
 
@@ -90,18 +90,24 @@ describe('readPackageData', () => {
   );
 
   test('services', async () => {
-    const { packageData: packages, rawProtoMessages } = readPackageData(
-      BOOKING_DOC_JSON_PATH
-    );
-    const localProtoMessagesDictionary = convertProtoToRecord(rawProtoMessages);
+    const {
+      packageData: packages,
+      rawProtoMessages,
+      rawProtoEnums
+    } = readPackageData(BOOKING_DOC_JSON_PATH);
+    const localProtoMessagesDictionary =
+      convertProtoArrayToRecord(rawProtoMessages);
+    const enumsDictionary = convertProtoArrayToRecord(rawProtoEnums);
     const allServices: string[] = [];
 
     for (const pkg of packages) {
       const array = pkg.rawProtoServices.map((service) =>
         getServiceString({
           service,
-          allProtoMessages: localProtoMessagesDictionary,
-          allWktMessages: {},
+          messagesRecord: localProtoMessagesDictionary,
+          enumsRecord: enumsDictionary,
+          wktMessagesRecord: {},
+          innerObjectsRecord: pkg.innerObjectsRecord,
           packageName: pkg.name
         })
       );

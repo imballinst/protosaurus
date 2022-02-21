@@ -14,12 +14,10 @@
  * limitations under the License.
  */
 
-import { ProtoMessage } from './types';
-
-export function convertProtoToRecord(
-  messages: ProtoMessage[]
-): Record<string, ProtoMessage> {
-  const record: Record<string, ProtoMessage> = {};
+export function convertProtoArrayToRecord<T extends { name: string }>(
+  messages: T[]
+): Record<string, T> {
+  const record: Record<string, T> = {};
 
   for (const message of messages) {
     record[message.name] = message;

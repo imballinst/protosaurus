@@ -114,13 +114,9 @@ export type InnerObjectsRecord = Record<
     rawEnum?: ProtoEnum;
   }
 >;
-export type ObjectsRecord = Record<
-  string,
-  {
-    rawMessage?: ProtoMessage;
-    rawEnum?: ProtoEnum;
-  }
->;
+
+export type MessagesRecord = Record<string, ProtoMessage>;
+export type EnumsRecord = Record<string, ProtoEnum>;
 
 export interface PackageData {
   name: string;
