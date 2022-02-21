@@ -128,7 +128,7 @@ export function getMessageFieldsBlock({
           innerObjectDefinitionFlag[field.longType] === undefined
         ) {
           // Add one newline before and two after the inner message.
-          innerMessageBlock = `\n${
+          innerMessageBlock = `${
             innerObjectsRecord[field.longType].messageBlock
           }\n\n`;
 
