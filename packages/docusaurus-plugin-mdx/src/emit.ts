@@ -97,7 +97,7 @@ export function emitJsonAndMdx(siteDir: string) {
     const pathToPlugin = `${pathToPluginDictionary}/${pkg.name}`;
     emitMessagesJson({
       filePath: pathToPlugin,
-      messages: pkg.messagesData.concat(
+      messages: pkg.messagesData.concat(pkg.enumsData).concat(
         // Concat with this array because we'll need the inner messages
         // in the dictionary for syntax coloring.
         //
