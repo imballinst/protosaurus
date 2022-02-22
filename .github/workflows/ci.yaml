@@ -61,7 +61,8 @@ jobs:
 
       # Check for code formatting.
       - run: make prettier-check
-      # TODO(imballinst): not sure whether to put this test here or to create a new job.
+      # Need to run the "prestart" first because it generates all the JSON and all that.
+      - run: yarn --cwd website prestart
       - run: make test
 
       - name: Get current PR number
