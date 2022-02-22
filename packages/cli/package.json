@@ -1,7 +1,9 @@
 {
   "name": "@protosaurus/cli",
   "version": "0.0.1",
-  "main": "bin/index.js",
+  "bin": {
+    "protosaurus": "bin/protosaurus.js"
+  },
   "license": "SEE LICENSE IN LICENSE",
   "dependencies": {
     "@protosaurus/generator": "0.0.1",
