@@ -1,0 +1,17 @@
+{
+  "name": "@protosaurus/rehype-plugin-codeblock",
+  "version": "0.0.1",
+  "main": "lib/index.js",
+  "license": "MIT",
+  "private": true,
+  "scripts": {
+    "build": "rm -rf lib && tsc --project tsconfig.build.json",
+    "mdx:test": "ts-node test-remark.ts"
+  },
+  "devDependencies": {
+    "@types/hast-format": "2.3.0"
+  },
+  "peerDependencies": {
+    "@mdx-js/mdx": "1.6.22"
+  }
+}

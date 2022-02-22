@@ -1,0 +1,14 @@
+{
+  "name": "@protosaurus/docusaurus-plugin-mdx",
+  "version": "0.0.3",
+  "main": "lib/index.js",
+  "dependencies": {
+    "fs-extra": "10.0.0"
+  },
+  "scripts": {
+    "build": "rm -rf lib && tsc --project tsconfig.build.json",
+    "test": "mocha",
+    "emit": "node lib/emit.js",
+    "emit:test": "ts-node test-emit.ts"
+  }
+}

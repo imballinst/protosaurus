@@ -1,0 +1,14 @@
+{
+  "name": "@protosaurus/docusaurus-theme",
+  "version": "0.0.1",
+  "main": "lib/index.js",
+  "scripts": {
+    "build": "rm -rf lib && tsc && node copy-css-modules.js"
+  },
+  "peerDependencies": {
+    "react": ">=16.8"
+  },
+  "dependencies": {
+    "react-modal": "3.14.4"
+  }
+}
