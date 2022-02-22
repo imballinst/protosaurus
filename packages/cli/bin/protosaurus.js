@@ -19,8 +19,8 @@
 const generator = require('@protosaurus/generator');
 const path = require('path');
 
-// The binary is usually located locally, e.g. in `website/node_modules/.bin`.
-const WORK_DIR = path.join(__dirname, '../..');
+// The process is based on the `package.json` that calls this.
+const DOCUSAURUS_DIR = process.cwd();
 
 // TODO(imballinst): we should make this a proper CLI binary, with something like
 // meow or commander. commander still is a bit behind meow, unless this issue
@@ -33,10 +33,10 @@ const WORK_DIR = path.join(__dirname, '../..');
 // $ protosaurus generate
 
 (async () => {
-  const [_bin, command] = process.argv;
+  const [_node, _protosaurus, command, relativePathToBufGenYaml] = process.argv;
   if (command !== 'clean' && command !== 'generate') {
     throw new Error(
-      'Invalid command. Currently available ones are `clean` and `generate`.'
+      `Invalid command ${command}. Currently available ones are \`clean\` and \`generate\`.`
     );
   }
 
@@ -44,18 +44,23 @@ const WORK_DIR = path.join(__dirname, '../..');
 
   switch (command) {
     case 'clean': {
-      fs.rmdir(path.join(WORK_DIR, '.protosaurus'));
+      fs.rmdir(path.join(DOCUSAURUS_DIR, '.protosaurus'));
     }
     case 'generate': {
+      const pathToBufGenYaml = path.join(
+        DOCUSAURUS_DIR,
+        relativePathToBufGenYaml
+      );
+
       await generator.generate({
-        workDir: WORK_DIR,
+        workDir: pathToBufGenYaml,
         // This should be inside the workDir, hence the actual path of the generated directory:
         //   path.join(workDir, outPath).
-        outPath: '.protosaurus/generated'
+        outPath: `${DOCUSAURUS_DIR}/.protosaurus/generated`
       });
       await generator.generateCacheFile({
-        workDir: WORK_DIR,
-        outPath: '.protosaurus/plugin-resources/.cache'
+        workDir: pathToBufGenYaml,
+        outPath: `${DOCUSAURUS_DIR}/.protosaurus/plugin-resources/.cache`
       });
     }
   }
