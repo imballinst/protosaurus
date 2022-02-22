@@ -2,9 +2,6 @@
   "name": "@protosaurus/cli",
   "version": "0.0.1",
   "main": "bin/index.js",
-  "scripts": {
-    "generate": "node ."
-  },
   "license": "SEE LICENSE IN LICENSE",
   "dependencies": {
     "@protosaurus/generator": "0.0.1",
