@@ -24,8 +24,8 @@ export default async function protosaurusPluginMdx(
   return {
     name: 'docusaurus-plugin-mdx',
     async loadContent() {
-      const pathToCache = `${context.siteDir}/plugin-resources/.cache/buf-ls-files.txt`;
-      const pathToBuildCache = `${context.siteDir}/plugin-resources/.cache/previous-build-buf-ls-files.txt`;
+      const pathToCache = `${context.siteDir}/.protosaurus/plugin-resources/.cache/buf-ls-files.txt`;
+      const pathToBuildCache = `${context.siteDir}/.protosaurus/plugin-resources/.cache/previous-build-buf-ls-files.txt`;
 
       const shouldEmit = shouldEmitJsonAndMdx(pathToCache, pathToBuildCache);
 
