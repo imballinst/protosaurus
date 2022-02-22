@@ -17,7 +17,7 @@
   },
   "dependencies": {
     "@docusaurus/core": "^2.0.0-beta.15",
-    "@protosaurus/cli": "0.0.1",
+    "@protosaurus/cli": "0.0.2",
     "@protosaurus/docusaurus-plugin-mdx": "0.0.3",
     "@protosaurus/docusaurus-preset": "0.0.1",
     "@protosaurus/rehype-plugin-codeblock": "0.0.1",
