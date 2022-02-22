@@ -54,8 +54,6 @@ const DOCUSAURUS_DIR = process.cwd();
 
       await generator.generate({
         workDir: pathToBufGenYaml,
-        // This should be inside the workDir, hence the actual path of the generated directory:
-        //   path.join(workDir, outPath).
         outPath: `${DOCUSAURUS_DIR}/.protosaurus/generated`
       });
       await generator.generateCacheFile({
