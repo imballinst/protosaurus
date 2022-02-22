@@ -86,13 +86,14 @@ help: ## Describe how to use each target
 	@printf "$(ansi_protosaurus)$(f_white)\n"
 	@awk 'BEGIN {FS = ":.*?## "} /^[0-9a-zA-Z_-]+:.*?## / {sub("\\\\n",sprintf("\n%22c"," "), $$2);printf "$(ansi_format_dark)", $$1, $$2}' $(MAKEFILE_LIST)
 
-# We use @protosaurus/example to generate .json from .proto in this project, provided by
-# buf.work.yaml that points to the testdata (buf) module.
+# We use @protosaurus/cli to generate .json from .proto in this project, provided by
+# buf.work.yaml that points to the testdata (buf) module. This is done in the
+# `prebuild` and `prestart` step of the CLI. The CLI itself is a wrapper of the
+# `docusaurus` CLI.
 gen: $(BUF_V1_MODULE_DATA) $(yarn) ## Generate files from proto files
 	@printf "$(ansi_format_dark)" $@ "generating files..."
 	@$(MAKE) gen-wkt
 	@$(yarn) install --frozen-lockfile
-	@$(yarn) workspace @protosaurus/example generate
 	@$(MAKE) gen-docusaurus-addons
 	@printf "$(ansi_format_bright)" $@ "ok"
 
