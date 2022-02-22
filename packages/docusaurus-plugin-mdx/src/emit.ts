@@ -41,13 +41,7 @@ export function emitJsonAndMdx(siteDir: string) {
     pathToMdxWkt,
     pathToPluginDictionary
   } = getPaths(siteDir);
-  console.log(
-    pathToGenerated,
-    pathToGeneratedWkt,
-    pathToMdx,
-    pathToMdxWkt,
-    pathToPluginDictionary
-  );
+
   // TODO(imballinst): cache.
   // This does 2 things:
   // 1. Delete all files except intro.mdx in `pathToMdx`.
@@ -307,7 +301,7 @@ function getPaths(siteDir: string) {
   const pathToMdxWkt = `${pathToMdx}/wkt`;
   const pathToPluginDictionary = path.join(
     siteDir,
-    '.protosaurus/plugin-resources/protosaurus-plugin-codeblock/dictionary'
+    '.protosaurus/plugin-resources/rehype-plugin-codeblock/dictionary'
   );
 
   return {
