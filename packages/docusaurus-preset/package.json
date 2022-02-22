@@ -1,0 +1,11 @@
+{
+  "name": "@protosaurus/docusaurus-preset",
+  "version": "0.0.1",
+  "main": "lib/index.js",
+  "scripts": {
+    "build": "rm -rf lib && tsc"
+  },
+  "dependencies": {
+    "@protosaurus/docusaurus-theme": "0.0.1"
+  }
+}

@@ -73,6 +73,38 @@ message Booking {
 
   // Intermediate locations.
   repeated location.v1.Location intermediate_locations = 9;
+
+  enum BookingPriority {
+    NORMAL = 0;
+    PRO = 1;
+    ENTERPRISE = 2;
+  }
+
+  // Describes the priority of the booking.
+  // The higher the level is, the faster the process will be.
+  BookingPriority priority = 10;
+
+  enum JourneyStatus {
+    option allow_alias = true;
+    UNKNOWN = 0;
+    STARTED = 1;
+    DEPARTED = 1;
+    ARRIVED = 2;
+  }
+
+  // Describes the status of the journey.
+  JourneyStatus journey_status = 11;
+
+  // Use outside enum.
+  TestEnumOutside test_enum_outside = 12;
+}
+
+// Test enum outside.
+// 
+// We have tested enum inside Message, but we haven't for outside.
+enum TestEnumOutside {
+  HELLO = 0;
+  WORLD = 1;
 }
 
 // An empty message for testing

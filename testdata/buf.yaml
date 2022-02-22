@@ -17,6 +17,8 @@ name: buf.build/protosaurus/protosaurus
 lint:
   use:
     - BASIC
+  except:
+    - ENUM_NO_ALLOW_ALIAS
 
 deps:
   - buf.build/googleapis/googleapis

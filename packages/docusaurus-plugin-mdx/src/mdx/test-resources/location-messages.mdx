@@ -1,0 +1,56 @@
+<Definition>
+
+<DefinitionHeader name="message">
+
+### Location
+
+</DefinitionHeader>
+
+Sample location.
+
+```protosaurus--location.v1.Location
+message Location {
+  // Latitude of the location.
+  int32 latitude = 1;
+
+  // Longitude of the location.
+  int32 longitude = 2;
+
+  // Address (human-friendly string) of the location.
+  // This line tests a <html> tag comment.
+  // This line tests for a [link inside comment](https://github.com).
+  // https://github.com tests line at the start.
+  // This line tests for a link https://github.com at the middle.
+  // This line tests for a [link inside comment](https://github.com) and https://github.com.
+  // This line tests for a [multi-line link inside a comment](https://github.com).
+  // Beware!
+  string address = 3;
+
+  message InnerMessage {
+    // Sample integer.
+    int32 hello = 1;
+  }
+
+  // Sample message.
+  InnerMessage inner_message = 4;
+
+  // Sample message yet again.
+  InnerMessage second_inner = 5;
+
+  InnerMessage empty_comment = 6;
+
+  map<string, InnerMessage> test_map = 7;
+
+  repeated InnerMessage test_repeated = 8;
+
+  // This is an ![example image](/img/protosaurus.jpeg).
+  InnerMessage test_image = 9;
+
+  // This line tests for a [link without https](http://example.com) as well as
+  // [link that is not http](ftp://example.com), another [link](intro), and
+  // [another relative link](./intro).
+  InnerMessage test_non_https_link = 10;
+}
+```
+
+</Definition>
