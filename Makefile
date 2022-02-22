@@ -94,6 +94,7 @@ gen: $(BUF_V1_MODULE_DATA) $(yarn) ## Generate files from proto files
 	@printf "$(ansi_format_dark)" $@ "generating files..."
 	@$(MAKE) gen-wkt
 	@$(yarn) install --frozen-lockfile
+	@$(yarn) --cwd website protosaurus generate ../
 	@$(MAKE) gen-docusaurus-addons
 	@printf "$(ansi_format_bright)" $@ "ok"
 
