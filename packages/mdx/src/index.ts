@@ -14,41 +14,27 @@
  * limitations under the License.
  */
 
-import { readFile, writeFile } from 'fs-extra';
+import { readFile } from 'fs-extra';
 
 export { emitJsonAndMdx } from './emit';
 export function getPathsToCache(siteDir: string) {
   return {
-    pathToCache: `${siteDir}/.protosaurus/plugin-resources/.cache/buf-ls-files.txt`,
-    pathToBuildCache: `${siteDir}/.protosaurus/plugin-resources/.cache/previous-build-buf-ls-files.txt`
+    pathToCache: `${siteDir}/.protosaurus/plugin-resources/.cache/buf-ls-files.txt`
   };
-}
-
-export async function writeBuildCache({
-  pathToCache,
-  pathToBuildCache
-}: {
-  pathToCache: string;
-  pathToBuildCache: string;
-}) {
-  // Re-create the previous build file (which will be used for next build).
-  const file = await readFile(pathToCache, 'utf-8');
-  await writeFile(pathToBuildCache, file);
 }
 
 export async function isCacheInvalid({
   pathToCache,
-  pathToBuildCache
+  currentListOfFiles
 }: {
   pathToCache: string;
-  pathToBuildCache: string;
+  currentListOfFiles: string;
 }) {
   try {
     const bufLsFileCache = await readFile(pathToCache, 'utf-8');
-    const previousBuildCache = await readFile(pathToBuildCache, 'utf-8');
 
     // Should emit only if the compared files aren't the same.
-    return bufLsFileCache !== previousBuildCache;
+    return bufLsFileCache !== currentListOfFiles;
   } catch (err) {
     // Cache file doesn't exist.
     return true;

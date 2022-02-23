@@ -53,26 +53,38 @@ const DOCUSAURUS_DIR = process.cwd();
         relativePathToBufGenYaml
       );
 
-      // Generate JSON.
-      await generator.generate({
-        workDir: pathToBufGenYaml,
-        outPath: `${DOCUSAURUS_DIR}/.protosaurus/generated`
+      // First and foremost, generate cache file.
+      // This is because, `buf ls-files` can identify the new packages/files.
+      // TODO(imballinst): identify cache by content.
+      const currentListOfFiles = generator.getListOfProtoFiles({
+        workDir: relativePathToBufGenYaml
       });
-      await generator.generateCacheFile({
-        workDir: pathToBufGenYaml,
-        outPath: `${DOCUSAURUS_DIR}/.protosaurus/plugin-resources/.cache`
+
+      const { pathToCache } = mdx.getPathsToCache(DOCUSAURUS_DIR);
+      const isCacheInvalid = mdx.isCacheInvalid({
+        pathToCache,
+        currentListOfFiles
       });
 
       // Check cache status, then determine whether MDX/JSON dictionary need to be
       // emitted or not.
-      const paths = mdx.getPathsToCache(DOCUSAURUS_DIR);
-      const isCacheInvalid = mdx.isCacheInvalid(paths);
-
       if (isCacheInvalid) {
+        console.info(
+          'There were one or more `.proto` files changed since last build, regenerating...'
+        );
+        // Generate protoc JSON.
+        await generator.generate({
+          workDir: pathToBufGenYaml,
+          outPath: `${DOCUSAURUS_DIR}/.protosaurus/generated`
+        });
+        // Generate MDX and JSON dictionary from the generated JSON above.
         await mdx.emitJsonAndMdx(DOCUSAURUS_DIR);
       }
 
-      await mdx.writeBuildCache(paths);
+      await generator.generateCacheFile({
+        workDir: pathToBufGenYaml,
+        outPath: `${DOCUSAURUS_DIR}/.protosaurus/plugin-resources/.cache`
+      });
     }
   }
 })();
