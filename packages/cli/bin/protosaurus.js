@@ -53,8 +53,6 @@ const DOCUSAURUS_DIR = process.cwd();
         relativePathToBufGenYaml
       );
 
-      // First and foremost, generate cache file.
-      // This is because, `buf ls-files` can identify the new packages/files.
       // TODO(imballinst): identify cache by content.
       const currentListOfFiles = await generator.getListOfProtoFiles({
         workDir: relativePathToBufGenYaml
