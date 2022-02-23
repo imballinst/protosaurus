@@ -42,8 +42,8 @@ const config = {
 
   presets: [
     [
-      'classic',
-      /** @type {import('@docusaurus/preset-classic').Options} */
+      '@protosaurus/docusaurus-preset',
+      /** @type {import('@protosaurus/docusaurus-preset').ProtosaurusPresetOptions} */
       ({
         docs: {
           sidebarPath: require.resolve('./sidebars.js'),
@@ -53,8 +53,7 @@ const config = {
           rehypePlugins: [[protoMessageRehypePlugin, { siteDir: __dirname }]]
         }
       })
-    ],
-    ['@protosaurus/docusaurus-preset', { siteDir: __dirname }]
+    ]
   ],
 
   plugins: [require.resolve('@protosaurus/docusaurus-plugin-mdx')],

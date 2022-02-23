@@ -14,12 +14,23 @@
  * limitations under the License.
  */
 
-import type { Preset } from '@docusaurus/types';
+import type { Preset, LoadContext } from '@docusaurus/types';
+import docusaurusPresetClassic from '@docusaurus/preset-classic/lib';
+import type { Options } from '@docusaurus/preset-classic';
 
 export type ProtosaurusPresetEntry = ['docusaurus-preset'];
+export type ProtosaurusPresetOptions = Options;
 
-export default function protosaurusPreset(): Preset {
+export default function protosaurusPreset(
+  context: LoadContext,
+  options: Options
+): Preset {
+  const presetClassic = docusaurusPresetClassic(context, options);
   return {
-    themes: [require.resolve('@protosaurus/docusaurus-theme')]
+    themes: [
+      ...(presetClassic.themes || []),
+      require.resolve('@protosaurus/docusaurus-theme')
+    ],
+    plugins: presetClassic.plugins
   };
 }
