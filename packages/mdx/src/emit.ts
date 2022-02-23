@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import { readdir, rm, stat } from 'fs-extra';
+import { readdir, rm, stat, mkdirp } from 'fs-extra';
 import path from 'path';
 
 import { emitMdx } from './mdx/mdx';
@@ -24,7 +24,6 @@ import { emitMessagesJson } from './mdx/json';
 import { emitCategoryMetadata } from './mdx/metadata';
 import { readPackageData } from './mdx/packages';
 import { getServiceString } from './mdx/services';
-import { createDirectoryIfNotExist } from './mdx/filesystem';
 
 const PRESERVED_DOCS_FILES = ['intro.mdx'];
 
@@ -46,13 +45,18 @@ export async function emitJsonAndMdx(siteDir: string) {
   // This does 2 things:
   // 1. Delete all files except intro.mdx in `pathToMdx`.
   // 2. Delete the dictionary folder `pathToPluginDictionary`.
-  deleteDirectoryEntries(pathToMdx, PRESERVED_DOCS_FILES);
-  deleteDirectoryEntries(pathToPluginDictionary);
+
+  await Promise.all([
+    ...(await deleteDirectoryEntries(pathToMdx, PRESERVED_DOCS_FILES)),
+    ...(await deleteDirectoryEntries(pathToPluginDictionary))
+  ]);
 
   // Re-create the folders.
-  createDirectoryIfNotExist(pathToPluginDictionary);
-  createDirectoryIfNotExist(pathToMdx);
-  createDirectoryIfNotExist(pathToMdxWkt);
+  await Promise.all([
+    mkdirp(pathToPluginDictionary),
+    mkdirp(pathToMdx),
+    mkdirp(pathToMdxWkt)
+  ]);
 
   // Generate MDX and dictionary for local types.
   const {
@@ -91,11 +95,11 @@ export async function emitJsonAndMdx(siteDir: string) {
 
     // Emit messages and services.
     const pathToMessagesMdx = `${pathToMdx}/${pkg.name}`;
-    emitMdx(pathToMessagesMdx, pkg);
+    await emitMdx(pathToMessagesMdx, pkg);
 
     // Emit JSON dictionary for the plugin.
     const pathToPlugin = `${pathToPluginDictionary}/${pkg.name}`;
-    emitMessagesJson({
+    await emitMessagesJson({
       filePath: pathToPlugin,
       messages: pkg.messagesData.concat(pkg.enumsData).concat(
         // Concat with this array because we'll need the inner messages
@@ -188,21 +192,23 @@ export async function emitJsonAndMdx(siteDir: string) {
   // Render MDX one-by-one.
   const allWktPackages = Object.values(wktPackagesDictionary);
 
-  for (const pkg of allWktPackages) {
-    const pathToMdx = `${pathToMdxWkt}/${pkg.name}`;
-    emitMdx(pathToMdx, pkg);
-  }
+  await Promise.all(
+    allWktPackages.map((pkg) => {
+      const pathToMdx = `${pathToMdxWkt}/${pkg.name}`;
+      return emitMdx(pathToMdx, pkg);
+    })
+  );
 
   // Render all WKT JSON in one file.
   const pathToWktFile = `${pathToPluginDictionary}/wkt`;
-  emitMessagesJson({
+  await emitMessagesJson({
     filePath: pathToWktFile,
     messages: allWktPackages.map((pkg) => pkg.messagesData).flat(),
     isWkt: true
   });
 
   // Create the metadata file.
-  emitCategoryMetadata(pathToMdxWkt, CATEGORY_LABELS.wkt);
+  await emitCategoryMetadata(pathToMdxWkt, CATEGORY_LABELS.wkt);
 }
 
 // Helper functions.
@@ -287,6 +293,7 @@ async function deleteDirectoryEntries(dir: string, exception?: string[]) {
     const deletedEntries = entries.filter(
       (entry) => !exception.includes(entry.name)
     );
+
     return Promise.all(
       deletedEntries.map((entry) =>
         rm(`${dir}/${entry.name}`, { recursive: true })
