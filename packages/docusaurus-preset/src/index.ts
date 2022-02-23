@@ -18,6 +18,8 @@ import type { Preset, LoadContext } from '@docusaurus/types';
 import docusaurusPresetClassic from '@docusaurus/preset-classic/lib';
 import type { Options } from '@docusaurus/preset-classic';
 
+import protoMessageRehypePlugin from '@protosaurus/rehype-plugin-codeblock';
+
 export type ProtosaurusPresetEntry = ['docusaurus-preset'];
 export type ProtosaurusPresetOptions = Options;
 
@@ -25,7 +27,17 @@ export default function protosaurusPreset(
   context: LoadContext,
   options: Options
 ): Preset {
-  const presetClassic = docusaurusPresetClassic(context, options);
+  const presetOpts = options;
+  const rehypePlugin = [protoMessageRehypePlugin, { siteDir: __dirname }];
+
+  if (typeof presetOpts?.docs === 'object') {
+    presetOpts.docs.rehypePlugins = presetOpts?.docs.rehypePlugins
+      ? [...presetOpts?.docs.rehypePlugins, rehypePlugin]
+      : ([rehypePlugin] as any);
+  }
+
+  const presetClassic = docusaurusPresetClassic(context, presetOpts);
+
   return {
     themes: [
       ...(presetClassic.themes || []),

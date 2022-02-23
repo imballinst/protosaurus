@@ -1,11 +1,12 @@
 {
   "compilerOptions": {
-    "target": "es5",
+    "target": "es2015",
     "outDir": "lib/",
     "lib": ["esnext"],
     "allowJs": true,
     "skipLibCheck": true,
     "strict": true,
+    "declaration": true,
     "forceConsistentCasingInFileNames": true,
     "esModuleInterop": true,
     "module": "CommonJS",

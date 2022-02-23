@@ -49,8 +49,7 @@ const config = {
           sidebarPath: require.resolve('./sidebars.js'),
           // Please change this to your repo.
           editUrl:
-            'https://github.com/facebook/docusaurus/tree/main/packages/create-docusaurus/templates/shared/',
-          rehypePlugins: [[protoMessageRehypePlugin, { siteDir: __dirname }]]
+            'https://github.com/facebook/docusaurus/tree/main/packages/create-docusaurus/templates/shared/'
         }
       })
     ]
