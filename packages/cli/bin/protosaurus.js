@@ -56,12 +56,12 @@ const DOCUSAURUS_DIR = process.cwd();
       // First and foremost, generate cache file.
       // This is because, `buf ls-files` can identify the new packages/files.
       // TODO(imballinst): identify cache by content.
-      const currentListOfFiles = generator.getListOfProtoFiles({
+      const currentListOfFiles = await generator.getListOfProtoFiles({
         workDir: relativePathToBufGenYaml
       });
 
       const { pathToCache } = mdx.getPathsToCache(DOCUSAURUS_DIR);
-      const isCacheInvalid = mdx.isCacheInvalid({
+      const isCacheInvalid = await mdx.isCacheInvalid({
         pathToCache,
         currentListOfFiles
       });
@@ -82,8 +82,8 @@ const DOCUSAURUS_DIR = process.cwd();
       }
 
       await generator.generateCacheFile({
-        workDir: pathToBufGenYaml,
-        outPath: `${DOCUSAURUS_DIR}/.protosaurus/plugin-resources/.cache`
+        outPath: `${DOCUSAURUS_DIR}/.protosaurus/plugin-resources/.cache`,
+        newList: currentListOfFiles
       });
     }
   }
