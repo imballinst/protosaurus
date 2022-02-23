@@ -28,7 +28,7 @@ export default function protosaurusPreset(
   options: Options
 ): Preset {
   const presetOpts = options;
-  const rehypePlugin = [protoMessageRehypePlugin, { siteDir: __dirname }];
+  const rehypePlugin = [protoMessageRehypePlugin, { siteDir: context.siteDir }];
 
   if (typeof presetOpts?.docs === 'object') {
     presetOpts.docs.rehypePlugins = presetOpts?.docs.rehypePlugins
