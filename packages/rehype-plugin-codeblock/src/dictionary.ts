@@ -29,7 +29,7 @@ interface Options {
 export function getAllDictionaries({ siteDir }: Options) {
   const pathToDictionary = path.join(
     siteDir,
-    'plugin-resources/protosaurus-plugin-codeblock/dictionary'
+    '.protosaurus/plugin-resources/rehype-plugin-codeblock/dictionary'
   );
 
   // This contains all "local" messages.

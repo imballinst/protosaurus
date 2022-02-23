@@ -5,6 +5,5 @@ packages/*/lib
 packages/protosaurus-plugin-mdx/src/mdx/test-resources
 
 website/.docusaurus
-website/generated
+website/.protosaurus
 website/docs
-website/plugin-resources

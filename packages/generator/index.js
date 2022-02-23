@@ -62,11 +62,11 @@ async function generate({ workDir, outPath }) {
   });
 
   // Copy all WKT *.json.
-  wkt.copyAll(path.join(workDir, outPath, 'wkt'));
+  wkt.copyAll(path.join(outPath, 'wkt'));
 }
 
 async function generateCacheFile({ workDir, outPath }) {
-  await fs.mkdirp(path.join(workDir, outPath));
+  await fs.mkdirp(path.join(outPath));
 
   const { execa } = await import('execa');
   const { stdout } = await execa(bufPath, ['ls-files'], {
@@ -76,7 +76,7 @@ async function generateCacheFile({ workDir, outPath }) {
 
   // TODO(imballinst): use a more reliable way in case that the content of the files changes,
   // and not just the number/name of files.
-  return fs.writeFile(path.join(workDir, outPath, 'buf-ls-files.txt'), stdout);
+  return fs.writeFile(path.join(outPath, 'buf-ls-files.txt'), stdout);
 }
 
 async function installProtocGenDoc() {

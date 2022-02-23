@@ -295,13 +295,13 @@ function deleteDirectoryEntries(dir: string, exception?: string[]) {
 }
 
 function getPaths(siteDir: string) {
-  const pathToGenerated = path.join(siteDir, 'generated');
-  const pathToGeneratedWkt = path.join(siteDir, 'generated/wkt');
+  const pathToGenerated = path.join(siteDir, '.protosaurus/generated');
+  const pathToGeneratedWkt = path.join(siteDir, '.protosaurus/generated/wkt');
   const pathToMdx = path.join(siteDir, 'docs');
   const pathToMdxWkt = `${pathToMdx}/wkt`;
   const pathToPluginDictionary = path.join(
     siteDir,
-    'plugin-resources/protosaurus-plugin-codeblock/dictionary'
+    '.protosaurus/plugin-resources/rehype-plugin-codeblock/dictionary'
   );
 
   return {

@@ -61,7 +61,6 @@ jobs:
 
       # Check for code formatting.
       - run: make prettier-check
-      # TODO(imballinst): not sure whether to put this test here or to create a new job.
       - run: make test
 
       - name: Get current PR number

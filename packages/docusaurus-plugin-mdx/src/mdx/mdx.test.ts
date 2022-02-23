@@ -28,7 +28,7 @@ describe('readPackageData', () => {
   // Test messages.
   const BOOKING_DOC_JSON_PATH = path.join(
     ROOT_PATH,
-    'website/generated/booking/v1/doc.json'
+    'website/.protosaurus/generated/booking/v1/doc.json'
   );
   const BOOKING_MDX_EXPECTED_MESSAGES_PATH = path.join(
     __dirname,
@@ -57,7 +57,7 @@ describe('readPackageData', () => {
   // Test inner messages.
   const LOCATION_DOC_JSON_PATH = path.join(
     ROOT_PATH,
-    'website/generated/location/v1/doc.json'
+    'website/.protosaurus/generated/location/v1/doc.json'
   );
   const LOCATION_MDX_EXPECTED_MESSAGES_PATH = path.join(
     __dirname,
