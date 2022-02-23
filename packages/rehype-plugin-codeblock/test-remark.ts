@@ -23,10 +23,10 @@ import rehypeProtoPlugin from './src';
 
 const md = fs.readFileSync(
   process.env.WORK_DIR
-    ? `${process.env.WORK_DIR}/packages/docusaurus-plugin-mdx/src/mdx/test-resources/booking-messages.mdx`
+    ? `${process.env.WORK_DIR}/packages/mdx/src/mdx/test-resources/booking-messages.mdx`
     : path.join(
         __dirname,
-        '../docusaurus-plugin-mdx/src/mdx/test-resources/booking-messages.mdx'
+        '../mdx/src/mdx/test-resources/booking-messages.mdx'
       ),
   'utf-8'
 );

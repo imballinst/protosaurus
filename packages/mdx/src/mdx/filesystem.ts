@@ -14,13 +14,13 @@
  * limitations under the License.
  */
 
-import { mkdirpSync, statSync } from 'fs-extra';
+import { mkdirp, stat } from 'fs-extra';
 
-export function createDirectoryIfNotExist(directory: string) {
+export async function createDirectoryIfNotExist(directory: string) {
   try {
-    statSync(directory);
+    return stat(directory);
   } catch (err) {
     // Not found.
-    mkdirpSync(directory);
+    return mkdirp(directory);
   }
 }

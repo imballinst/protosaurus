@@ -56,8 +56,6 @@ const config = {
     ]
   ],
 
-  plugins: [require.resolve('@protosaurus/docusaurus-plugin-mdx')],
-
   themeConfig:
     /** @type {import('@docusaurus/preset-classic').ThemeConfig} */
     ({

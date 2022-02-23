@@ -14,7 +14,7 @@ mdx_dir := $(root_dir)/packages/mdx
 # TODO(imballinst): make it an array so that we don't have to define the
 # build step one-by-one.
 rehype_plugin_codeblock_dir := $(root_dir)/packages/rehype-plugin-codeblock
-docusaurus_plugin_mdx_dir := $(root_dir)/packages/docusaurus-plugin-mdx
+docusaurus_plugin_mdx_dir := $(root_dir)/packages/mdx
 docusaurus_theme_dir := $(root_dir)/packages/docusaurus-theme
 docusaurus_preset_dir := $(root_dir)/packages/docusaurus-preset
 

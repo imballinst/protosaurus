@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import { readdirSync, rmSync, statSync } from 'fs-extra';
+import { readdir, rm, stat } from 'fs-extra';
 import path from 'path';
 
 import { emitMdx } from './mdx/mdx';
@@ -33,7 +33,7 @@ const CATEGORY_LABELS = {
   wkt: 'Well Known Types'
 };
 
-export function emitJsonAndMdx(siteDir: string) {
+export async function emitJsonAndMdx(siteDir: string) {
   const {
     pathToGenerated,
     pathToGeneratedWkt,
@@ -59,12 +59,12 @@ export function emitJsonAndMdx(siteDir: string) {
     allPackages: localPackages,
     allProtoMessages,
     allProtoEnums
-  } = recursivelyReadDirectory({
+  } = await recursivelyReadDirectory({
     pathToDirectory: pathToGenerated,
     excludedDirectories: [pathToGeneratedWkt]
   });
   const { allPackages: wktPackages, allProtoMessages: allWktProtoMessages } =
-    recursivelyReadDirectory({
+    await recursivelyReadDirectory({
       pathToDirectory: pathToGeneratedWkt
     });
 
@@ -206,7 +206,7 @@ export function emitJsonAndMdx(siteDir: string) {
 }
 
 // Helper functions.
-function recursivelyReadDirectory({
+async function recursivelyReadDirectory({
   pathToDirectory,
   excludedDirectories
 }: {
@@ -215,11 +215,11 @@ function recursivelyReadDirectory({
   // Directories to exclude. Mostly this is to stop reading WKT JSONs
   // when we want to just read the non-WKT JSONs.
   excludedDirectories?: string[];
-}): {
+}): Promise<{
   allPackages: PackageData[];
   allProtoMessages: ProtoMessage[];
   allProtoEnums: ProtoEnum[];
-} {
+}> {
   const allPackages: PackageData[] = [];
   const allProtoMessages: ProtoMessage[] = [];
   const allProtoEnums: ProtoEnum[] = [];
@@ -228,7 +228,7 @@ function recursivelyReadDirectory({
     return { allPackages, allProtoMessages, allProtoEnums };
   }
 
-  const entries = readdirSync(pathToDirectory, {
+  const entries = await readdir(pathToDirectory, {
     encoding: 'utf-8',
     withFileTypes: true
   });
@@ -238,8 +238,9 @@ function recursivelyReadDirectory({
 
     // If file, read its contents.
     if (entry.isFile()) {
-      const { packageData: packages, rawProtoMessages } =
-        readPackageData(pathToEntry);
+      const { packageData: packages, rawProtoMessages } = await readPackageData(
+        pathToEntry
+      );
 
       allPackages.push(...packages);
       allProtoMessages.push(...rawProtoMessages);
@@ -251,7 +252,7 @@ function recursivelyReadDirectory({
       allPackages: packages,
       allProtoMessages: rawProtoMessages,
       allProtoEnums: rawProtoEnums
-    } = recursivelyReadDirectory({
+    } = await recursivelyReadDirectory({
       pathToDirectory: pathToEntry,
       excludedDirectories
     });
@@ -263,22 +264,22 @@ function recursivelyReadDirectory({
   return { allPackages, allProtoMessages, allProtoEnums };
 }
 
-function deleteDirectoryEntries(dir: string, exception?: string[]) {
+async function deleteDirectoryEntries(dir: string, exception?: string[]) {
   try {
     // Check for directory existence.
     // If it doesn't exist, this will throw an error.
-    statSync(dir);
+    await stat(dir);
 
     // If directory exists, proceed.
-    const entries = readdirSync(dir, {
+    const entries = await readdir(dir, {
       encoding: 'utf-8',
       withFileTypes: true
     });
 
     // Delete without exception.
     if (exception === undefined) {
-      return entries.map((entry) =>
-        rmSync(`${dir}/${entry.name}`, { recursive: true })
+      return Promise.all(
+        entries.map((entry) => rm(`${dir}/${entry.name}`, { recursive: true }))
       );
     }
 
@@ -286,8 +287,10 @@ function deleteDirectoryEntries(dir: string, exception?: string[]) {
     const deletedEntries = entries.filter(
       (entry) => !exception.includes(entry.name)
     );
-    return deletedEntries.map((entry) =>
-      rmSync(`${dir}/${entry.name}`, { recursive: true })
+    return Promise.all(
+      deletedEntries.map((entry) =>
+        rm(`${dir}/${entry.name}`, { recursive: true })
+      )
     );
   } catch (err) {
     return [];

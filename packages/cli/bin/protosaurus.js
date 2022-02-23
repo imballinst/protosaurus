@@ -17,6 +17,7 @@
  */
 
 const generator = require('@protosaurus/generator');
+const mdx = require('@protosaurus/mdx');
 const path = require('path');
 
 // The process is based on the `package.json` that calls this.
@@ -52,6 +53,7 @@ const DOCUSAURUS_DIR = process.cwd();
         relativePathToBufGenYaml
       );
 
+      // Generate JSON.
       await generator.generate({
         workDir: pathToBufGenYaml,
         outPath: `${DOCUSAURUS_DIR}/.protosaurus/generated`
@@ -60,6 +62,17 @@ const DOCUSAURUS_DIR = process.cwd();
         workDir: pathToBufGenYaml,
         outPath: `${DOCUSAURUS_DIR}/.protosaurus/plugin-resources/.cache`
       });
+
+      // Check cache status, then determine whether MDX/JSON dictionary need to be
+      // emitted or not.
+      const paths = mdx.getPathsToCache(DOCUSAURUS_DIR);
+      const isCacheInvalid = mdx.isCacheInvalid(paths);
+
+      if (isCacheInvalid) {
+        await mdx.emitJsonAndMdx(DOCUSAURUS_DIR);
+      }
+
+      await mdx.writeBuildCache(paths);
     }
   }
 })();
