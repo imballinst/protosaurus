@@ -14,11 +14,11 @@
  * limitations under the License.
  */
 
-import { writeFileSync } from 'fs-extra';
+import { writeFile } from 'fs-extra';
 import { PackageData } from './types';
 
 // Main exported functions.
-export function emitMdx(filePath: string, pkg: PackageData) {
+export async function emitMdx(filePath: string, pkg: PackageData) {
   const services = pkg.servicesData.map((m) => m.body).join('\n\n');
   const messages = pkg.messagesData.map((m) => m.body).join('\n\n');
   const enums = pkg.enumsData.map((m) => m.body).join('\n\n');
@@ -31,7 +31,7 @@ export function emitMdx(filePath: string, pkg: PackageData) {
     : '';
   const enumsString = enums.length ? `## Enums\n\n${enums}` : '';
 
-  return writeFileSync(
+  return writeFile(
     `${filePath}.mdx`,
     `
 ---

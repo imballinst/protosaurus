@@ -33,6 +33,7 @@ const PATH = `${bin}:${process.env.PATH}`;
 
 module.exports = {
   generate,
+  getListOfProtoFiles,
   generateCacheFile
 };
 
@@ -65,18 +66,22 @@ async function generate({ workDir, outPath }) {
   wkt.copyAll(path.join(outPath, 'wkt'));
 }
 
-async function generateCacheFile({ workDir, outPath }) {
-  await fs.mkdirp(path.join(outPath));
-
+async function getListOfProtoFiles({ workDir }) {
   const { execa } = await import('execa');
   const { stdout } = await execa(bufPath, ['ls-files'], {
     cwd: workDir,
     env: { PATH, BUF_CACHE_DIR }
   });
 
+  return stdout;
+}
+
+async function generateCacheFile({ outPath, newList }) {
+  await fs.mkdirp(path.join(outPath));
+
   // TODO(imballinst): use a more reliable way in case that the content of the files changes,
   // and not just the number/name of files.
-  return fs.writeFile(path.join(outPath, 'buf-ls-files.txt'), stdout);
+  return fs.writeFile(path.join(outPath, 'buf-ls-files.txt'), newList);
 }
 
 async function installProtocGenDoc() {

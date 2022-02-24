@@ -17,6 +17,7 @@
  */
 
 const generator = require('@protosaurus/generator');
+const mdx = require('@protosaurus/mdx');
 const path = require('path');
 
 // The process is based on the `package.json` that calls this.
@@ -52,13 +53,35 @@ const DOCUSAURUS_DIR = process.cwd();
         relativePathToBufGenYaml
       );
 
-      await generator.generate({
-        workDir: pathToBufGenYaml,
-        outPath: `${DOCUSAURUS_DIR}/.protosaurus/generated`
+      // TODO(imballinst): identify cache by content.
+      const currentListOfFiles = await generator.getListOfProtoFiles({
+        workDir: relativePathToBufGenYaml
       });
+
+      const { pathToCache } = mdx.getPathsToCache(DOCUSAURUS_DIR);
+      const isCacheInvalid = await mdx.isCacheInvalid({
+        pathToCache,
+        currentListOfFiles
+      });
+
+      // Check cache status, then determine whether MDX/JSON dictionary need to be
+      // emitted or not.
+      if (isCacheInvalid) {
+        console.info(
+          'There were one or more `.proto` files changed since last build, regenerating...'
+        );
+        // Generate protoc JSON.
+        await generator.generate({
+          workDir: pathToBufGenYaml,
+          outPath: `${DOCUSAURUS_DIR}/.protosaurus/generated`
+        });
+        // Generate MDX and JSON dictionary from the generated JSON above.
+        await mdx.emitJsonAndMdx(DOCUSAURUS_DIR);
+      }
+
       await generator.generateCacheFile({
-        workDir: pathToBufGenYaml,
-        outPath: `${DOCUSAURUS_DIR}/.protosaurus/plugin-resources/.cache`
+        outPath: `${DOCUSAURUS_DIR}/.protosaurus/plugin-resources/.cache`,
+        newList: currentListOfFiles
       });
     }
   }

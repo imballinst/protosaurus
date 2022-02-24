@@ -14,13 +14,29 @@
  * limitations under the License.
  */
 
-import { mkdirpSync, statSync } from 'fs-extra';
+import { readFile } from 'fs-extra';
 
-export function createDirectoryIfNotExist(directory: string) {
+export { emitJsonAndMdx } from './emit';
+export function getPathsToCache(siteDir: string) {
+  return {
+    pathToCache: `${siteDir}/.protosaurus/plugin-resources/.cache/buf-ls-files.txt`
+  };
+}
+
+export async function isCacheInvalid({
+  pathToCache,
+  currentListOfFiles
+}: {
+  pathToCache: string;
+  currentListOfFiles: string;
+}) {
   try {
-    statSync(directory);
+    const bufLsFileCache = await readFile(pathToCache, 'utf-8');
+
+    // Should emit only if the compared files aren't the same.
+    return bufLsFileCache !== currentListOfFiles;
   } catch (err) {
-    // Not found.
-    mkdirpSync(directory);
+    // Cache file doesn't exist.
+    return true;
   }
 }

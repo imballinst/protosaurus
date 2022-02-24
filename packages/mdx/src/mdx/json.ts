@@ -14,10 +14,10 @@
  * limitations under the License.
  */
 
-import { writeFileSync } from 'fs-extra';
+import { writeFile } from 'fs-extra';
 import { ObjectData } from './types';
 
-export function emitMessagesJson({
+export async function emitMessagesJson({
   filePath,
   messages,
   isWkt
@@ -28,7 +28,7 @@ export function emitMessagesJson({
 }) {
   const map = getMessagesJsonDictionary({ messages, isWkt });
 
-  return writeFileSync(`${filePath}.json`, JSON.stringify(map));
+  return writeFile(`${filePath}.json`, JSON.stringify(map));
 }
 
 export function getMessagesJsonDictionary({
