@@ -14,7 +14,6 @@
  * limitations under the License.
  */
 
-import type { Plugin } from '@docusaurus/types';
 import { Comment, DocType, Element, Root, Text } from 'hast-format';
 import { getLinksFromALine, isLineAComment } from './comments';
 import { REPEATED_TEXT } from './constants';
@@ -22,11 +21,16 @@ import { getAllDictionaries } from './dictionary';
 import { getFieldInformation } from './fields';
 import { getHastElementType } from './hast';
 
-interface Options {
+export interface RehypePluginCodeblockOptions {
   siteDir: string;
 }
 
-const docusaurusPlugin: Plugin = (opts: Options) => {
+// TODO(imballinst): I tried to create a proper typing,
+// but it resulted in a mess. The `unified` ecosystem deps are ESM-only,
+// whereas @mdx-js/mdx is only CommonJS (and without typing)!
+// To save time and work on something more productive, let's set this to `any`... for now.
+// Revisit this when Docusaurus has moved to MDX v2.
+const docusaurusPlugin: any = (opts: RehypePluginCodeblockOptions) => {
   const { innerMessages, localMessages, wktMessages } =
     getAllDictionaries(opts);
 

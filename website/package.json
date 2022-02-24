@@ -20,7 +20,6 @@
     "@protosaurus/cli": "0.0.2",
     "@protosaurus/mdx": "0.0.3",
     "@protosaurus/docusaurus-preset": "0.0.1",
-    "@protosaurus/rehype-plugin-codeblock": "0.0.1",
     "@mdx-js/react": "^1.6.21",
     "clsx": "^1.1.1",
     "prism-react-renderer": "^1.2.1",
