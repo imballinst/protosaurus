@@ -19,6 +19,7 @@
 const generator = require('@protosaurus/generator');
 const mdx = require('@protosaurus/mdx');
 const path = require('path');
+const { spawn } = require('child_process');
 
 // The process is based on the `package.json` that calls this.
 const DOCUSAURUS_DIR = process.cwd();
@@ -26,18 +27,17 @@ const DOCUSAURUS_DIR = process.cwd();
 // TODO(imballinst): we should make this a proper CLI binary, with something like
 // meow or commander. commander still is a bit behind meow, unless this issue
 // https://github.com/sindresorhus/meow/issues/69 is fixed (regarding subcommands).
-//
-// Clean cache:
-// $ protosaurus clean
-//
-// Generate resources:
-// $ protosaurus generate
+const AVAILABLE_COMMANDS = ['start', 'build', 'clean'];
 
 (async () => {
-  const [_node, _protosaurus, command, relativePathToBufGenYaml] = process.argv;
-  if (command !== 'clean' && command !== 'generate') {
+  const [_node, _protosaurus, command, relativePathArgs] = process.argv;
+  if (!AVAILABLE_COMMANDS.includes(command)) {
+    const commandsString = AVAILABLE_COMMANDS.map((cmd) => `\`${cmd}\``).join(
+      ', '
+    );
+
     throw new Error(
-      `Invalid command ${command}. Currently available ones are \`clean\` and \`generate\`.`
+      `Invalid command ${command}. Currently available ones are ${commandsString}.`
     );
   }
 
@@ -47,42 +47,61 @@ const DOCUSAURUS_DIR = process.cwd();
     case 'clean': {
       fs.rmdir(path.join(DOCUSAURUS_DIR, '.protosaurus'));
     }
-    case 'generate': {
+    case 'start':
+    case 'build': {
+      const relativePathToBufGenYaml = relativePathArgs || '../';
       const pathToBufGenYaml = path.join(
         DOCUSAURUS_DIR,
         relativePathToBufGenYaml
       );
 
-      // TODO(imballinst): identify cache by content.
-      const currentListOfFiles = await generator.getListOfProtoFiles({
-        workDir: relativePathToBufGenYaml
-      });
-
-      const { pathToCache } = mdx.getPathsToCache(DOCUSAURUS_DIR);
-      const isCacheInvalid = await mdx.isCacheInvalid({
-        pathToCache,
-        currentListOfFiles
-      });
-
-      // Check cache status, then determine whether MDX/JSON dictionary need to be
-      // emitted or not.
-      if (isCacheInvalid) {
-        console.info(
-          'There were one or more `.proto` files changed since last build, regenerating...'
+      if (relativePathArgs === undefined) {
+        console.warn(
+          "No relative path argument to buf.gen.yaml directory given. It will default to '../'."
         );
-        // Generate protoc JSON.
-        await generator.generate({
-          workDir: pathToBufGenYaml,
-          outPath: `${DOCUSAURUS_DIR}/.protosaurus/generated`
-        });
-        // Generate MDX and JSON dictionary from the generated JSON above.
-        await mdx.emitJsonAndMdx(DOCUSAURUS_DIR);
       }
 
-      await generator.generateCacheFile({
-        outPath: `${DOCUSAURUS_DIR}/.protosaurus/plugin-resources/.cache`,
-        newList: currentListOfFiles
+      // When starting the dev server or building, generate the
+      // files first.
+      await generate(pathToBufGenYaml);
+      // After that, run docusaurus.
+      spawn('yarn', ['docusaurus', command], {
+        cwd: DOCUSAURUS_DIR,
+        stdio: 'inherit'
       });
     }
   }
 })();
+
+async function generate(pathToBufGenYaml) {
+  // TODO(imballinst): identify cache by content.
+  const currentListOfFiles = await generator.getListOfProtoFiles({
+    workDir: pathToBufGenYaml
+  });
+
+  const { pathToCache } = mdx.getPathsToCache(DOCUSAURUS_DIR);
+  const isCacheInvalid = await mdx.isCacheInvalid({
+    pathToCache,
+    currentListOfFiles
+  });
+
+  // Check cache status, then determine whether MDX/JSON dictionary need to be
+  // emitted or not.
+  if (isCacheInvalid) {
+    console.info(
+      'There were one or more `.proto` files changed since last build, regenerating...'
+    );
+    // Generate protoc JSON.
+    await generator.generate({
+      workDir: pathToBufGenYaml,
+      outPath: `${DOCUSAURUS_DIR}/.protosaurus/generated`
+    });
+    // Generate MDX and JSON dictionary from the generated JSON above.
+    await mdx.emitJsonAndMdx(DOCUSAURUS_DIR);
+  }
+
+  await generator.generateCacheFile({
+    outPath: `${DOCUSAURUS_DIR}/.protosaurus/plugin-resources/.cache`,
+    newList: currentListOfFiles
+  });
+}
