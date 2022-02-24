@@ -22,12 +22,12 @@ const path = require('path');
 const { spawn } = require('child_process');
 
 // The process is based on the `package.json` that calls this.
-const DOCUSAURUS_DIR = process.cwd();
+const WORK_DIR = process.cwd();
 
 // TODO(imballinst): we should make this a proper CLI binary, with something like
 // meow or commander. commander still is a bit behind meow, unless this issue
 // https://github.com/sindresorhus/meow/issues/69 is fixed (regarding subcommands).
-const AVAILABLE_COMMANDS = ['start', 'build', 'clean'];
+const AVAILABLE_COMMANDS = ['start', 'build', 'clean', 'generate'];
 
 (async () => {
   const [_node, _protosaurus, command, relativePathArgs] = process.argv;
@@ -42,19 +42,20 @@ const AVAILABLE_COMMANDS = ['start', 'build', 'clean'];
   }
 
   const fs = await import('fs-extra');
+  const relativePathToBufGenYaml = relativePathArgs || '../';
+  const pathToBufGenYaml = path.join(WORK_DIR, relativePathToBufGenYaml);
 
   switch (command) {
     case 'clean': {
-      fs.rmdir(path.join(DOCUSAURUS_DIR, '.protosaurus'));
+      fs.rmdir(path.join(WORK_DIR, '.protosaurus'));
+      break;
+    }
+    case 'generate': {
+      await generate(pathToBufGenYaml);
+      break;
     }
     case 'start':
     case 'build': {
-      const relativePathToBufGenYaml = relativePathArgs || '../';
-      const pathToBufGenYaml = path.join(
-        DOCUSAURUS_DIR,
-        relativePathToBufGenYaml
-      );
-
       if (relativePathArgs === undefined) {
         console.warn(
           "No relative path argument to buf.gen.yaml directory given. It will default to '../'."
@@ -66,7 +67,7 @@ const AVAILABLE_COMMANDS = ['start', 'build', 'clean'];
       await generate(pathToBufGenYaml);
       // After that, run docusaurus.
       spawn('yarn', ['docusaurus', command], {
-        cwd: DOCUSAURUS_DIR,
+        cwd: WORK_DIR,
         stdio: 'inherit'
       });
     }
@@ -79,7 +80,7 @@ async function generate(pathToBufGenYaml) {
     workDir: pathToBufGenYaml
   });
 
-  const { pathToCache } = mdx.getPathsToCache(DOCUSAURUS_DIR);
+  const { pathToCache } = mdx.getPathsToCache(WORK_DIR);
   const isCacheInvalid = await mdx.isCacheInvalid({
     pathToCache,
     currentListOfFiles
@@ -94,14 +95,14 @@ async function generate(pathToBufGenYaml) {
     // Generate protoc JSON.
     await generator.generate({
       workDir: pathToBufGenYaml,
-      outPath: `${DOCUSAURUS_DIR}/.protosaurus/generated`
+      outPath: `${WORK_DIR}/.protosaurus/generated`
     });
     // Generate MDX and JSON dictionary from the generated JSON above.
-    await mdx.emitJsonAndMdx(DOCUSAURUS_DIR);
+    await mdx.emitJsonAndMdx(WORK_DIR);
   }
 
   await generator.generateCacheFile({
-    outPath: `${DOCUSAURUS_DIR}/.protosaurus/plugin-resources/.cache`,
+    outPath: `${WORK_DIR}/.protosaurus/plugin-resources/.cache`,
     newList: currentListOfFiles
   });
 }
