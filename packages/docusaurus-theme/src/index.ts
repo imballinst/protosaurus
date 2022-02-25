@@ -32,6 +32,9 @@ export default function protosaurusTheme(): Plugin<void> {
     },
     getClientModules() {
       return [`${LIB_PATH}/custom.css`];
+    },
+    getPathsToWatch() {
+      return [`${LIB_PATH}/custom.css`];
     }
   };
 }

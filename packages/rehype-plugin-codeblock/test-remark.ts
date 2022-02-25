@@ -23,11 +23,8 @@ import rehypeProtoPlugin from './src';
 
 const md = fs.readFileSync(
   process.env.WORK_DIR
-    ? `${process.env.WORK_DIR}/packages/mdx/src/mdx/test-resources/booking-messages.mdx`
-    : path.join(
-        __dirname,
-        '../mdx/src/mdx/test-resources/booking-messages.mdx'
-      ),
+    ? `${process.env.WORK_DIR}/website/docs/test.mdx`
+    : path.join(__dirname, '../../website/docs/test.mdx'),
   'utf-8'
 );
 
