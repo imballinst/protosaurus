@@ -19,7 +19,6 @@
 const generator = require('@protosaurus/generator');
 const mdx = require('@protosaurus/mdx');
 const path = require('path');
-const { spawn } = require('child_process');
 
 // The process is based on the `package.json` that calls this.
 const WORK_DIR = process.cwd();
@@ -42,6 +41,7 @@ const AVAILABLE_COMMANDS = ['start', 'build', 'clean', 'generate'];
   }
 
   const fs = await import('fs-extra');
+  const { execa } = await import('execa');
   const relativePathToBufGenYaml = relativePathArgs || '../';
   const pathToBufGenYaml = path.join(WORK_DIR, relativePathToBufGenYaml);
 
@@ -66,7 +66,7 @@ const AVAILABLE_COMMANDS = ['start', 'build', 'clean', 'generate'];
       // files first.
       await generate(pathToBufGenYaml);
       // After that, run docusaurus.
-      spawn('yarn', ['docusaurus', command], {
+      await execa('yarn', ['docusaurus', command], {
         cwd: WORK_DIR,
         stdio: 'inherit'
       });
