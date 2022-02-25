@@ -45,5 +45,5 @@ async function main() {
     ]
   });
   // Hide this as needed.
-  // console.log(result);
+  console.log(result);
 }

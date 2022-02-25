@@ -46,6 +46,38 @@ const docusaurusPlugin: any = (opts: RehypePluginCodeblockOptions) => {
         continue;
       }
 
+      if (child.tagName === 'p') {
+        // Check the annotations.
+        if (child.children && child.children.length === 1) {
+          const firstChild = child.children[0];
+
+          if (isText(firstChild) && firstChild.value.startsWith('@@')) {
+            const titleIndexBoundaryStart = firstChild.value.indexOf('{');
+            const titleIndexBoundaryEnd = firstChild.value.indexOf('}');
+
+            if (titleIndexBoundaryStart > -1 && titleIndexBoundaryEnd > -1) {
+              const title = firstChild.value.slice(
+                titleIndexBoundaryStart + 1,
+                titleIndexBoundaryEnd
+              );
+              const description = firstChild.value
+                .slice(titleIndexBoundaryEnd + 1)
+                .trim();
+
+              child.properties = {
+                className: '__text-protosaurus-annotation__',
+                'data-title': title,
+                'data-description': description,
+                hidden: true,
+                'aria-hidden': true
+              };
+            }
+          }
+        }
+
+        continue;
+      }
+
       if (child.tagName === 'pre') {
         const pre = child;
         if (!isElement(pre)) {
@@ -141,12 +173,17 @@ const docusaurusPlugin: any = (opts: RehypePluginCodeblockOptions) => {
             let secondSlice = '';
             let hastTypeElements: (Element | Text)[] = [];
 
+            const annotationIndex = line.indexOf('// @@');
+
             if (map) {
               // Map type.
               const { key, value, mapClosingTagIndex } = map;
 
               firstSlice = line.slice(0, key.position);
-              secondSlice = line.slice(mapClosingTagIndex + 1);
+              secondSlice = line.slice(
+                mapClosingTagIndex + 1,
+                annotationIndex === -1 ? undefined : annotationIndex
+              );
 
               hastTypeElements.push(
                 getHastElementType(key),
@@ -177,9 +214,37 @@ const docusaurusPlugin: any = (opts: RehypePluginCodeblockOptions) => {
               }
 
               firstSlice = line.slice(0, firstSlicePosition);
-              secondSlice = line.slice(position + name.length);
+              secondSlice = line.slice(
+                position + name.length,
+                annotationIndex === -1 ? undefined : annotationIndex
+              );
 
               hastTypeElements.push(getHastElementType(field));
+            }
+
+            const divContent: (Element | Comment | Text)[] = [
+              {
+                type: 'text',
+                value: firstSlice
+              },
+              ...hastTypeElements,
+              {
+                type: 'text',
+                value: `${secondSlice}\n`
+              }
+            ];
+
+            if (annotationIndex > -1) {
+              divContent.push({
+                type: 'element',
+                tagName: 'button',
+                children: [
+                  {
+                    type: 'text',
+                    value: 'Click me'
+                  }
+                ]
+              });
             }
 
             children.push({
@@ -190,17 +255,7 @@ const docusaurusPlugin: any = (opts: RehypePluginCodeblockOptions) => {
                   [HIGHLIGHT_CLASSNAME]: highlightState !== undefined
                 })
               },
-              children: [
-                {
-                  type: 'text',
-                  value: firstSlice
-                },
-                ...hastTypeElements,
-                {
-                  type: 'text',
-                  value: `${secondSlice}\n`
-                }
-              ]
+              children: divContent
             });
           } else {
             // Otherwise, push the line normally.
