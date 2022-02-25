@@ -44,7 +44,6 @@ export async function emitJsonAndMdx(siteDir: string) {
   );
 
   // Delete all generated MDX files.
-  console.log('pog');
   await Promise.all(
     deletedFilesAndFolders.map((entry) => rm(entry, { recursive: true }))
   );
