@@ -25,8 +25,6 @@ import { emitCategoryMetadata } from './mdx/metadata';
 import { readPackageData } from './mdx/packages';
 import { getServiceString } from './mdx/services';
 
-const PRESERVED_DOCS_FILES = ['intro.mdx'];
-
 // Labels for the local types and the well-known types.
 const CATEGORY_LABELS = {
   wkt: 'Well Known Types'
@@ -46,6 +44,7 @@ export async function emitJsonAndMdx(siteDir: string) {
   );
 
   // Delete all generated MDX files.
+  console.log('pog');
   await Promise.all(
     deletedFilesAndFolders.map((entry) => rm(entry, { recursive: true }))
   );
@@ -292,15 +291,19 @@ async function getDeletedFilesAndFolderNames(
   pluginDictionaryDir: string,
   pathToMdx: string
 ) {
-  const entries = await readdir(pluginDictionaryDir, { withFileTypes: true });
-  const filesAndFolderNames: string[] = [];
+  try {
+    const entries = await readdir(pluginDictionaryDir, { withFileTypes: true });
+    const filesAndFolderNames: string[] = [];
 
-  for (const entry of entries) {
-    const basename = path.basename(entry.name, '.json');
-    filesAndFolderNames.push(
-      path.join(pathToMdx, basename === 'wkt' ? basename : `${basename}.mdx`)
-    );
+    for (const entry of entries) {
+      const basename = path.basename(entry.name, '.json');
+      filesAndFolderNames.push(
+        path.join(pathToMdx, basename === 'wkt' ? basename : `${basename}.mdx`)
+      );
+    }
+
+    return filesAndFolderNames;
+  } catch (err) {
+    return [];
   }
-
-  return filesAndFolderNames;
 }
