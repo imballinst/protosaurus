@@ -25,8 +25,6 @@ import { emitCategoryMetadata } from './mdx/metadata';
 import { readPackageData } from './mdx/packages';
 import { getServiceString } from './mdx/services';
 
-const PRESERVED_DOCS_FILES = ['intro.mdx'];
-
 // Labels for the local types and the well-known types.
 const CATEGORY_LABELS = {
   wkt: 'Well Known Types'
@@ -40,16 +38,16 @@ export async function emitJsonAndMdx(siteDir: string) {
     pathToMdxWkt,
     pathToPluginDictionary
   } = getPaths(siteDir);
+  const deletedFilesAndFolders = await getDeletedFilesAndFolderNames(
+    pathToPluginDictionary,
+    pathToMdx
+  );
 
-  // TODO(imballinst): cache.
-  // This does 2 things:
-  // 1. Delete all files except intro.mdx in `pathToMdx`.
-  // 2. Delete the dictionary folder `pathToPluginDictionary`.
-
-  await Promise.all([
-    ...(await deleteDirectoryEntries(pathToMdx, PRESERVED_DOCS_FILES)),
-    ...(await deleteDirectoryEntries(pathToPluginDictionary))
-  ]);
+  // Delete all generated MDX files.
+  console.log('pog');
+  await Promise.all(
+    deletedFilesAndFolders.map((entry) => rm(entry, { recursive: true }))
+  );
 
   // Re-create the folders.
   await Promise.all([
@@ -270,40 +268,6 @@ async function recursivelyReadDirectory({
   return { allPackages, allProtoMessages, allProtoEnums };
 }
 
-async function deleteDirectoryEntries(dir: string, exception?: string[]) {
-  try {
-    // Check for directory existence.
-    // If it doesn't exist, this will throw an error.
-    await stat(dir);
-
-    // If directory exists, proceed.
-    const entries = await readdir(dir, {
-      encoding: 'utf-8',
-      withFileTypes: true
-    });
-
-    // Delete without exception.
-    if (exception === undefined) {
-      return Promise.all(
-        entries.map((entry) => rm(`${dir}/${entry.name}`, { recursive: true }))
-      );
-    }
-
-    // Delete with exceptions.
-    const deletedEntries = entries.filter(
-      (entry) => !exception.includes(entry.name)
-    );
-
-    return Promise.all(
-      deletedEntries.map((entry) =>
-        rm(`${dir}/${entry.name}`, { recursive: true })
-      )
-    );
-  } catch (err) {
-    return [];
-  }
-}
-
 function getPaths(siteDir: string) {
   const pathToGenerated = path.join(siteDir, '.protosaurus/generated');
   const pathToGeneratedWkt = path.join(siteDir, '.protosaurus/generated/wkt');
@@ -321,4 +285,25 @@ function getPaths(siteDir: string) {
     pathToMdxWkt,
     pathToPluginDictionary
   };
+}
+
+async function getDeletedFilesAndFolderNames(
+  pluginDictionaryDir: string,
+  pathToMdx: string
+) {
+  try {
+    const entries = await readdir(pluginDictionaryDir, { withFileTypes: true });
+    const filesAndFolderNames: string[] = [];
+
+    for (const entry of entries) {
+      const basename = path.basename(entry.name, '.json');
+      filesAndFolderNames.push(
+        path.join(pathToMdx, basename === 'wkt' ? basename : `${basename}.mdx`)
+      );
+    }
+
+    return filesAndFolderNames;
+  } catch (err) {
+    return [];
+  }
 }
