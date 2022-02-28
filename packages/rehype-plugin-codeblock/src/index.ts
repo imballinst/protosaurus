@@ -26,6 +26,7 @@ export interface RehypePluginCodeblockOptions {
 }
 
 const HIGHLIGHT_CLASSNAME = 'docusaurus-highlight-code-line';
+const COMMENT_ANNOTATION = '// [^';
 
 // TODO(imballinst): I tried to create a proper typing,
 // but it resulted in a mess. The `unified` ecosystem deps are ESM-only,
@@ -40,6 +41,7 @@ const docusaurusPlugin: any = (opts: RehypePluginCodeblockOptions) => {
     // During build, we can use `process.env` from `docusaurus.config.js` perhaps
     // to get the directory containing the intermediary JSON.
     // console.log(process.env);
+    const codeBlockAnnotationIds: string[] = [];
 
     for (const child of tree.children) {
       if (!isElement(child)) {
@@ -51,26 +53,29 @@ const docusaurusPlugin: any = (opts: RehypePluginCodeblockOptions) => {
         if (child.children && child.children.length === 1) {
           const firstChild = child.children[0];
 
-          if (isText(firstChild) && firstChild.value.startsWith('@@')) {
-            const titleIndexBoundaryStart = firstChild.value.indexOf('{');
-            const titleIndexBoundaryEnd = firstChild.value.indexOf('}');
+          if (isText(firstChild) && firstChild.value.startsWith('[^')) {
+            const titleIndexBoundaryStart = firstChild.value.indexOf('[^') + 2;
+            const titleIndexBoundaryEnd = firstChild.value.indexOf(']');
 
-            if (titleIndexBoundaryStart > -1 && titleIndexBoundaryEnd > -1) {
+            if (titleIndexBoundaryEnd > -1) {
               const title = firstChild.value.slice(
-                titleIndexBoundaryStart + 1,
+                titleIndexBoundaryStart,
                 titleIndexBoundaryEnd
               );
-              const description = firstChild.value
-                .slice(titleIndexBoundaryEnd + 1)
-                .trim();
 
-              child.properties = {
-                className: '__text-protosaurus-annotation__',
-                'data-title': title,
-                'data-description': description,
-                hidden: true,
-                'aria-hidden': true
-              };
+              if (codeBlockAnnotationIds.includes(title)) {
+                const description = firstChild.value
+                  .slice(titleIndexBoundaryEnd + 1)
+                  .trim();
+
+                child.properties = {
+                  className: '__text-protosaurus-annotation__',
+                  'data-title': title,
+                  'data-description': description,
+                  hidden: true,
+                  'aria-hidden': true
+                };
+              }
             }
           }
         }
@@ -173,7 +178,7 @@ const docusaurusPlugin: any = (opts: RehypePluginCodeblockOptions) => {
             let secondSlice = '';
             let hastTypeElements: (Element | Text)[] = [];
 
-            const annotationIndex = line.indexOf('// @@');
+            const annotationIndex = line.indexOf(COMMENT_ANNOTATION);
 
             if (map) {
               // Map type.
@@ -235,9 +240,20 @@ const docusaurusPlugin: any = (opts: RehypePluginCodeblockOptions) => {
             ];
 
             if (annotationIndex > -1) {
+              const startIdx = annotationIndex + COMMENT_ANNOTATION.length;
+              const annotationTitle = line.slice(
+                startIdx,
+                line.indexOf(']', startIdx)
+              );
+
+              codeBlockAnnotationIds.push(annotationTitle);
               divContent.push({
                 type: 'element',
                 tagName: 'button',
+                properties: {
+                  className: '__button-protosaurus-annotation__',
+                  'data-title': annotationTitle
+                },
                 children: [
                   {
                     type: 'text',

@@ -19,6 +19,7 @@ import docusaurusPresetClassic from '@docusaurus/preset-classic/lib';
 import type { Options } from '@docusaurus/preset-classic';
 
 import protoMessageRehypePlugin from '@protosaurus/rehype-plugin-codeblock';
+import remarkPluginAnnotations from '@protosaurus/remark-plugin-annotations';
 
 export type ProtosaurusPresetEntry = ['docusaurus-preset'];
 export type ProtosaurusPresetOptions = Options;
@@ -29,11 +30,15 @@ export default function protosaurusPreset(
 ): Preset {
   const presetOpts = options;
   const rehypePlugin = [protoMessageRehypePlugin, { siteDir: context.siteDir }];
+  const remarkPlugin = [remarkPluginAnnotations, { siteDir: context.siteDir }];
 
   if (typeof presetOpts?.docs === 'object') {
     presetOpts.docs.rehypePlugins = presetOpts?.docs.rehypePlugins
       ? [...presetOpts?.docs.rehypePlugins, rehypePlugin]
       : ([rehypePlugin] as any);
+    presetOpts.docs.remarkPlugins = presetOpts?.docs.remarkPlugins
+      ? [...presetOpts?.docs.remarkPlugins, remarkPlugin]
+      : ([remarkPlugin] as any);
   }
 
   const presetClassic = docusaurusPresetClassic(context, presetOpts);
