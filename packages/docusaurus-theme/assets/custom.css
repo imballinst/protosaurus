@@ -110,6 +110,7 @@ precustom .type {
 }
 
 .protosaurus-popper {
+  font-family: var(--ifm-font-family-base);
   background: #333;
   color: white;
   font-weight: bold;
