@@ -20,6 +20,7 @@ const mdx = require('@mdx-js/mdx');
 import fs from 'fs';
 import path from 'path';
 import rehypeProtoPlugin from './src';
+import remarkAnnotationsPlugin from '../remark-plugin-annotations/src';
 
 const md = fs.readFileSync(
   process.env.WORK_DIR
@@ -33,6 +34,7 @@ main();
 async function main() {
   // MDX v1, reference: https://github.com/mdx-js/mdx/blob/v1/docs/advanced/plugins.mdx.
   const result = mdx.sync(md, {
+    remarkPlugins: [remarkAnnotationsPlugin],
     rehypePlugins: [
       [
         rehypeProtoPlugin,

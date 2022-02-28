@@ -15,7 +15,7 @@ export default function remarkPluginAnnotations() {
           children: [
             {
               type: 'text',
-              value: child.label
+              value: `[^${child.label}]: `
             },
             ...child.children.map((c: any) => c.children).flat()
           ]
