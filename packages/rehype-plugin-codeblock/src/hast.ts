@@ -29,7 +29,7 @@ export function getHastElementType(
       properties: {
         'data-image-src': href,
         'data-image-alt': name,
-        className: 'button-text __button-protosaurus-image-toggle__'
+        className: 'button-text protosaurus-image-toggle-button'
       },
       children: [
         {

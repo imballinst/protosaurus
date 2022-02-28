@@ -103,3 +103,56 @@ precustom .type {
 .button-text > svg {
   margin-left: 4px;
 }
+
+/* Protosaurus popper classes. */
+.protosaurus-annotation-wrapper {
+  display: inline-block;
+}
+
+.protosaurus-popper {
+  background: #333;
+  color: white;
+  font-weight: bold;
+  padding: 4px 8px;
+  font-size: 13px;
+  border-radius: 4px;
+  display: none;
+}
+
+.protosaurus-popper[data-show] {
+  display: block;
+}
+
+.protosaurus-popper .protosaurus-arrow,
+.protosaurus-popper .protosaurus-arrow::before {
+  position: absolute;
+  width: 8px;
+  height: 8px;
+  background: inherit;
+}
+
+.protosaurus-popper .protosaurus-arrow {
+  visibility: hidden;
+}
+
+.protosaurus-popper .protosaurus-arrow::before {
+  visibility: visible;
+  content: '';
+  transform: rotate(45deg);
+}
+
+.protosaurus-popper[data-popper-placement^='top'] > .protosaurus-arrow {
+  bottom: -4px;
+}
+
+.protosaurus-popper[data-popper-placement^='bottom'] > .protosaurus-arrow {
+  top: -4px;
+}
+
+.protosaurus-popper[data-popper-placement^='left'] > .protosaurus-arrow {
+  right: -4px;
+}
+
+.protosaurus-popper[data-popper-placement^='right'] > .protosaurus-arrow {
+  left: -4px;
+}

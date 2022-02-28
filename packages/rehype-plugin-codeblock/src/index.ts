@@ -28,6 +28,12 @@ export interface RehypePluginCodeblockOptions {
 const HIGHLIGHT_CLASSNAME = 'docusaurus-highlight-code-line';
 const COMMENT_ANNOTATION = '// [^';
 
+interface Annotation {
+  footnoteIndex: number;
+  title: string;
+  divWrapper: Element;
+}
+
 // TODO(imballinst): I tried to create a proper typing,
 // but it resulted in a mess. The `unified` ecosystem deps are ESM-only,
 // whereas @mdx-js/mdx is only CommonJS (and without typing)!
@@ -41,41 +47,61 @@ const docusaurusPlugin: any = (opts: RehypePluginCodeblockOptions) => {
     // During build, we can use `process.env` from `docusaurus.config.js` perhaps
     // to get the directory containing the intermediary JSON.
     // console.log(process.env);
-    const codeBlockAnnotationIds: string[] = [];
+    const codeBlockAnnotations: Annotation[] = [];
 
-    for (const child of tree.children) {
+    for (let i = 0; i < tree.children.length; i++) {
+      const child = tree.children[i];
+
       if (!isElement(child)) {
         continue;
       }
 
       if (child.tagName === 'p') {
         // Check the annotations.
-        if (child.children && child.children.length === 1) {
-          const firstChild = child.children[0];
+        const firstChild = child.children[0];
 
-          if (isText(firstChild) && firstChild.value.startsWith('[^')) {
-            const titleIndexBoundaryStart = firstChild.value.indexOf('[^') + 2;
-            const titleIndexBoundaryEnd = firstChild.value.indexOf(']');
+        if (isText(firstChild) && firstChild.value.startsWith('[^')) {
+          const titleIndexBoundaryStart = firstChild.value.indexOf('[^') + 2;
+          const titleIndexBoundaryEnd = firstChild.value.indexOf(']');
 
-            if (titleIndexBoundaryEnd > -1) {
-              const title = firstChild.value.slice(
-                titleIndexBoundaryStart,
-                titleIndexBoundaryEnd
-              );
+          if (titleIndexBoundaryEnd > -1) {
+            const title = firstChild.value.slice(
+              titleIndexBoundaryStart,
+              titleIndexBoundaryEnd
+            );
+            const matching = codeBlockAnnotations.find(
+              (annotation) => annotation.title === title
+            );
 
-              if (codeBlockAnnotationIds.includes(title)) {
-                const description = firstChild.value
-                  .slice(titleIndexBoundaryEnd + 1)
-                  .trim();
-
-                child.properties = {
-                  className: '__text-protosaurus-annotation__',
-                  'data-title': title,
-                  'data-description': description,
-                  hidden: true,
-                  'aria-hidden': true
-                };
-              }
+            if (matching) {
+              matching.footnoteIndex = i;
+              matching.divWrapper.children = [
+                {
+                  type: 'element',
+                  tagName: 'div',
+                  properties: {
+                    className: 'protosaurus-popper',
+                    'data-title': title
+                  },
+                  // Cut the first child, which contains the "title".
+                  children: child.children.slice(1)
+                },
+                {
+                  type: 'element',
+                  tagName: 'button',
+                  properties: {
+                    className: 'protosaurus-popper-button',
+                    'data-title': title
+                  },
+                  children: [
+                    {
+                      type: 'text',
+                      // TODO(imballinst): change to info icon.
+                      value: '!'
+                    }
+                  ]
+                }
+              ];
             }
           }
         }
@@ -235,7 +261,7 @@ const docusaurusPlugin: any = (opts: RehypePluginCodeblockOptions) => {
               ...hastTypeElements,
               {
                 type: 'text',
-                value: `${secondSlice}\n`
+                value: secondSlice
               }
             ];
 
@@ -246,22 +272,28 @@ const docusaurusPlugin: any = (opts: RehypePluginCodeblockOptions) => {
                 line.indexOf(']', startIdx)
               );
 
-              codeBlockAnnotationIds.push(annotationTitle);
-              divContent.push({
+              const divWrapper: Element = {
                 type: 'element',
-                tagName: 'button',
+                tagName: 'div',
                 properties: {
-                  className: '__button-protosaurus-annotation__',
+                  className: 'protosaurus-annotation-wrapper',
                   'data-title': annotationTitle
                 },
-                children: [
-                  {
-                    type: 'text',
-                    value: 'Click me'
-                  }
-                ]
+                children: []
+              };
+
+              codeBlockAnnotations.push({
+                footnoteIndex: -1,
+                title: annotationTitle,
+                divWrapper
               });
+              divContent.push(divWrapper);
             }
+
+            divContent.push({
+              type: 'text',
+              value: '\n'
+            });
 
             children.push({
               type: 'element',
@@ -362,6 +394,14 @@ const docusaurusPlugin: any = (opts: RehypePluginCodeblockOptions) => {
         pre.tagName = 'precustom';
       }
     }
+
+    // Delete the "dangling paragraphs" at the end.
+    const deletedIndexes = codeBlockAnnotations.map(
+      (annotation) => annotation.footnoteIndex
+    );
+    tree.children = tree.children.filter(
+      (_, idx) => !deletedIndexes.includes(idx)
+    );
   };
 };
 
