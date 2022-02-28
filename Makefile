@@ -14,6 +14,7 @@ mdx_dir := $(root_dir)/packages/mdx
 # TODO(imballinst): make it an array so that we don't have to define the
 # build step one-by-one.
 rehype_plugin_codeblock_dir := $(root_dir)/packages/rehype-plugin-codeblock
+remark_plugin_annotations_dir := $(root_dir)/packages/remark-plugin-annotations
 mdx_generator := $(root_dir)/packages/mdx
 docusaurus_theme_dir := $(root_dir)/packages/docusaurus-theme
 docusaurus_preset_dir := $(root_dir)/packages/docusaurus-preset
@@ -107,6 +108,7 @@ gen-wkt: $(protoc) $(protoc-gen-doc)
 
 gen-docusaurus-addons: $(yarn)
 	@$(yarn) --cwd $(rehype_plugin_codeblock_dir) build
+	@$(yarn) --cwd $(remark_plugin_annotations_dir) build
 	@$(yarn) --cwd $(docusaurus_theme_dir) build
 	@$(yarn) --cwd $(docusaurus_preset_dir) build
 	@$(yarn) --cwd $(mdx_generator) build
