@@ -118,12 +118,14 @@ precustom .type {
   height: 16px;
   border: none;
   background: transparent;
-  color: var(--ifm-color-primary-contrast-foreground);
+  color: var(--ifm-color-info);
   cursor: pointer;
+  background: #000;
+  border-radius: 50%;
 }
 
 .protosaurus-popper-button:hover {
-  color: var(--ifm-color-emphasis-700);
+  color: var(--ifm-color-info-dark);
 }
 
 .protosaurus-annotation-wrapper {
@@ -135,13 +137,14 @@ precustom .type {
 .protosaurus-popper {
   font-family: var(--ifm-font-family-base);
   border: 1px solid var(--ifm-color-primary-contrast-foreground);
-  background: var(--ifm-background-color);
+  background: var(--ifm-color-primary-contrast-background);
   color: var(--ifm-color-primary-contrast-foreground);
   padding: 8px;
   font-size: 13px;
   border-radius: 4px;
   opacity: 0;
   visibility: hidden;
+  box-shadow: 1px 1px #000;
 }
 
 .protosaurus-popper[data-show] {
@@ -155,10 +158,11 @@ precustom .type {
   width: 8px;
   height: 8px;
   background: inherit;
+  z-index: 10;
 }
 
 .protosaurus-popper .protosaurus-arrow {
-  background: var(--ifm-background-color);
+  background: var(--ifm-color-primary-contrast-background);
   visibility: hidden;
 }
 

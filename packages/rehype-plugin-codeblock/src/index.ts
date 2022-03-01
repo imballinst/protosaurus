@@ -101,7 +101,7 @@ const docusaurusPlugin: any = (opts: RehypePluginCodeblockOptions) => {
                 type: 'element',
                 tagName: 'div',
                 properties: {
-                  className: 'protosaurus-annotation-wrapper',
+                  className: 'protosaurus-annotation-wrapper mx-4',
                   'data-title': annotationTitle
                 },
                 children: []
@@ -116,6 +116,19 @@ const docusaurusPlugin: any = (opts: RehypePluginCodeblockOptions) => {
 
               // Override the child with the container.
               child.children[j] = divWrapper;
+
+              // For the previous and after elements, if they are text,
+              // trim their whitespaces.
+              const previousChild = child.children[j - 1];
+              const nextChild = child.children[j + 1];
+
+              if (previousChild && isText(previousChild)) {
+                previousChild.value = previousChild.value.trimEnd();
+              }
+
+              if (nextChild && isText(nextChild)) {
+                nextChild.value = nextChild.value.trimStart();
+              }
             }
           }
         }
@@ -472,12 +485,12 @@ const docusaurusPlugin: any = (opts: RehypePluginCodeblockOptions) => {
                 hastElements.push(
                   {
                     type: 'text' as const,
-                    value: line.slice(0, annotationIdx)
+                    value: line.slice(0, annotationIdx).trimEnd()
                   },
                   divWrapper,
                   {
                     type: 'text' as const,
-                    value: line.slice(titleIndexBoundaryEnd + 1)
+                    value: line.slice(titleIndexBoundaryEnd + 1).trimStart()
                   }
                 );
                 // Push the footnote annotation for later use.
