@@ -9,6 +9,21 @@ export default function remarkPluginAnnotations() {
     for (let i = 0; i < tree.children.length; i++) {
       const child = tree.children[i];
 
+      // Clean up footnote reference (usually in a paragraph).
+      if (child.type === 'paragraph') {
+        for (let j = 0; j < child.children.length; j++) {
+          const paragraphChild = child.children[j];
+
+          if (paragraphChild.type === 'footnoteReference') {
+            child.children[j] = {
+              type: 'text',
+              value: `[^${paragraphChild.label}]`
+            };
+          }
+        }
+      }
+
+      // Clean up the footnote definitions (usually at the end of file).
       if (child.type === 'footnoteDefinition') {
         const newChild: Paragraph = {
           type: 'paragraph',

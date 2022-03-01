@@ -82,7 +82,7 @@ export default function ProtosaurusAnnotation() {
             { name: 'eventListeners', enabled: false }
           ]
         }));
-      }, 500);
+      }, 100);
     }
 
     // List of events that we want to add.

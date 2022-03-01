@@ -37,12 +37,16 @@ message Booking {
   // ID of booked vehicle.
   int32 vehicle_id = 1;
 
-  // Customer that booked the vehicle.
+  // Customer that booked the vehicle. [^1]
   // highlight-next-line
-  int32 customer_id = 2; // [^1]
+  int32 customer_id = 2; // [^2]
 }
 ```
 
 </Definition>
 
+Pretty sure we can still annotation outside of the codeblock[^3], right?
+
 [^1]: this is a sample annotation. I can also put `code` hree!
+[^2]: this is another sample annotation.
+[^3]: it works!
