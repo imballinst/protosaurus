@@ -116,15 +116,24 @@ precustom .type {
   padding: 0;
   width: 16px;
   height: 16px;
-  border: none;
+  border: 2px solid var(--ifm-color-info);
+  cursor: pointer;
   background: transparent;
   color: var(--ifm-color-info);
-  cursor: pointer;
-  background: #000;
   border-radius: 50%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.protosaurus-popper-button svg {
+  height: 8px;
+  width: 8px;
 }
 
 .protosaurus-popper-button:hover {
+  border-color: var(--ifm-color-info-dark);
   color: var(--ifm-color-info-dark);
 }
 
