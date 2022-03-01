@@ -459,7 +459,9 @@ const docusaurusPlugin: any = (opts: RehypePluginCodeblockOptions) => {
                   type: 'element',
                   tagName: 'div',
                   properties: {
-                    className: 'protosaurus-annotation-wrapper',
+                    // Add a horizontal margin so it's not too condensed with
+                    // the characters to the side of it.
+                    className: 'protosaurus-annotation-wrapper mx-4',
                     'data-title': annotationTitle
                   },
                   children: []

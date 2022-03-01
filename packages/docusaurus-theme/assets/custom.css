@@ -57,6 +57,12 @@ html[data-theme='dark'] .docusaurus-highlight-code-line {
   background-color: rgba(255, 255, 255, 0.05);
 }
 
+/* Utility classes. */
+.mx-4 {
+  margin-left: 4px;
+  margin-right: 4px;
+}
+
 /* Protosaurus code block. */
 /* TODO(imballinst): this causes warning in dev mode regarding `precustom` element not known. */
 /* Perhaps we should change it to div.precustom or something... if it's possible. */
