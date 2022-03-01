@@ -48,7 +48,7 @@ export default function ProtosaurusAnnotation() {
       popperInstance.setOptions((options) => ({
         ...options,
         modifiers: [
-          ...options.modifiers,
+          ...(options.modifiers || []),
           { name: 'eventListeners', enabled: true }
         ]
       }));
