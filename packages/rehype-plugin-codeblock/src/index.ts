@@ -25,6 +25,8 @@ export interface RehypePluginCodeblockOptions {
   siteDir: string;
 }
 
+const HIGHLIGHT_CLASSNAME = 'docusaurus-highlight-code-line';
+
 // TODO(imballinst): I tried to create a proper typing,
 // but it resulted in a mess. The `unified` ecosystem deps are ESM-only,
 // whereas @mdx-js/mdx is only CommonJS (and without typing)!
@@ -76,10 +78,28 @@ const docusaurusPlugin: any = (opts: RehypePluginCodeblockOptions) => {
         // `subMessagesDictionary` variable.
         const [, namespace] = matchingLanguage.split('--');
         const children: (Element | Text)[] = [];
+        let highlightState:
+          | 'highlight-next-line'
+          | 'highlight-until'
+          | undefined = undefined;
 
         // Discard the last line from the code block (pure newline).
         for (let i = 0, length = codeArray.length - 1; i < length; i++) {
           const line = codeArray[i];
+          // First things first, check if it's a highlight annotation.
+          // If so, we skip the rest of the process for this line.
+          const trimmed = line.trim();
+          if (trimmed === '// highlight-next-line') {
+            highlightState = 'highlight-next-line';
+            continue;
+          } else if (trimmed === '// highlight-start') {
+            highlightState = 'highlight-until';
+            continue;
+          } else if (trimmed === '// highlight-end') {
+            highlightState = undefined;
+            continue;
+          }
+
           let type = getFieldInformation({
             line,
             namespace,
@@ -88,7 +108,7 @@ const docusaurusPlugin: any = (opts: RehypePluginCodeblockOptions) => {
             wktMessages
           });
 
-          if (type === undefined && line.trim().startsWith('message')) {
+          if (type === undefined && trimmed.startsWith('message')) {
             // If undefined, then we find the built-in syntaxes.
             type = {
               match: {
@@ -99,7 +119,7 @@ const docusaurusPlugin: any = (opts: RehypePluginCodeblockOptions) => {
                 }
               }
             };
-          } else if (type === undefined && line.trim().startsWith('enum')) {
+          } else if (type === undefined && trimmed.startsWith('enum')) {
             // If undefined, then we find the built-in syntaxes.
             type = {
               match: {
@@ -162,17 +182,26 @@ const docusaurusPlugin: any = (opts: RehypePluginCodeblockOptions) => {
               hastTypeElements.push(getHastElementType(field));
             }
 
-            children.push(
-              {
-                type: 'text',
-                value: firstSlice
+            children.push({
+              type: 'element',
+              tagName: 'div',
+              properties: {
+                className: classnames({
+                  [HIGHLIGHT_CLASSNAME]: highlightState !== undefined
+                })
               },
-              ...hastTypeElements,
-              {
-                type: 'text',
-                value: `${secondSlice}\n`
-              }
-            );
+              children: [
+                {
+                  type: 'text',
+                  value: firstSlice
+                },
+                ...hastTypeElements,
+                {
+                  type: 'text',
+                  value: `${secondSlice}\n`
+                }
+              ]
+            });
           } else {
             // Otherwise, push the line normally.
             const isNotLast = i + 1 < length;
@@ -237,18 +266,21 @@ const docusaurusPlugin: any = (opts: RehypePluginCodeblockOptions) => {
               });
             }
 
-            if (isAComment) {
-              children.push({
-                type: 'element',
-                tagName: 'span',
-                properties: {
-                  className: 'comment'
-                },
-                children: hastElements
-              });
-            } else {
-              children.push(...hastElements);
-            }
+            children.push({
+              type: 'element',
+              tagName: 'div',
+              properties: {
+                className: classnames({
+                  comment: isAComment,
+                  [HIGHLIGHT_CLASSNAME]: highlightState !== undefined
+                })
+              },
+              children: hastElements
+            });
+          }
+
+          if (highlightState === 'highlight-next-line') {
+            highlightState = undefined;
           }
         }
 
@@ -273,4 +305,23 @@ function isElement(
 
 function isText(child: Element | DocType | Comment | Text): child is Text {
   return child.type === 'text';
+}
+
+function classnames(...args: (string | Record<string, boolean>)[]) {
+  const classNames = [];
+
+  for (const arg of args) {
+    if (typeof arg === 'string') {
+      classNames.push(arg);
+    } else {
+      // Object.
+      for (const key in arg) {
+        if (arg[key]) {
+          classNames.push(key);
+        }
+      }
+    }
+  }
+
+  return classNames.length ? classNames.join(' ') : undefined;
 }
