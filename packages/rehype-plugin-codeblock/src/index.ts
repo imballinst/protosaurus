@@ -19,7 +19,7 @@ import { getLinksFromALine, isLineAComment } from './comments';
 import { REPEATED_TEXT } from './constants';
 import { getAllDictionaries } from './dictionary';
 import { getFieldInformation } from './fields';
-import { getHastElementType } from './hast';
+import { getHastElementType, getInfoSvgIcon } from './hast';
 
 export interface RehypePluginCodeblockOptions {
   siteDir: string;
@@ -104,13 +104,7 @@ const docusaurusPlugin: any = (opts: RehypePluginCodeblockOptions) => {
                     className: 'protosaurus-popper-button',
                     'data-title': title
                   },
-                  children: [
-                    {
-                      type: 'text',
-                      // TODO(imballinst): change to info icon.
-                      value: '!'
-                    }
-                  ]
+                  children: [getInfoSvgIcon()]
                 }
               ];
             }
@@ -266,8 +260,14 @@ const docusaurusPlugin: any = (opts: RehypePluginCodeblockOptions) => {
 
             const divContent: (Element | Comment | Text)[] = [
               {
-                type: 'text',
-                value: firstSlice
+                type: 'element',
+                tagName: 'span',
+                children: [
+                  {
+                    type: 'text',
+                    value: firstSlice
+                  }
+                ]
               },
               ...hastTypeElements,
               {

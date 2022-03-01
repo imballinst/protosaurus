@@ -17,6 +17,7 @@
 import React, { useEffect, useState } from 'react';
 import { createPopper, Instance as PopperInstance } from '@popperjs/core';
 
+// TODO(imballinst): clean up this file.
 export default function ProtosaurusAnnotation() {
   const [popperButtons, setPopperButtons] = useState<HTMLButtonElement[]>([]);
 
