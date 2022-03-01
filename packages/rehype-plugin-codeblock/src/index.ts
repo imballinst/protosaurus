@@ -132,7 +132,6 @@ const docusaurusPlugin: any = (opts: RehypePluginCodeblockOptions) => {
 
         const codeArray = codeChild.value.split('\n');
         const matchingLanguage = code.properties?.className?.find((c: string) =>
-          // TODO(imballinst): specify a better language code, if this is unfit.
           c.startsWith('language-protosaurus')
         );
 

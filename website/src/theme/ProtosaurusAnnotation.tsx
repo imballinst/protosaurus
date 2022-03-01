@@ -14,13 +14,15 @@
  * limitations under the License.
  */
 
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import { createPopper, Instance as PopperInstance } from '@popperjs/core';
 
-// TODO(imballinst): clean up this file.
+// This file perhaps a bit anti-pattern, because
+// We are using React hooks to modify the DOM directly. However, this is necessary,
+// because the `usePopper` isn't possible when it comes to "injecting" styles and attributes
+// to HTML tags outside of the render lifecycle.
+// Reference: https://popper.js.org/docs/v2/tutorial/.
 export default function ProtosaurusAnnotation() {
-  const [popperButtons, setPopperButtons] = useState<HTMLButtonElement[]>([]);
-
   useEffect(() => {
     const buttons = document.getElementsByClassName(
       'protosaurus-popper-button'
@@ -29,14 +31,20 @@ export default function ProtosaurusAnnotation() {
     const instances: PopperInstance[] = [];
     let i = 0;
 
-    let timeout;
+    // Basically, the "state" lives here.
+    // Every time we hover the button, we will immediately show the popper.
+    let timeout: number;
 
-    function show(tooltip: HTMLDivElement, popperInstance: PopperInstance) {
+    function onHoverButton(
+      tooltip: HTMLDivElement,
+      popperInstance: PopperInstance
+    ) {
+      // Clear the timeout, so that it doesn't get hidden after hovering somewhere else.
       clearTimeout(timeout);
-      // Make the tooltip visible
+      // Make the tooltip visible.
       tooltip.setAttribute('data-show', '');
 
-      // Enable the event listeners
+      // Enable the event listeners.
       popperInstance.setOptions((options) => ({
         ...options,
         modifiers: [
@@ -45,21 +53,23 @@ export default function ProtosaurusAnnotation() {
         ]
       }));
 
-      // Update its position
+      // Update its position.
       popperInstance.update();
     }
 
-    function showPopper() {
+    function onHoverPopper() {
+      // Clear the timeout, so that it doesn't get hidden after hovering somewhere else.
       clearTimeout(timeout);
     }
 
-    function hide(tooltip: HTMLDivElement, popperInstance: PopperInstance) {
+    function onHide(tooltip: HTMLDivElement, popperInstance: PopperInstance) {
+      // Clear the timeout, since we are going to assign it with a new one.
       clearTimeout(timeout);
-      timeout = setTimeout(() => {
-        // Hide the tooltip
+      timeout = window.setTimeout(() => {
+        // Hide the tooltip.
         tooltip.removeAttribute('data-show');
 
-        // Disable the event listeners
+        // Disable the event listeners.
         popperInstance.setOptions((options) => ({
           ...options,
           modifiers: [
@@ -70,7 +80,13 @@ export default function ProtosaurusAnnotation() {
       }, 500);
     }
 
+    // List of events that we want to add.
+    const showEvents = ['mouseenter', 'focus'];
+    const hideEvents = ['mouseleave', 'blur'];
+
     while (i < buttons.length) {
+      // Iterate each of the button and create a popper that is
+      // "mapped" to the reference element (the button).
       const button = buttons.item(i) as HTMLButtonElement;
       const popper = poppers.item(i) as HTMLDivElement;
 
@@ -81,44 +97,38 @@ export default function ProtosaurusAnnotation() {
             {
               name: 'offset',
               options: {
+                // Move it down a bit.
                 offset: [0, 4]
               }
             },
             {
               name: 'arrow',
               options: {
-                padding: ({ popper, reference, placement }) =>
+                // Center the arrow.
+                padding: ({ popper, reference }) =>
                   popper.width / reference.width
               }
             }
           ]
         })
       );
-      i++;
-    }
 
-    const showEvents = ['mouseenter', 'focus'];
-    const hideEvents = ['mouseleave', 'blur'];
-
-    i = 0;
-
-    while (i < buttons.length) {
-      const button = buttons.item(i) as HTMLButtonElement;
-      const popper = poppers.item(i) as HTMLDivElement;
-
+      // Add event handlers.
       showEvents.forEach((event) => {
-        button.addEventListener(event, () => show(popper, instances[i]));
-        popper.addEventListener(event, showPopper);
+        button.addEventListener(event, () =>
+          onHoverButton(popper, instances[i])
+        );
+        popper.addEventListener(event, onHoverPopper);
       });
       hideEvents.forEach((event) => {
-        button.addEventListener(event, () => hide(popper, instances[i]));
-        popper.addEventListener(event, () => hide(popper, instances[i]));
+        button.addEventListener(event, () => onHide(popper, instances[i]));
+        popper.addEventListener(event, () => onHide(popper, instances[i]));
       });
-
       i++;
     }
 
     return () => {
+      // Cleanup the events.
       i = 0;
 
       while (i < buttons.length) {
@@ -126,22 +136,20 @@ export default function ProtosaurusAnnotation() {
         const popper = poppers.item(i) as HTMLDivElement;
 
         showEvents.forEach((event) => {
-          button.removeEventListener(event, () => show(popper, instances[i]));
-          popper.removeEventListener(event, showPopper);
+          button.removeEventListener(event, () =>
+            onHoverButton(popper, instances[i])
+          );
+          popper.removeEventListener(event, onHoverPopper);
         });
         hideEvents.forEach((event) => {
-          button.removeEventListener(event, () => hide(popper, instances[i]));
-          popper.removeEventListener(event, () => hide(popper, instances[i]));
+          button.removeEventListener(event, () => onHide(popper, instances[i]));
+          popper.removeEventListener(event, () => onHide(popper, instances[i]));
         });
 
         i++;
       }
     };
   }, []);
-
-  if (popperButtons.length) {
-    return <></>;
-  }
 
   return null;
 }
