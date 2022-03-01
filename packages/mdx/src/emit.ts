@@ -45,6 +45,8 @@ export async function emitJsonAndMdx(siteDir: string) {
   );
 
   // Delete all generated MDX files.
+  // Use `allSettled` so that if the file doesn't exist, it won't throw
+  // an error.
   await Promise.allSettled(
     deletedFilesAndFolders.map((entry) => rm(entry, { recursive: true }))
   );
