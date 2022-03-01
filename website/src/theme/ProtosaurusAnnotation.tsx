@@ -28,7 +28,10 @@ export default function ProtosaurusAnnotation() {
     const instances: PopperInstance[] = [];
     let i = 0;
 
+    let timeout;
+
     function show(tooltip: HTMLDivElement, popperInstance: PopperInstance) {
+      clearTimeout(timeout);
       // Make the tooltip visible
       tooltip.setAttribute('data-show', '');
 
@@ -45,18 +48,25 @@ export default function ProtosaurusAnnotation() {
       popperInstance.update();
     }
 
-    function hide(tooltip: HTMLDivElement, popperInstance: PopperInstance) {
-      // Hide the tooltip
-      tooltip.removeAttribute('data-show');
+    function showPopper() {
+      clearTimeout(timeout);
+    }
 
-      // Disable the event listeners
-      popperInstance.setOptions((options) => ({
-        ...options,
-        modifiers: [
-          ...options.modifiers,
-          { name: 'eventListeners', enabled: false }
-        ]
-      }));
+    function hide(tooltip: HTMLDivElement, popperInstance: PopperInstance) {
+      clearTimeout(timeout);
+      timeout = setTimeout(() => {
+        // Hide the tooltip
+        tooltip.removeAttribute('data-show');
+
+        // Disable the event listeners
+        popperInstance.setOptions((options) => ({
+          ...options,
+          modifiers: [
+            ...options.modifiers,
+            { name: 'eventListeners', enabled: false }
+          ]
+        }));
+      }, 500);
     }
 
     while (i < buttons.length) {
@@ -65,11 +75,19 @@ export default function ProtosaurusAnnotation() {
 
       instances.push(
         createPopper(button, popper, {
+          placement: 'bottom',
           modifiers: [
             {
               name: 'offset',
               options: {
-                offset: [0, 8]
+                offset: [0, 4]
+              }
+            },
+            {
+              name: 'arrow',
+              options: {
+                padding: ({ popper, reference, placement }) =>
+                  popper.width / reference.width
               }
             }
           ]
@@ -89,9 +107,11 @@ export default function ProtosaurusAnnotation() {
 
       showEvents.forEach((event) => {
         button.addEventListener(event, () => show(popper, instances[i]));
+        popper.addEventListener(event, showPopper);
       });
       hideEvents.forEach((event) => {
         button.addEventListener(event, () => hide(popper, instances[i]));
+        popper.addEventListener(event, () => hide(popper, instances[i]));
       });
 
       i++;
@@ -105,10 +125,12 @@ export default function ProtosaurusAnnotation() {
         const popper = poppers.item(i) as HTMLDivElement;
 
         showEvents.forEach((event) => {
-          button.addEventListener(event, () => show(popper, instances[i]));
+          button.removeEventListener(event, () => show(popper, instances[i]));
+          popper.removeEventListener(event, showPopper);
         });
         hideEvents.forEach((event) => {
-          button.addEventListener(event, () => hide(popper, instances[i]));
+          button.removeEventListener(event, () => hide(popper, instances[i]));
+          popper.removeEventListener(event, () => hide(popper, instances[i]));
         });
 
         i++;

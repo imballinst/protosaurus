@@ -111,17 +111,20 @@ precustom .type {
 
 .protosaurus-popper {
   font-family: var(--ifm-font-family-base);
-  background: #333;
-  color: white;
+  border: 1px solid var(--ifm-color-primary-contrast-foreground);
+  background: var(--ifm-background-color);
+  color: var(--ifm-color-primary-contrast-foreground);
   font-weight: bold;
-  padding: 4px 8px;
+  padding: 8px;
   font-size: 13px;
   border-radius: 4px;
-  display: none;
+  opacity: 0;
+  visibility: hidden;
 }
 
 .protosaurus-popper[data-show] {
-  display: block;
+  visibility: visible;
+  opacity: 1;
 }
 
 .protosaurus-popper .protosaurus-arrow,
@@ -133,6 +136,7 @@ precustom .type {
 }
 
 .protosaurus-popper .protosaurus-arrow {
+  background: var(--ifm-background-color);
   visibility: hidden;
 }
 
@@ -140,20 +144,23 @@ precustom .type {
   visibility: visible;
   content: '';
   transform: rotate(45deg);
+  border: 1px solid var(--ifm-color-primary-contrast-foreground);
+  border-bottom: none;
+  border-right: none;
 }
 
 .protosaurus-popper[data-popper-placement^='top'] > .protosaurus-arrow {
-  bottom: -4px;
+  bottom: -5px;
 }
 
 .protosaurus-popper[data-popper-placement^='bottom'] > .protosaurus-arrow {
-  top: -4px;
+  top: -5px;
 }
 
 .protosaurus-popper[data-popper-placement^='left'] > .protosaurus-arrow {
-  right: -4px;
+  right: -5px;
 }
 
 .protosaurus-popper[data-popper-placement^='right'] > .protosaurus-arrow {
-  left: -4px;
+  left: -5px;
 }

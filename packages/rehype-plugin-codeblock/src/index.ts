@@ -84,7 +84,18 @@ const docusaurusPlugin: any = (opts: RehypePluginCodeblockOptions) => {
                     'data-title': title
                   },
                   // Cut the first child, which contains the "title".
-                  children: child.children.slice(1)
+                  children: [
+                    {
+                      type: 'element',
+                      tagName: 'div',
+                      properties: {
+                        className: 'protosaurus-arrow',
+                        'data-popper-arrow': ''
+                      },
+                      children: []
+                    },
+                    ...child.children.slice(1)
+                  ]
                 },
                 {
                   type: 'element',
