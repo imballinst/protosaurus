@@ -15,7 +15,12 @@
  */
 
 import React, { useEffect } from 'react';
-import { createPopper, Instance as PopperInstance } from '@popperjs/core';
+import {
+  ClientRectObject,
+  createPopper,
+  Instance as PopperInstance,
+  Modifier
+} from '@popperjs/core';
 
 // This file perhaps a bit anti-pattern, because
 // We are using React hooks to modify the DOM directly. However, this is necessary,
@@ -73,7 +78,7 @@ export default function ProtosaurusAnnotation() {
         popperInstance.setOptions((options) => ({
           ...options,
           modifiers: [
-            ...options.modifiers,
+            ...(options.modifiers || []),
             { name: 'eventListeners', enabled: false }
           ]
         }));
@@ -105,8 +110,13 @@ export default function ProtosaurusAnnotation() {
               name: 'arrow',
               options: {
                 // Center the arrow.
-                padding: ({ popper, reference }) =>
-                  popper.width / reference.width
+                padding: ({
+                  popper,
+                  reference
+                }: {
+                  popper: ClientRectObject;
+                  reference: ClientRectObject;
+                }) => popper.width / reference.width
               }
             }
           ]
