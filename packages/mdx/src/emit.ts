@@ -36,8 +36,7 @@ export async function emitJsonAndMdx(siteDir: string) {
     pathToGeneratedWkt,
     pathToMdx,
     pathToMdxWkt,
-    pathToPluginDictionary,
-    pathToListGeneratedEntries
+    pathToPluginDictionary
   } = getPaths(siteDir);
   const deletedFilesAndFolders = await getDeletedFilesAndFolderNames(
     pathToPluginDictionary,
@@ -76,8 +75,6 @@ export async function emitJsonAndMdx(siteDir: string) {
   const wktMessagesDictionary = convertProtoArrayToRecord(allWktProtoMessages);
   const enumsDictionary = convertProtoArrayToRecord(allProtoEnums);
 
-  const generatedEntries: string[] = [];
-
   for (const pkg of localPackages) {
     // Since services require the information of all messages, then
     // we can only "render" the service string here, after all messages
@@ -97,7 +94,6 @@ export async function emitJsonAndMdx(siteDir: string) {
 
     // Emit messages and services.
     const pathToMessagesMdx = `${pathToMdx}/${pkg.name}`;
-    generatedEntries.push(pathToMessagesMdx);
     await emitMdx(pathToMessagesMdx, pkg);
 
     // Emit JSON dictionary for the plugin.
@@ -194,16 +190,13 @@ export async function emitJsonAndMdx(siteDir: string) {
 
   // Render MDX one-by-one.
   const allWktPackages = Object.values(wktPackagesDictionary);
-  const wktPromises = [];
 
-  for (const pkg of allWktPackages) {
-    const pathToMdx = `${pathToMdxWkt}/${pkg.name}`;
-
-    generatedEntries.push(pathToMdx);
-    wktPromises.push(emitMdx(pathToMdx, pkg));
-  }
-
-  await Promise.all(wktPromises);
+  await Promise.all(
+    allWktPackages.map((pkg) => {
+      const pathToMdx = `${pathToMdxWkt}/${pkg.name}`;
+      return emitMdx(pathToMdx, pkg);
+    })
+  );
 
   // Render all WKT JSON in one file.
   const pathToWktFile = `${pathToPluginDictionary}/wkt`;
@@ -215,9 +208,6 @@ export async function emitJsonAndMdx(siteDir: string) {
 
   // Create the metadata file.
   await emitCategoryMetadata(pathToMdxWkt, CATEGORY_LABELS.wkt);
-
-  // Create the list generated files.
-  await writeFile(pathToListGeneratedEntries, generatedEntries.join('\n'));
 }
 
 // Helper functions.
@@ -288,18 +278,13 @@ function getPaths(siteDir: string) {
     siteDir,
     '.protosaurus/plugin-resources/rehype-plugin-codeblock/dictionary'
   );
-  const pathToListGeneratedEntries = path.join(
-    siteDir,
-    '.protosaurus/plugin-resources/rehype-plugin-codeblock/manually-created-entries.txt'
-  );
 
   return {
     pathToGenerated,
     pathToGeneratedWkt,
     pathToMdx,
     pathToMdxWkt,
-    pathToPluginDictionary,
-    pathToListGeneratedEntries
+    pathToPluginDictionary
   };
 }
 
