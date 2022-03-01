@@ -47,7 +47,8 @@ const docusaurusPlugin: any = (opts: RehypePluginCodeblockOptions) => {
     // During build, we can use `process.env` from `docusaurus.config.js` perhaps
     // to get the directory containing the intermediary JSON.
     // console.log(process.env);
-    const codeBlockAnnotations: Annotation[] = [];
+    // Currently, this is only limited for code blocks only.
+    const codeblockAnnotations: Annotation[] = [];
 
     for (let i = 0; i < tree.children.length; i++) {
       const child = tree.children[i];
@@ -58,9 +59,13 @@ const docusaurusPlugin: any = (opts: RehypePluginCodeblockOptions) => {
 
       if (child.tagName === 'p') {
         // Check the annotations.
+        // We use the footnote annotation, e.g. `[^1]: hello world`.
+        // By the time we read a footnote, it's almost always we have traversed
+        // the previous lines above it.
         const firstChild = child.children[0];
 
         if (isText(firstChild) && firstChild.value.startsWith('[^')) {
+          // Get the footnote title (identified by number).
           const titleIndexBoundaryStart = firstChild.value.indexOf('[^') + 2;
           const titleIndexBoundaryEnd = firstChild.value.indexOf(']');
 
@@ -69,12 +74,18 @@ const docusaurusPlugin: any = (opts: RehypePluginCodeblockOptions) => {
               titleIndexBoundaryStart,
               titleIndexBoundaryEnd
             );
-            const matching = codeBlockAnnotations.find(
+            // Find the matching footnote that we have identified above.
+            // Currently, this is only limited for code blocks only.
+            const matching = codeblockAnnotations.find(
               (annotation) => annotation.title === title
             );
 
             if (matching) {
+              // Store the footnote index. We will remove it from the HAST.
               matching.footnoteIndex = i;
+              // Add these 2 children to the container.
+              // One is for the popper, so that the position absolute is relative
+              // to the container, and the other one is the button toggler.
               matching.divWrapper.children = [
                 {
                   type: 'element',
@@ -111,10 +122,12 @@ const docusaurusPlugin: any = (opts: RehypePluginCodeblockOptions) => {
           }
         }
 
+        // Skip the rest of the steps.
         continue;
       }
 
       if (child.tagName === 'pre') {
+        // Read code block.
         const pre = child;
         if (!isElement(pre)) {
           continue;
@@ -260,6 +273,9 @@ const docusaurusPlugin: any = (opts: RehypePluginCodeblockOptions) => {
             const divContent: (Element | Comment | Text)[] = [
               {
                 type: 'element',
+                // We need to wrap this with "span" because if it's whitespace,
+                // then it will not be "recognized" as whitespace when the "display" style
+                // is not "block".
                 tagName: 'span',
                 children: [
                   {
@@ -282,6 +298,7 @@ const docusaurusPlugin: any = (opts: RehypePluginCodeblockOptions) => {
                 line.indexOf(']', startIdx)
               );
 
+              // Create the container.
               const divWrapper: Element = {
                 type: 'element',
                 tagName: 'div',
@@ -292,14 +309,20 @@ const docusaurusPlugin: any = (opts: RehypePluginCodeblockOptions) => {
                 children: []
               };
 
-              codeBlockAnnotations.push({
+              // Push the footnote annotation for later use.
+              // Currently, this is only limited for code blocks only.
+              codeblockAnnotations.push({
                 footnoteIndex: -1,
                 title: annotationTitle,
                 divWrapper
               });
+              // Push the wrapper as well to the "line".
               divContent.push(divWrapper);
             }
 
+            // End the line.
+            // We do this always last because otherwise some elements, e.g. popper toggle button
+            // will be pushed to the next line instead.
             divContent.push({
               type: 'text',
               value: '\n'
@@ -406,7 +429,8 @@ const docusaurusPlugin: any = (opts: RehypePluginCodeblockOptions) => {
     }
 
     // Delete the "dangling paragraphs" at the end.
-    const deletedIndexes = codeBlockAnnotations.map(
+    // Currently, this is only limited for code blocks only.
+    const deletedIndexes = codeblockAnnotations.map(
       (annotation) => annotation.footnoteIndex
     );
     tree.children = tree.children.filter(
