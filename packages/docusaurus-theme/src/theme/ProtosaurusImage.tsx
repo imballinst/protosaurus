@@ -33,7 +33,7 @@ export default function ProtosaurusImage() {
 
   useEffect(() => {
     const buttons = document.getElementsByClassName(
-      '__button-protosaurus-image-toggle__'
+      'protosaurus-image-toggle-button'
     );
     const elements: HTMLButtonElement[] = [];
     let i = 0;

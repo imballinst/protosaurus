@@ -4,7 +4,6 @@
   "main": "lib/index.js",
   "types": "lib/index.d.ts",
   "license": "MIT",
-  "private": true,
   "scripts": {
     "build": "rm -rf lib && tsc --project tsconfig.build.json",
     "mdx:test": "ts-node test-remark.ts"

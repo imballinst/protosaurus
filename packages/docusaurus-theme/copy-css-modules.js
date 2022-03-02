@@ -38,7 +38,6 @@ const LIB_THEME_PATH = path.join(LIB_PATH, 'theme');
         `${SRC_THEME_PATH}/${file.name}`,
         `${LIB_THEME_PATH}/${file.name}`
       )
-    ),
-    fs.copyFile(`${SRC_PATH}/custom.css`, `${LIB_PATH}/custom.css`)
+    )
   ]);
 })();

@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import { readdir, rm, stat, mkdirp } from 'fs-extra';
+import { readdir, rm, mkdirp, writeFile } from 'fs-extra';
 import path from 'path';
 
 import { emitMdx } from './mdx/mdx';
@@ -44,7 +44,9 @@ export async function emitJsonAndMdx(siteDir: string) {
   );
 
   // Delete all generated MDX files.
-  await Promise.all(
+  // Use `allSettled` so that if the file doesn't exist, it won't throw
+  // an error.
+  await Promise.allSettled(
     deletedFilesAndFolders.map((entry) => rm(entry, { recursive: true }))
   );
 

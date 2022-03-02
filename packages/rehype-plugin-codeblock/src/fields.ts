@@ -109,11 +109,6 @@ function getBuiltInType({
   return textMatch;
 }
 
-// TODO(imballinst): use these later.
-// We also haven't covered `option` inside `enum` yet.
-// const BUILTIN_SYNTAXES = ["message", "enum"];
-// const BUILTIN_SYNTAXES_WITHOUT_COLORS = ["oneof", "reserved"];
-
 // For example, "string, string".
 // Not sure if "string,string" is possible, but 0-N seems safer.
 const MAP_KEY_VALUE_REGEX = /,\s*/;

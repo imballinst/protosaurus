@@ -19,13 +19,24 @@ import { getLinksFromALine, isLineAComment } from './comments';
 import { REPEATED_TEXT } from './constants';
 import { getAllDictionaries } from './dictionary';
 import { getFieldInformation } from './fields';
-import { getHastElementType } from './hast';
+import { getHastElementType, getInfoSvgIcon } from './hast';
 
 export interface RehypePluginCodeblockOptions {
   siteDir: string;
 }
 
 const HIGHLIGHT_CLASSNAME = 'docusaurus-highlight-code-line';
+// Separate annotation and comment annotation.
+// Annotation is for annotations inside a pure line comment, whereas
+// comment annotation is for code + comment.
+const COMMENT_ANNOTATION = '// [^';
+const ANNOTATION = '[^';
+
+interface Annotation {
+  footnoteIndex: number;
+  title: string;
+  divWrapper: Element;
+}
 
 // TODO(imballinst): I tried to create a proper typing,
 // but it resulted in a mess. The `unified` ecosystem deps are ESM-only,
@@ -40,13 +51,94 @@ const docusaurusPlugin: any = (opts: RehypePluginCodeblockOptions) => {
     // During build, we can use `process.env` from `docusaurus.config.js` perhaps
     // to get the directory containing the intermediary JSON.
     // console.log(process.env);
+    // Currently, this is only limited for code blocks only.
+    const codeblockAnnotations: Annotation[] = [];
 
-    for (const child of tree.children) {
+    for (let i = 0; i < tree.children.length; i++) {
+      const child = tree.children[i];
+
       if (!isElement(child)) {
         continue;
       }
 
+      if (child.tagName === 'p') {
+        // Check the annotations.
+        // We use the footnote annotation, e.g. `[^1]: hello world`.
+        // By the time we read a footnote, it's almost always we have traversed
+        // the previous lines above it.
+        const firstChild = child.children[0];
+
+        if (isText(firstChild) && firstChild.value.startsWith('[^')) {
+          processFootnote({
+            child,
+            text: firstChild,
+            codeblockAnnotations,
+            index: i
+          });
+        } else {
+          // Normal lines, but it can still have annotations, so we still have to check it.
+          for (let j = 0; j < child.children.length; j++) {
+            const paragraphChild = child.children[j];
+
+            if (
+              isText(paragraphChild) &&
+              paragraphChild.value.startsWith(ANNOTATION)
+            ) {
+              const line = paragraphChild.value;
+              const titleIndexBoundaryStart = line.indexOf(ANNOTATION) + 2;
+              const titleIndexBoundaryEnd = line.indexOf(
+                ']',
+                titleIndexBoundaryStart
+              );
+
+              const annotationTitle = line.slice(
+                titleIndexBoundaryStart,
+                titleIndexBoundaryEnd
+              );
+
+              // Create the container.
+              const divWrapper: Element = {
+                type: 'element',
+                tagName: 'div',
+                properties: {
+                  className: 'protosaurus-annotation-wrapper mx-4',
+                  'data-title': annotationTitle
+                },
+                children: []
+              };
+              // Push the footnote annotation for later use.
+              // Currently, this is only limited for code blocks only.
+              codeblockAnnotations.push({
+                footnoteIndex: -1,
+                title: annotationTitle,
+                divWrapper
+              });
+
+              // Override the child with the container.
+              child.children[j] = divWrapper;
+
+              // For the previous and after elements, if they are text,
+              // trim their whitespaces.
+              const previousChild = child.children[j - 1];
+              const nextChild = child.children[j + 1];
+
+              if (previousChild && isText(previousChild)) {
+                previousChild.value = previousChild.value.trimEnd();
+              }
+
+              if (nextChild && isText(nextChild)) {
+                nextChild.value = nextChild.value.trimStart();
+              }
+            }
+          }
+        }
+
+        // Skip the rest of the steps.
+        continue;
+      }
+
       if (child.tagName === 'pre') {
+        // Read code block.
         const pre = child;
         if (!isElement(pre)) {
           continue;
@@ -64,7 +156,6 @@ const docusaurusPlugin: any = (opts: RehypePluginCodeblockOptions) => {
 
         const codeArray = codeChild.value.split('\n');
         const matchingLanguage = code.properties?.className?.find((c: string) =>
-          // TODO(imballinst): specify a better language code, if this is unfit.
           c.startsWith('language-protosaurus')
         );
 
@@ -141,12 +232,17 @@ const docusaurusPlugin: any = (opts: RehypePluginCodeblockOptions) => {
             let secondSlice = '';
             let hastTypeElements: (Element | Text)[] = [];
 
+            const commentAnnotationIdx = line.indexOf(COMMENT_ANNOTATION);
+
             if (map) {
               // Map type.
               const { key, value, mapClosingTagIndex } = map;
 
               firstSlice = line.slice(0, key.position);
-              secondSlice = line.slice(mapClosingTagIndex + 1);
+              secondSlice = line.slice(
+                mapClosingTagIndex + 1,
+                commentAnnotationIdx === -1 ? undefined : commentAnnotationIdx
+              );
 
               hastTypeElements.push(
                 getHastElementType(key),
@@ -177,10 +273,73 @@ const docusaurusPlugin: any = (opts: RehypePluginCodeblockOptions) => {
               }
 
               firstSlice = line.slice(0, firstSlicePosition);
-              secondSlice = line.slice(position + name.length);
+              secondSlice = line.slice(
+                position + name.length,
+                commentAnnotationIdx === -1 ? undefined : commentAnnotationIdx
+              );
 
               hastTypeElements.push(getHastElementType(field));
             }
+
+            const divContent: (Element | Comment | Text)[] = [
+              {
+                type: 'element',
+                // We need to wrap this with "span" because if it's whitespace,
+                // then it will not be "recognized" as whitespace when the "display" style
+                // is not "block".
+                tagName: 'span',
+                children: [
+                  {
+                    type: 'text',
+                    value: firstSlice
+                  }
+                ]
+              },
+              ...hastTypeElements,
+              {
+                type: 'text',
+                value: secondSlice
+              }
+            ];
+
+            if (commentAnnotationIdx > -1) {
+              const startIdx = commentAnnotationIdx + COMMENT_ANNOTATION.length;
+              // TODO(imballinst): this is 2-3x duplicated in this file.
+              // Refactor this later.
+              const annotationTitle = line.slice(
+                startIdx,
+                line.indexOf(']', startIdx)
+              );
+
+              // Create the container.
+              const divWrapper: Element = {
+                type: 'element',
+                tagName: 'div',
+                properties: {
+                  className: 'protosaurus-annotation-wrapper',
+                  'data-title': annotationTitle
+                },
+                children: []
+              };
+
+              // Push the footnote annotation for later use.
+              // Currently, this is only limited for code blocks only.
+              codeblockAnnotations.push({
+                footnoteIndex: -1,
+                title: annotationTitle,
+                divWrapper
+              });
+              // Push the wrapper as well to the "line".
+              divContent.push(divWrapper);
+            }
+
+            // End the line.
+            // We do this always last because otherwise some elements, e.g. popper toggle button
+            // will be pushed to the next line instead.
+            divContent.push({
+              type: 'text',
+              value: '\n'
+            });
 
             children.push({
               type: 'element',
@@ -190,17 +349,7 @@ const docusaurusPlugin: any = (opts: RehypePluginCodeblockOptions) => {
                   [HIGHLIGHT_CLASSNAME]: highlightState !== undefined
                 })
               },
-              children: [
-                {
-                  type: 'text',
-                  value: firstSlice
-                },
-                ...hastTypeElements,
-                {
-                  type: 'text',
-                  value: `${secondSlice}\n`
-                }
-              ]
+              children: divContent
             });
           } else {
             // Otherwise, push the line normally.
@@ -215,20 +364,68 @@ const docusaurusPlugin: any = (opts: RehypePluginCodeblockOptions) => {
             //     render it normally.
             const hastElements = [];
 
+            const annotationIdx = line.indexOf(ANNOTATION);
+
             if (matches.length) {
               // Line containing one or more links.
               let previousIndex = 0;
 
               for (const match of matches) {
                 const { position, originalText } = match;
-                const nextPreviousIndex = match.position + originalText.length;
+                const nextPreviousIndex = position + originalText.length;
 
-                // Push the text before the match. This will always be a non-text.
-                // This is because the line will always start with whitespace + double slashes.
-                hastElements.push({
-                  type: 'text' as const,
-                  value: line.slice(previousIndex, position)
-                });
+                // Push the text before the link.
+                if (annotationIdx > -1 && annotationIdx <= position) {
+                  const titleIndexBoundaryStart =
+                    annotationIdx + ANNOTATION.length;
+                  const titleIndexBoundaryEnd = line.indexOf(
+                    ']',
+                    previousIndex
+                  );
+                  const annotationTitle = line.slice(
+                    titleIndexBoundaryStart,
+                    titleIndexBoundaryEnd
+                  );
+
+                  // Create the container.
+                  const divWrapper: Element = {
+                    type: 'element',
+                    tagName: 'div',
+                    properties: {
+                      className: 'protosaurus-annotation-wrapper',
+                      'data-title': annotationTitle
+                    },
+                    children: []
+                  };
+
+                  // If there is an annotation in between, then we need to
+                  // split the pushed elements into two.
+                  hastElements.push(
+                    {
+                      type: 'text' as const,
+                      value: line.slice(previousIndex, annotationIdx)
+                    },
+                    divWrapper,
+                    {
+                      type: 'text' as const,
+                      value: line.slice(titleIndexBoundaryEnd + 1, position)
+                    }
+                  );
+                  // Push the footnote annotation for later use.
+                  // Currently, this is only limited for code blocks only.
+                  codeblockAnnotations.push({
+                    footnoteIndex: -1,
+                    title: annotationTitle,
+                    divWrapper
+                  });
+                } else {
+                  // Otherwise, just push it normally.
+                  hastElements.push({
+                    type: 'text' as const,
+                    value: line.slice(previousIndex, position)
+                  });
+                }
+
                 // Push the link.
                 hastElements.push(getHastElementType(match));
 
@@ -260,10 +457,56 @@ const docusaurusPlugin: any = (opts: RehypePluginCodeblockOptions) => {
                 }
               }
 
-              hastElements.push({
-                type: 'text' as const,
-                value: val
-              });
+              if (annotationIdx > -1) {
+                // Push text + annotations.
+                const titleIndexBoundaryStart =
+                  annotationIdx + ANNOTATION.length;
+                const titleIndexBoundaryEnd = line.indexOf(']', annotationIdx);
+                const annotationTitle = line.slice(
+                  titleIndexBoundaryStart,
+                  titleIndexBoundaryEnd
+                );
+
+                // Create the container.
+                const divWrapper: Element = {
+                  type: 'element',
+                  tagName: 'div',
+                  properties: {
+                    // Add a horizontal margin so it's not too condensed with
+                    // the characters to the side of it.
+                    className: 'protosaurus-annotation-wrapper mx-4',
+                    'data-title': annotationTitle
+                  },
+                  children: []
+                };
+
+                // If there is an annotation in between, then we need to
+                // split the pushed elements into two.
+                hastElements.push(
+                  {
+                    type: 'text' as const,
+                    value: line.slice(0, annotationIdx).trimEnd()
+                  },
+                  divWrapper,
+                  {
+                    type: 'text' as const,
+                    value: line.slice(titleIndexBoundaryEnd + 1).trimStart()
+                  }
+                );
+                // Push the footnote annotation for later use.
+                // Currently, this is only limited for code blocks only.
+                codeblockAnnotations.push({
+                  footnoteIndex: -1,
+                  title: annotationTitle,
+                  divWrapper
+                });
+              } else {
+                // Push pure text.
+                hastElements.push({
+                  type: 'text' as const,
+                  value: val
+                });
+              }
             }
 
             children.push({
@@ -291,6 +534,15 @@ const docusaurusPlugin: any = (opts: RehypePluginCodeblockOptions) => {
         pre.tagName = 'precustom';
       }
     }
+
+    // Delete the "dangling paragraphs" at the end.
+    // Currently, this is only limited for code blocks only.
+    const deletedIndexes = codeblockAnnotations.map(
+      (annotation) => annotation.footnoteIndex
+    );
+    tree.children = tree.children.filter(
+      (_, idx) => !deletedIndexes.includes(idx)
+    );
   };
 };
 
@@ -324,4 +576,72 @@ function classnames(...args: (string | Record<string, boolean>)[]) {
   }
 
   return classNames.length ? classNames.join(' ') : undefined;
+}
+
+function processFootnote({
+  child,
+  text,
+  codeblockAnnotations,
+  index
+}: {
+  child: Element;
+  text: Text;
+  codeblockAnnotations: Annotation[];
+  index: number;
+}) {
+  // Get the footnote title (identified by number).
+  const titleIndexBoundaryStart = text.value.indexOf('[^') + 2;
+  const titleIndexBoundaryEnd = text.value.indexOf(']');
+
+  if (titleIndexBoundaryEnd > -1) {
+    const title = text.value.slice(
+      titleIndexBoundaryStart,
+      titleIndexBoundaryEnd
+    );
+    // Find the matching footnote that we have identified above.
+    // Currently, this is only limited for code blocks only.
+    const matching = codeblockAnnotations.find(
+      (annotation) => annotation.title === title
+    );
+
+    if (matching) {
+      // Store the footnote index. We will remove it from the HAST.
+      matching.footnoteIndex = index;
+      // Add these 2 children to the container.
+      // One is for the popper, so that the position absolute is relative
+      // to the container, and the other one is the button toggler.
+      matching.divWrapper.children = [
+        {
+          type: 'element',
+          tagName: 'div',
+          properties: {
+            className: 'protosaurus-popper',
+            'data-title': title
+          },
+          // Cut the first child, which contains the "title".
+          children: [
+            {
+              type: 'element',
+              tagName: 'div',
+              properties: {
+                className: 'protosaurus-arrow',
+                'data-popper-arrow': ''
+              },
+              children: []
+            },
+            ...child.children.slice(1)
+          ]
+        },
+        {
+          type: 'element',
+          tagName: 'button',
+          properties: {
+            className: 'protosaurus-popper-button',
+            'data-title': title
+          },
+          children: [getInfoSvgIcon()]
+        }
+      ];
+    }
+  }
 }

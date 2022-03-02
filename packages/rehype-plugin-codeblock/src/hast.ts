@@ -29,7 +29,7 @@ export function getHastElementType(
       properties: {
         'data-image-src': href,
         'data-image-alt': name,
-        className: 'button-text __button-protosaurus-image-toggle__'
+        className: 'button-text protosaurus-image-toggle-button'
       },
       children: [
         {
@@ -67,6 +67,41 @@ export function getHastElementType(
       {
         type: 'text',
         value: name
+      }
+    ]
+  };
+}
+
+export function getInfoSvgIcon(): Element {
+  // Source element: https://react-icons.github.io/react-icons/icons?name=fa.
+  // <svg
+  //   stroke="currentColor"
+  //   fill="currentColor"
+  //   stroke-width="0"
+  //   viewBox="0 0 192 512"
+  //   height="1em"
+  //   width="1em"
+  //   xmlns="http://www.w3.org/2000/svg"
+  // >
+  //   <path d="M20 424.229h20V279.771H20c-11.046 0-20-8.954-20-20V212c0-11.046 8.954-20 20-20h112c11.046 0 20 8.954 20 20v212.229h20c11.046 0 20 8.954 20 20V492c0 11.046-8.954 20-20 20H20c-11.046 0-20-8.954-20-20v-47.771c0-11.046 8.954-20 20-20zM96 0C56.235 0 24 32.235 24 72s32.235 72 72 72 72-32.235 72-72S135.764 0 96 0z"></path>
+  // </svg>
+  return {
+    type: 'element',
+    tagName: 'svg',
+    properties: {
+      stroke: 'currentColor',
+      fill: 'currentColor',
+      viewBox: '0 0 192 512',
+      xmlns: 'http://www.w3.org/2000/svg'
+    },
+    children: [
+      {
+        type: 'element',
+        tagName: 'path',
+        properties: {
+          d: 'M20 424.229h20V279.771H20c-11.046 0-20-8.954-20-20V212c0-11.046 8.954-20 20-20h112c11.046 0 20 8.954 20 20v212.229h20c11.046 0 20 8.954 20 20V492c0 11.046-8.954 20-20 20H20c-11.046 0-20-8.954-20-20v-47.771c0-11.046 8.954-20 20-20zM96 0C56.235 0 24 32.235 24 72s32.235 72 72 72 72-32.235 72-72S135.764 0 96 0z'
+        },
+        children: []
       }
     ]
   };

@@ -9,6 +9,10 @@
     "react": ">=16.8"
   },
   "dependencies": {
+    "@popperjs/core": "2.11.2",
     "react-modal": "3.14.4"
+  },
+  "devDependencies": {
+    "@types/react-modal": "3.13.1"
   }
 }

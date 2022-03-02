@@ -45,8 +45,11 @@ import RpcDefinitionHeader from "@theme/RpcDefinitionHeader";
 import RpcDefinitionDescription from "@theme/RpcDefinitionDescription";
 import RpcMethodText from "@theme/RpcMethodText";
 import ProtosaurusImage from "@theme/ProtosaurusImage";
+import ProtosaurusAnnotation from "@theme/ProtosaurusAnnotation";
 
 <ProtosaurusImage />
+
+<ProtosaurusAnnotation />
 
 ${pkg.descriptionMdx}
 

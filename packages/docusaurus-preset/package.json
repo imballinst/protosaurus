@@ -9,6 +9,7 @@
   "dependencies": {
     "@docusaurus/preset-classic": "2.0.0-beta.15",
     "@protosaurus/docusaurus-theme": "0.0.1",
-    "@protosaurus/rehype-plugin-codeblock": "0.0.1"
+    "@protosaurus/rehype-plugin-codeblock": "0.0.1",
+    "@protosaurus/remark-plugin-annotations": "0.0.1"
   }
 }

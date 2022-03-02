@@ -20,6 +20,7 @@ import path from 'path';
 const SRC_THEME_PATH = path.join(__dirname, '../src/theme');
 const LIB_PATH = path.join(__dirname);
 const LIB_THEME_PATH = path.join(__dirname, './theme');
+const ASSETS_PATH = path.join(__dirname, '../assets');
 
 export default function protosaurusTheme(): Plugin<void> {
   return {
@@ -31,10 +32,10 @@ export default function protosaurusTheme(): Plugin<void> {
       return SRC_THEME_PATH;
     },
     getClientModules() {
-      return [`${LIB_PATH}/custom.css`];
+      return [`${ASSETS_PATH}/custom.css`];
     },
     getPathsToWatch() {
-      return [`${LIB_PATH}/custom.css`];
+      return [`${ASSETS_PATH}/custom.css`, `${LIB_PATH}/theme`];
     }
   };
 }
