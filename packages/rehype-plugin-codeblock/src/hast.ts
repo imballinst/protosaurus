@@ -15,6 +15,7 @@
  */
 
 import { Element } from 'hast-format';
+import { MetastringInfo, parseMetastring } from './metastring';
 import { LinkMatch, PartialSpecific, TextMatchField } from './types';
 
 export function getHastElementType(
@@ -70,6 +71,60 @@ export function getHastElementType(
       }
     ]
   };
+}
+
+export function wrapWithMetastringElements(
+  metastringInfo: MetastringInfo,
+  element: Element
+): Element[] {
+  const children: Element[] = [];
+
+  if (metastringInfo.isCollapsible) {
+    children.push({
+      type: 'element',
+      tagName: 'details',
+      children: [
+        {
+          type: 'element',
+          tagName: 'summary',
+          children: [
+            {
+              type: 'element',
+              tagName: 'span',
+              children: [
+                {
+                  type: 'text',
+                  value: metastringInfo.title
+                }
+              ]
+            }
+          ]
+        },
+        element
+      ]
+    });
+  } else if (metastringInfo.title) {
+    children.push(
+      {
+        type: 'element',
+        tagName: 'div',
+        properties: {
+          className: 'precustom-code-title'
+        },
+        children: [
+          {
+            type: 'text',
+            value: metastringInfo.title
+          }
+        ]
+      },
+      element
+    );
+  } else {
+    children.push(element);
+  }
+
+  return children;
 }
 
 export function getInfoSvgIcon(): Element {

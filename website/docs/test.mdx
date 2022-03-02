@@ -18,38 +18,37 @@ import ProtosaurusAnnotation from "@theme/ProtosaurusAnnotation";
 
 <ProtosaurusAnnotation />
 
-## Messages
+## Hello world
 
-<Definition>
-
-<DefinitionHeader name="message">
-
-### Booking
-
-</DefinitionHeader>
-
-Represents the booking of a vehicle.
-
-Vehicles are some cool shit. But drive carefully.
-
-```protosaurus--booking.v1.Booking
+```protobuf title="Hello world" collapsible
 message Booking {
   // ID of booked vehicle.
   int32 vehicle_id = 1;
-
-  // Customer that booked the vehicle. [^1]
-  // highlight-next-line
-  int32 customer_id = 2; // [^2]
+  // Customer that booked the vehicle.
+  int32 customer_id = 2;
+  // Status of the booking.
+  BookingStatus status = 3;
 }
 ```
 
-</Definition>
+```protosaurus title="Hello world" collapsible
+message Booking {
+  // ID of booked vehicle.
+  int32 vehicle_id = 1;
+  // Customer that booked the vehicle.
+  int32 customer_id = 2;
+  // Status of the booking.
+  BookingStatus status = 3;
+}
+```
 
-Pretty sure we can still annotation outside of the codeblock[^3], right?
-
-Let's see annotations between [^4] texts.
-
-[^1]: this is a sample annotation. I can also put `code` hree!
-[^2]: this is another sample annotation.
-[^3]: it works!
-[^4]: hello world
+```protosaurus title="Hello world"
+message Booking {
+  // ID of booked vehicle.
+  int32 vehicle_id = 1;
+  // Customer that booked the vehicle.
+  int32 customer_id = 2;
+  // Status of the booking.
+  BookingStatus status = 3;
+}
+```
