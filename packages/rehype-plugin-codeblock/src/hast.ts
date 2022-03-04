@@ -73,6 +73,7 @@ export function getHastElementType(
   };
 }
 
+// This function "transforms" an element if there is a metastring modifier.
 export function wrapWithMetastringElements(
   metastringInfo: MetastringInfo,
   element: Element
@@ -80,6 +81,11 @@ export function wrapWithMetastringElements(
   const children: Element[] = [];
 
   if (metastringInfo.isCollapsible) {
+    // The resulting JSX would be something like:
+    // <details>
+    //   <summary><span>{metastringInfo.title}</span></summary>
+    //   {element}
+    // </details>
     children.push({
       type: 'element',
       tagName: 'details',
@@ -104,6 +110,11 @@ export function wrapWithMetastringElements(
       ]
     });
   } else if (metastringInfo.title) {
+    // The resulting JSX would be something like:
+    // <>
+    //   <div>{metastringInfo.title}</div>
+    //   {element}
+    // </>
     children.push(
       {
         type: 'element',
@@ -121,6 +132,8 @@ export function wrapWithMetastringElements(
       element
     );
   } else {
+    // If there is no metastring modifier, then
+    // we keep it as it is.
     children.push(element);
   }
 
