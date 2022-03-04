@@ -15,6 +15,7 @@
  */
 
 import { Element } from 'hast-format';
+import { MetastringInfo, parseMetastring } from './metastring';
 import { LinkMatch, PartialSpecific, TextMatchField } from './types';
 
 export function getHastElementType(
@@ -70,6 +71,73 @@ export function getHastElementType(
       }
     ]
   };
+}
+
+// This function "transforms" an element if there is a metastring modifier.
+export function wrapWithMetastringElements(
+  metastringInfo: MetastringInfo,
+  element: Element
+): Element[] {
+  const children: Element[] = [];
+
+  if (metastringInfo.isCollapsible) {
+    // The resulting JSX would be something like:
+    // <details>
+    //   <summary><span>{metastringInfo.title}</span></summary>
+    //   {element}
+    // </details>
+    children.push({
+      type: 'element',
+      tagName: 'details',
+      children: [
+        {
+          type: 'element',
+          tagName: 'summary',
+          children: [
+            {
+              type: 'element',
+              tagName: 'span',
+              children: [
+                {
+                  type: 'text',
+                  value: metastringInfo.title
+                }
+              ]
+            }
+          ]
+        },
+        element
+      ]
+    });
+  } else if (metastringInfo.title) {
+    // The resulting JSX would be something like:
+    // <>
+    //   <div>{metastringInfo.title}</div>
+    //   {element}
+    // </>
+    children.push(
+      {
+        type: 'element',
+        tagName: 'div',
+        properties: {
+          className: 'precustom-code-title'
+        },
+        children: [
+          {
+            type: 'text',
+            value: metastringInfo.title
+          }
+        ]
+      },
+      element
+    );
+  } else {
+    // If there is no metastring modifier, then
+    // we keep it as it is.
+    children.push(element);
+  }
+
+  return children;
 }
 
 export function getInfoSvgIcon(): Element {

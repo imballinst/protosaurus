@@ -40,7 +40,7 @@
 
 html[data-theme='dark'] {
   --ifm-pre-color: rgb(248, 248, 242);
-  --ifm-pre-background: rgb(40, 42, 54);
+  --ifm-pre-background-color: rgb(40, 42, 54);
 
   --precustom-comment-color: rgb(98, 114, 164);
   --precustom-type-color: rgb(189, 147, 249);
@@ -70,11 +70,15 @@ precustom {
   font: var(--ifm-code-font-size) / var(--ifm-pre-line-height)
     var(--ifm-font-family-monospace);
   white-space: pre;
-  background: var(--ifm-pre-background);
+  background: var(--ifm-pre-background-color);
   display: block;
   padding: var(--ifm-pre-padding);
   border-radius: var(--ifm-code-border-radius);
   /* TODO(imballinst): add overflow-x: auto here. */
+}
+
+precustom:not(:last-child) {
+  margin-bottom: var(--ifm-pre-padding);
 }
 
 precustom .comment {
@@ -83,6 +87,26 @@ precustom .comment {
 
 precustom .type {
   color: var(--precustom-type-color);
+}
+
+.precustom-code-title {
+  border-bottom: 1px solid var(--ifm-color-emphasis-300);
+  border-top-left-radius: var(--ifm-global-radius);
+  border-top-right-radius: var(--ifm-global-radius);
+  font-size: var(--ifm-code-font-size);
+  font-weight: 500;
+  padding: 0.75rem var(--ifm-pre-padding);
+  background: var(--ifm-pre-background-color);
+}
+
+.precustom-container .alert {
+  /* Reset the CSS style for these so that the code block style is consistent. */
+  --ifm-link-color: inherit;
+  --ifm-link-hover-color: inherit;
+  --ifm-link-decoration: inherit;
+  --ifm-pre-background: inherit;
+  --ifm-code-background: inherit;
+  --ifm-alert-background-color: transparent;
 }
 
 /* Button text to enable the image gallery. */

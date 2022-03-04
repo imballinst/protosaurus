@@ -19,7 +19,12 @@ import { getLinksFromALine, isLineAComment } from './comments';
 import { REPEATED_TEXT } from './constants';
 import { getAllDictionaries } from './dictionary';
 import { getFieldInformation } from './fields';
-import { getHastElementType, getInfoSvgIcon } from './hast';
+import {
+  getHastElementType,
+  getInfoSvgIcon,
+  wrapWithMetastringElements
+} from './hast';
+import { parseMetastring } from './metastring';
 
 export interface RehypePluginCodeblockOptions {
   siteDir: string;
@@ -163,6 +168,11 @@ const docusaurusPlugin: any = (opts: RehypePluginCodeblockOptions) => {
           continue;
         }
 
+        const metastringInfo = parseMetastring(
+          code?.properties?.metastring || '',
+          codeChild.value
+        );
+
         // For example: the format is `language-protosaurus--booking.v1.Booking`.
         // This has the purpose to "detect" submessages.
         // With the "booking.v1.Booking" namespace information, we can lookup to the
@@ -222,6 +232,8 @@ const docusaurusPlugin: any = (opts: RehypePluginCodeblockOptions) => {
               }
             };
           }
+
+          let pushedChild: Element;
 
           if (type !== undefined) {
             // When found, we split the line into 3 parts.
@@ -341,7 +353,7 @@ const docusaurusPlugin: any = (opts: RehypePluginCodeblockOptions) => {
               value: '\n'
             });
 
-            children.push({
+            pushedChild = {
               type: 'element',
               tagName: 'div',
               properties: {
@@ -350,7 +362,7 @@ const docusaurusPlugin: any = (opts: RehypePluginCodeblockOptions) => {
                 })
               },
               children: divContent
-            });
+            };
           } else {
             // Otherwise, push the line normally.
             const isNotLast = i + 1 < length;
@@ -509,7 +521,7 @@ const docusaurusPlugin: any = (opts: RehypePluginCodeblockOptions) => {
               }
             }
 
-            children.push({
+            pushedChild = {
               type: 'element',
               tagName: 'div',
               properties: {
@@ -519,19 +531,28 @@ const docusaurusPlugin: any = (opts: RehypePluginCodeblockOptions) => {
                 })
               },
               children: hastElements
-            });
+            };
           }
 
           if (highlightState === 'highlight-next-line') {
             highlightState = undefined;
           }
+
+          children.push(pushedChild);
         }
 
         // Rewrite the `children` field.
-        pre.children = children;
+        pre.children = wrapWithMetastringElements(metastringInfo, {
+          type: 'element',
+          tagName: 'precustom',
+          children
+        });
         // Rewrite the tag name from `pre` to `precustom` so we could
         // make a difference between normal `pre` and our `pre`.
-        pre.tagName = 'precustom';
+        pre.properties = {
+          className: 'precustom-container'
+        };
+        pre.tagName = 'div';
       }
     }
 

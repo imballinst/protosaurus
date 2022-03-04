@@ -6,7 +6,8 @@
   "license": "MIT",
   "scripts": {
     "build": "rm -rf lib && tsc --project tsconfig.build.json",
-    "mdx:test": "ts-node test-remark.ts"
+    "mdx:test": "ts-node test-remark.ts",
+    "test": "mocha"
   },
   "devDependencies": {
     "@types/hast-format": "2.3.0"
