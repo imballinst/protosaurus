@@ -107,6 +107,7 @@ precustom .type {
   --ifm-pre-background: inherit;
   --ifm-code-background: inherit;
   --ifm-alert-background-color: transparent;
+  /* Removes the margin in if a code block exists inside a collapsible. */
   --ifm-leading: 0;
 }
 
