@@ -5,14 +5,16 @@ describe('parseMetastring', () => {
   test('none', () => {
     expect(parseMetastring('', '')).to.eql({
       title: '',
-      isCollapsible: false
+      isCollapsible: false,
+      highlightedLines: []
     });
   });
 
   test('title only', () => {
     expect(parseMetastring('title="Hello world"', '')).to.eql({
       title: 'Hello world',
-      isCollapsible: false
+      isCollapsible: false,
+      highlightedLines: []
     });
   });
 
@@ -28,16 +30,114 @@ message Booking {
     );
   });
 
+  test('line highlights only', () => {
+    expect(parseMetastring('{1}', '')).to.eql({
+      title: '',
+      isCollapsible: false,
+      highlightedLines: [1]
+    });
+    expect(parseMetastring('{1-3}', '')).to.eql({
+      title: '',
+      isCollapsible: false,
+      highlightedLines: [1, 2, 3]
+    });
+    expect(parseMetastring('{1-3, 4}', '')).to.eql({
+      title: '',
+      isCollapsible: false,
+      highlightedLines: [1, 2, 3, 4]
+    });
+  });
+
   test('title and collapsible', () => {
     expect(parseMetastring('title="Hello world" collapsible', '')).to.eql({
       title: 'Hello world',
-      isCollapsible: true
+      isCollapsible: true,
+      highlightedLines: []
     });
 
     // Swap the positions.
     expect(parseMetastring('collapsible title="Hello world"', '')).to.eql({
       title: 'Hello world',
-      isCollapsible: true
+      isCollapsible: true,
+      highlightedLines: []
+    });
+  });
+
+  test('title and line highlights', () => {
+    expect(parseMetastring('title="Hello world" {1}', '')).to.eql({
+      title: 'Hello world',
+      isCollapsible: false,
+      highlightedLines: [1]
+    });
+    expect(parseMetastring('title="Hello world" {1-3}', '')).to.eql({
+      title: 'Hello world',
+      isCollapsible: false,
+      highlightedLines: [1, 2, 3]
+    });
+    expect(parseMetastring('title="Hello world" {1-3,4}', '')).to.eql({
+      title: 'Hello world',
+      isCollapsible: false,
+      highlightedLines: [1, 2, 3, 4]
+    });
+
+    // Swap the positions.
+    expect(parseMetastring('{1} title="Hello world"', '')).to.eql({
+      title: 'Hello world',
+      isCollapsible: false,
+      highlightedLines: [1]
+    });
+    expect(parseMetastring('{1-3} title="Hello world"', '')).to.eql({
+      title: 'Hello world',
+      isCollapsible: false,
+      highlightedLines: [1, 2, 3]
+    });
+    expect(parseMetastring('{1-3,4} title="Hello world"', '')).to.eql({
+      title: 'Hello world',
+      isCollapsible: false,
+      highlightedLines: [1, 2, 3, 4]
+    });
+  });
+
+  test('title, line highlights, and collapsible', () => {
+    expect(parseMetastring('title="Hello world" collapsible {1}', '')).to.eql({
+      title: 'Hello world',
+      isCollapsible: true,
+      highlightedLines: [1]
+    });
+    expect(parseMetastring('title="Hello world" collapsible {1-3}', '')).to.eql(
+      {
+        title: 'Hello world',
+        isCollapsible: true,
+        highlightedLines: [1, 2, 3]
+      }
+    );
+    expect(
+      parseMetastring('title="Hello world" collapsible {1-3,4}', '')
+    ).to.eql({
+      title: 'Hello world',
+      isCollapsible: true,
+      highlightedLines: [1, 2, 3, 4]
+    });
+
+    // Swap the positions.
+    expect(parseMetastring('{1} title="Hello world" collapsible', '')).to.eql({
+      title: 'Hello world',
+      isCollapsible: true,
+      highlightedLines: [1]
+    });
+    expect(parseMetastring('{1-3} title="Hello world" collapsible', '')).to.eql(
+      {
+        title: 'Hello world',
+        isCollapsible: true,
+        highlightedLines: [1, 2, 3]
+      }
+    );
+    expect(
+      parseMetastring('{1-3,4} title="Hello world" collapsible', '')
+    ).to.eql({
+      title: 'Hello world',
+      isCollapsible: true,
+      highlightedLines: [1, 2, 3, 4]
     });
   });
 });
