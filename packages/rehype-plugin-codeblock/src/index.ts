@@ -176,10 +176,9 @@ const docusaurusPlugin: any = (opts: RehypePluginCodeblockOptions) => {
             className: 'protosaurus-code-container'
           };
           pre.tagName = 'div';
-          // Strip the title from the code element, if metastringInfo.collapsible is true.
-          if (metastringInfo.isCollapsible) {
-            code.properties = stripTitleFromElementProperties(code.properties);
-          }
+          // Strip the title from the metastring, so that Prism.js will not
+          // duplicate the code title.
+          code.properties = stripTitleFromElementProperties(code.properties);
           continue;
         }
 
