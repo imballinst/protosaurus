@@ -99,7 +99,7 @@ precustom .type {
   background: var(--ifm-pre-background-color);
 }
 
-.precustom-container .alert {
+.protosaurus-code-container .alert {
   /* Reset the CSS style for these so that the code block style is consistent. */
   --ifm-link-color: inherit;
   --ifm-link-hover-color: inherit;
@@ -107,6 +107,7 @@ precustom .type {
   --ifm-pre-background: inherit;
   --ifm-code-background: inherit;
   --ifm-alert-background-color: transparent;
+  --ifm-leading: 0;
 }
 
 /* Button text to enable the image gallery. */
