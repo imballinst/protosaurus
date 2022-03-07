@@ -489,7 +489,10 @@ const docusaurusPlugin: any = (opts: RehypePluginCodeblockOptions) => {
           type: 'element',
           // Rewrite the tag name from `pre` to `protosaurus-code` so we could
           // make a difference between normal `pre` and our `pre`.
-          tagName: 'protosaurus-code',
+          tagName: 'div',
+          properties: {
+            className: 'protosaurus-code'
+          },
           children
         });
         // Change the `pre` tag to a `div`, in case that we have code titles
