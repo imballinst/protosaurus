@@ -15,10 +15,10 @@
  */
 
 import { Element } from 'hast-format';
-import { MetastringInfo, parseMetastring } from './parser';
+import { MetastringInfo } from './parser';
 import { LinkMatch, PartialSpecific, TextMatchField } from '../types';
 
-export function getHastElementType(
+export function createElementFromMatch(
   match: PartialSpecific<TextMatchField, 'position'> | LinkMatch
 ): Element {
   const { name, href } = match;

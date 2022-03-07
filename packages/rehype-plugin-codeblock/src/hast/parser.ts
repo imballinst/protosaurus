@@ -93,7 +93,6 @@ export function parseMetastring(
         highlightedLines.push(Number(segment) - 1);
       }
     }
-    console.log(highlightedLines);
   }
 
   return {
