@@ -64,9 +64,7 @@ html[data-theme='dark'] .docusaurus-highlight-code-line {
 }
 
 /* Protosaurus code block. */
-/* TODO(imballinst): this causes warning in dev mode regarding `precustom` element not known. */
-/* Perhaps we should change it to div.precustom or something... if it's possible. */
-precustom {
+.protosaurus-code {
   font: var(--ifm-code-font-size) / var(--ifm-pre-line-height)
     var(--ifm-font-family-monospace);
   white-space: pre;
@@ -74,22 +72,22 @@ precustom {
   display: block;
   padding: var(--ifm-pre-padding);
   border-radius: var(--ifm-code-border-radius);
-  /* TODO(imballinst): add overflow-x: auto here. */
+  overflow-x: auto;
 }
 
-precustom:not(:last-child) {
+.protosaurus-code:not(:last-child) {
   margin-bottom: var(--ifm-pre-padding);
 }
 
-precustom .comment {
+.protosaurus-code .comment {
   color: var(--precustom-comment-color);
 }
 
-precustom .type {
+.protosaurus-code .type {
   color: var(--precustom-type-color);
 }
 
-.precustom-code-title {
+.protosaurus-code-title {
   border-bottom: 1px solid var(--ifm-color-emphasis-300);
   border-top-left-radius: var(--ifm-global-radius);
   border-top-right-radius: var(--ifm-global-radius);

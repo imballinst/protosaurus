@@ -120,7 +120,7 @@ export function wrapWithMetastringElements(
         type: 'element',
         tagName: 'div',
         properties: {
-          className: 'precustom-code-title'
+          className: 'protosaurus-code-title'
         },
         children: [
           {

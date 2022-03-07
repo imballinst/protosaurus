@@ -487,11 +487,13 @@ const docusaurusPlugin: any = (opts: RehypePluginCodeblockOptions) => {
         // Rewrite the `children` field.
         pre.children = wrapWithMetastringElements(metastringInfo, {
           type: 'element',
-          tagName: 'precustom',
+          // Rewrite the tag name from `pre` to `protosaurus-code` so we could
+          // make a difference between normal `pre` and our `pre`.
+          tagName: 'protosaurus-code',
           children
         });
-        // Rewrite the tag name from `pre` to `precustom` so we could
-        // make a difference between normal `pre` and our `pre`.
+        // Change the `pre` tag to a `div`, in case that we have code titles
+        // or we wrap it in a collapsible.
         pre.properties = {
           className: 'protosaurus-code-container'
         };
