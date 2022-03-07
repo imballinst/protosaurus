@@ -24,7 +24,7 @@ import {
   getInfoSvgIcon,
   wrapWithMetastringElements
 } from './hast';
-import { parseMetastring } from './metastring';
+import { parseMetastring, stripTitleFromElementProperties } from './metastring';
 
 export interface RehypePluginCodeblockOptions {
   siteDir: string;
@@ -164,14 +164,23 @@ const docusaurusPlugin: any = (opts: RehypePluginCodeblockOptions) => {
           c.startsWith('language-protosaurus')
         );
 
-        if (!matchingLanguage) {
-          continue;
-        }
-
         const metastringInfo = parseMetastring(
           code?.properties?.metastring || '',
           codeChild.value
         );
+
+        if (!matchingLanguage) {
+          // Languages other than protosaurus.
+          pre.children = wrapWithMetastringElements(metastringInfo, { ...pre });
+          pre.properties = {
+            className: 'protosaurus-code-container'
+          };
+          pre.tagName = 'div';
+          // Strip the title from the metastring, so that Prism.js will not
+          // duplicate the code title.
+          code.properties = stripTitleFromElementProperties(code.properties);
+          continue;
+        }
 
         // For example: the format is `language-protosaurus--booking.v1.Booking`.
         // This has the purpose to "detect" submessages.
@@ -181,6 +190,7 @@ const docusaurusPlugin: any = (opts: RehypePluginCodeblockOptions) => {
         const children: (Element | Text)[] = [];
         let highlightState:
           | 'highlight-next-line'
+          | 'highlight-current-line'
           | 'highlight-until'
           | undefined = undefined;
 
@@ -199,6 +209,8 @@ const docusaurusPlugin: any = (opts: RehypePluginCodeblockOptions) => {
           } else if (trimmed === '// highlight-end') {
             highlightState = undefined;
             continue;
+          } else if (metastringInfo.highlightedLines.includes(i)) {
+            highlightState = 'highlight-current-line';
           }
 
           let type = getFieldInformation({
@@ -534,7 +546,10 @@ const docusaurusPlugin: any = (opts: RehypePluginCodeblockOptions) => {
             };
           }
 
-          if (highlightState === 'highlight-next-line') {
+          if (
+            highlightState === 'highlight-next-line' ||
+            highlightState === 'highlight-current-line'
+          ) {
             highlightState = undefined;
           }
 
@@ -550,7 +565,7 @@ const docusaurusPlugin: any = (opts: RehypePluginCodeblockOptions) => {
         // Rewrite the tag name from `pre` to `precustom` so we could
         // make a difference between normal `pre` and our `pre`.
         pre.properties = {
-          className: 'precustom-container'
+          className: 'protosaurus-code-container'
         };
         pre.tagName = 'div';
       }
