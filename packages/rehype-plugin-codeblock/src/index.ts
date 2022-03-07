@@ -23,8 +23,11 @@ import {
   getHastElementType,
   getInfoSvgIcon,
   wrapWithMetastringElements
-} from './hast';
-import { parseMetastring, stripTitleFromElementProperties } from './metastring';
+} from './hast/hast';
+import {
+  parseMetastring,
+  stripTitleFromElementProperties
+} from './hast/parser';
 
 export interface RehypePluginCodeblockOptions {
   siteDir: string;

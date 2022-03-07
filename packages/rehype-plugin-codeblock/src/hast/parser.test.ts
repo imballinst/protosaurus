@@ -1,5 +1,5 @@
 import { expect } from 'chai';
-import { parseMetastring, stripTitleFromElementProperties } from './metastring';
+import { parseMetastring, stripTitleFromElementProperties } from './parser';
 
 describe('parseMetastring', () => {
   test('none', () => {

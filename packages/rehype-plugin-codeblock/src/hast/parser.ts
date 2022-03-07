@@ -23,20 +23,16 @@ export function parseMetastring(
 ): MetastringInfo {
   let metastring = metastringParam;
   // Parse title, if any.
-  const titleStartIdx = metastring.indexOf(TITLE_TOKEN);
-  const titleEndIdx = metastring.indexOf(
-    '"',
-    titleStartIdx + TITLE_TOKEN.length
-  );
+  const titleIndices = getTitleIndicesFromMetastring(metastring);
   let title = '';
 
-  if (titleStartIdx > -1 && titleEndIdx > -1) {
-    const titleIdxPlusToken = titleStartIdx + TITLE_TOKEN.length;
-
-    title = metastring.slice(titleIdxPlusToken, titleEndIdx);
-    metastring = metastring
-      .slice(0, titleIdxPlusToken)
-      .concat(metastring.slice(titleEndIdx + 1));
+  if (titleIndices.start > -1) {
+    title = metastring.slice(titleIndices.startWithToken, titleIndices.end);
+    metastring = removeStringMarkedByIndices(
+      metastring,
+      titleIndices.start,
+      titleIndices.end
+    );
   }
 
   // Parse collapsible.
@@ -45,9 +41,11 @@ export function parseMetastring(
   const collapsibleIdx = metastring.indexOf(COLLAPSIBLE_TOKEN);
   if (collapsibleIdx > -1) {
     isCollapsible = true;
-    metastring = metastring
-      .slice(0, collapsibleIdx)
-      .concat(metastring.slice(collapsibleIdx + COLLAPSIBLE_TOKEN.length));
+    metastring = removeStringMarkedByIndices(
+      metastring,
+      collapsibleIdx,
+      collapsibleIdx + COLLAPSIBLE_TOKEN.length
+    );
   }
 
   // If it is collapsible but does not have title, then throw an error.
@@ -95,6 +93,7 @@ export function parseMetastring(
         highlightedLines.push(Number(segment) - 1);
       }
     }
+    console.log(highlightedLines);
   }
 
   return {
@@ -113,8 +112,8 @@ export function stripTitleFromElementProperties(
   }
 
   const keys = Object.keys(properties);
-  const titleIdx = keys.indexOf('title');
-  if (titleIdx === -1) {
+  const titleKeyStartIdx = keys.indexOf('title');
+  if (titleKeyStartIdx === -1) {
     // Exit early when no title key is found.
     return properties;
   }
@@ -124,32 +123,36 @@ export function stripTitleFromElementProperties(
   // It is contained in `metastring`, `title`, and one key after `title`.
   // For more information, please see the properties example in the test file.
   const newProperties = { ...properties };
-  const titleEndIdx = titleIdx + 1;
+  const titleKeyEndIdx = titleKeyStartIdx + 1;
   // Delete the title-related keys.
-  delete newProperties[keys[titleIdx]];
-  delete newProperties[keys[titleEndIdx]];
+  delete newProperties[keys[titleKeyStartIdx]];
+  delete newProperties[keys[titleKeyEndIdx]];
 
   // Also trim it from the metastring.
   const metastring = newProperties.metastring || '';
-  const metastringTitleIdx = metastring.indexOf(TITLE_TOKEN);
-  // Only try to trim it when we find the TITLE_TOKEN substring, which most likely
-  // exists, if things are working normally in the remark/rehype transformer.
-  if (metastringTitleIdx > -1) {
-    const metaStringTitleEndIdx = metastring.indexOf(
-      '"',
-      metastringTitleIdx + TITLE_TOKEN.length
-    );
+  const titleIndices = getTitleIndicesFromMetastring(metastring);
 
-    // Do a preventive slicing. This covers 3 cases:
-    //
-    // 1. title at the start of the string
-    // 2. title in the middle of the string
-    // 3. title at the end of the string
-    newProperties.metastring = metastring
-      .slice(0, metastringTitleIdx)
-      .concat(metastring.slice(metaStringTitleEndIdx + 1))
-      .trim();
+  if (titleIndices.start > -1) {
+    newProperties.metastring = removeStringMarkedByIndices(
+      metastring,
+      titleIndices.start,
+      titleIndices.end
+    );
   }
 
   return newProperties;
+}
+
+// Helper functions.
+function getTitleIndicesFromMetastring(metastring: string) {
+  // Parse title, if any.
+  const start = metastring.indexOf(TITLE_TOKEN);
+  const startWithToken = start + TITLE_TOKEN.length;
+  const end = metastring.indexOf('"', startWithToken);
+
+  return { start, startWithToken, end };
+}
+
+function removeStringMarkedByIndices(str: string, start: number, end: number) {
+  return str.slice(0, start).concat(str.slice(end));
 }

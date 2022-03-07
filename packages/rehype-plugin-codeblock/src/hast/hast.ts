@@ -15,8 +15,8 @@
  */
 
 import { Element } from 'hast-format';
-import { MetastringInfo, parseMetastring } from './metastring';
-import { LinkMatch, PartialSpecific, TextMatchField } from './types';
+import { MetastringInfo, parseMetastring } from './parser';
+import { LinkMatch, PartialSpecific, TextMatchField } from '../types';
 
 export function getHastElementType(
   match: PartialSpecific<TextMatchField, 'position'> | LinkMatch
