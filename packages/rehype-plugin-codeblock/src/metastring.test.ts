@@ -34,17 +34,17 @@ message Booking {
     expect(parseMetastring('{1}', '')).to.eql({
       title: '',
       isCollapsible: false,
-      highlightedLines: [1]
+      highlightedLines: [0]
     });
     expect(parseMetastring('{1-3}', '')).to.eql({
       title: '',
       isCollapsible: false,
-      highlightedLines: [1, 2, 3]
+      highlightedLines: [0, 1, 2]
     });
     expect(parseMetastring('{1-3, 4}', '')).to.eql({
       title: '',
       isCollapsible: false,
-      highlightedLines: [1, 2, 3, 4]
+      highlightedLines: [0, 1, 2, 3]
     });
   });
 
@@ -67,34 +67,34 @@ message Booking {
     expect(parseMetastring('title="Hello world" {1}', '')).to.eql({
       title: 'Hello world',
       isCollapsible: false,
-      highlightedLines: [1]
+      highlightedLines: [0]
     });
     expect(parseMetastring('title="Hello world" {1-3}', '')).to.eql({
       title: 'Hello world',
       isCollapsible: false,
-      highlightedLines: [1, 2, 3]
+      highlightedLines: [0, 1, 2]
     });
     expect(parseMetastring('title="Hello world" {1-3,4}', '')).to.eql({
       title: 'Hello world',
       isCollapsible: false,
-      highlightedLines: [1, 2, 3, 4]
+      highlightedLines: [0, 1, 2, 3]
     });
 
     // Swap the positions.
     expect(parseMetastring('{1} title="Hello world"', '')).to.eql({
       title: 'Hello world',
       isCollapsible: false,
-      highlightedLines: [1]
+      highlightedLines: [0]
     });
     expect(parseMetastring('{1-3} title="Hello world"', '')).to.eql({
       title: 'Hello world',
       isCollapsible: false,
-      highlightedLines: [1, 2, 3]
+      highlightedLines: [0, 1, 2]
     });
     expect(parseMetastring('{1-3,4} title="Hello world"', '')).to.eql({
       title: 'Hello world',
       isCollapsible: false,
-      highlightedLines: [1, 2, 3, 4]
+      highlightedLines: [0, 1, 2, 3]
     });
   });
 
@@ -102,13 +102,13 @@ message Booking {
     expect(parseMetastring('title="Hello world" collapsible {1}', '')).to.eql({
       title: 'Hello world',
       isCollapsible: true,
-      highlightedLines: [1]
+      highlightedLines: [0]
     });
     expect(parseMetastring('title="Hello world" collapsible {1-3}', '')).to.eql(
       {
         title: 'Hello world',
         isCollapsible: true,
-        highlightedLines: [1, 2, 3]
+        highlightedLines: [0, 1, 2]
       }
     );
     expect(
@@ -116,20 +116,20 @@ message Booking {
     ).to.eql({
       title: 'Hello world',
       isCollapsible: true,
-      highlightedLines: [1, 2, 3, 4]
+      highlightedLines: [0, 1, 2, 3]
     });
 
     // Swap the positions.
     expect(parseMetastring('{1} title="Hello world" collapsible', '')).to.eql({
       title: 'Hello world',
       isCollapsible: true,
-      highlightedLines: [1]
+      highlightedLines: [0]
     });
     expect(parseMetastring('{1-3} title="Hello world" collapsible', '')).to.eql(
       {
         title: 'Hello world',
         isCollapsible: true,
-        highlightedLines: [1, 2, 3]
+        highlightedLines: [0, 1, 2]
       }
     );
     expect(
@@ -137,7 +137,7 @@ message Booking {
     ).to.eql({
       title: 'Hello world',
       isCollapsible: true,
-      highlightedLines: [1, 2, 3, 4]
+      highlightedLines: [0, 1, 2, 3]
     });
   });
 });
