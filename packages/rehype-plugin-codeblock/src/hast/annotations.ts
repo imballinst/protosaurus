@@ -31,7 +31,7 @@ export const ANNOTATION = '[^';
 export interface Annotation {
   footnoteIndex: number;
   title: string;
-  divWrapper: Element;
+  container: Element;
 }
 
 export function processAnnotationFooter({
@@ -66,7 +66,7 @@ export function processAnnotationFooter({
       // Add these 2 children to the container.
       // One is for the popper, so that the position absolute is relative
       // to the container, and the other one is the button toggler.
-      matching.divWrapper.children = [
+      matching.container.children = [
         {
           type: 'element',
           tagName: 'div',
@@ -123,7 +123,7 @@ export function processAnnotationParagraph({
       );
 
       // Create the container.
-      const divWrapper = createAnnotationElement({
+      const container = createAnnotationElement({
         title: annotationTitle,
         // Add a horizontal margin so it's not too condensed with
         // the characters to the side of it.
@@ -134,11 +134,11 @@ export function processAnnotationParagraph({
       codeblockAnnotations.push({
         footnoteIndex: -1,
         title: annotationTitle,
-        divWrapper
+        container
       });
 
       // Override the child with the container.
-      child.children[j] = divWrapper;
+      child.children[j] = container;
 
       // For the previous and after elements, if they are text,
       // trim their whitespaces.

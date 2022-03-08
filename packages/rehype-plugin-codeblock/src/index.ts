@@ -284,7 +284,7 @@ const docusaurusPlugin: any = (opts: RehypePluginCodeblockOptions) => {
               );
 
               // Create the container.
-              const divWrapper = createAnnotationElement({
+              const container = createAnnotationElement({
                 title: annotationTitle
               });
 
@@ -292,10 +292,10 @@ const docusaurusPlugin: any = (opts: RehypePluginCodeblockOptions) => {
               codeblockAnnotations.push({
                 footnoteIndex: -1,
                 title: annotationTitle,
-                divWrapper
+                container
               });
               // Push the wrapper as well to the "line".
-              divContent.push(divWrapper);
+              divContent.push(container);
             }
 
             // End the line.
@@ -353,7 +353,7 @@ const docusaurusPlugin: any = (opts: RehypePluginCodeblockOptions) => {
                   );
 
                   // Create the container.
-                  const divWrapper = createAnnotationElement({
+                  const container = createAnnotationElement({
                     title: annotationTitle
                   });
 
@@ -364,7 +364,7 @@ const docusaurusPlugin: any = (opts: RehypePluginCodeblockOptions) => {
                       type: 'text' as const,
                       value: line.slice(previousIndex, annotationIdx)
                     },
-                    divWrapper,
+                    container,
                     {
                       type: 'text' as const,
                       value: line.slice(titleIndexBoundaryEnd + 1, position)
@@ -374,7 +374,7 @@ const docusaurusPlugin: any = (opts: RehypePluginCodeblockOptions) => {
                   codeblockAnnotations.push({
                     footnoteIndex: -1,
                     title: annotationTitle,
-                    divWrapper
+                    container
                   });
                 } else {
                   // Otherwise, just push it normally.
@@ -426,7 +426,7 @@ const docusaurusPlugin: any = (opts: RehypePluginCodeblockOptions) => {
                 );
 
                 // Create the container.
-                const divWrapper = createAnnotationElement({
+                const container = createAnnotationElement({
                   title: annotationTitle,
                   // Add a horizontal margin so it's not too condensed with
                   // the characters to the side of it.
@@ -440,7 +440,7 @@ const docusaurusPlugin: any = (opts: RehypePluginCodeblockOptions) => {
                     type: 'text' as const,
                     value: line.slice(0, annotationIdx).trimEnd()
                   },
-                  divWrapper,
+                  container,
                   {
                     type: 'text' as const,
                     value: line.slice(titleIndexBoundaryEnd + 1).trimStart()
@@ -450,7 +450,7 @@ const docusaurusPlugin: any = (opts: RehypePluginCodeblockOptions) => {
                 codeblockAnnotations.push({
                   footnoteIndex: -1,
                   title: annotationTitle,
-                  divWrapper
+                  container
                 });
               } else {
                 // Push pure text.
