@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import { Comment, DocType, Element, Root, Text } from 'hast-format';
+import { Comment, Element, Root, Text } from 'hast-format';
 import { getLinksFromALine, isLineAComment } from './comments';
 import { REPEATED_TEXT } from './constants';
 import { getAllDictionaries } from './dictionary';
