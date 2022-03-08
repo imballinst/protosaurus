@@ -15,10 +15,10 @@
  */
 
 import { Element } from 'hast-format';
-import { MetastringInfo, parseMetastring } from './metastring';
-import { LinkMatch, PartialSpecific, TextMatchField } from './types';
+import { MetastringInfo } from './parser';
+import { LinkMatch, PartialSpecific, TextMatchField } from '../types';
 
-export function getHastElementType(
+export function createElementFromMatch(
   match: PartialSpecific<TextMatchField, 'position'> | LinkMatch
 ): Element {
   const { name, href } = match;
@@ -120,7 +120,7 @@ export function wrapWithMetastringElements(
         type: 'element',
         tagName: 'div',
         properties: {
-          className: 'precustom-code-title'
+          className: 'protosaurus-code-title'
         },
         children: [
           {

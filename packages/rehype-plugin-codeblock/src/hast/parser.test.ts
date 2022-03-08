@@ -1,5 +1,21 @@
+/**
+ * Copyright 2022 Protosaurus Authors
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 import { expect } from 'chai';
-import { parseMetastring, stripTitleFromElementProperties } from './metastring';
+import { parseMetastring, stripTitleFromElementProperties } from './parser';
 
 describe('parseMetastring', () => {
   test('none', () => {
@@ -139,44 +155,6 @@ message Booking {
       isCollapsible: true,
       highlightedLines: [0, 1, 2, 3]
     });
-  });
-});
-
-describe('stripTitleFromElementProperties', () => {
-  test('none', () => {
-    expect(stripTitleFromElementProperties({})).to.eql({});
-    expect(stripTitleFromElementProperties(undefined)).to.eql(undefined);
-  });
-
-  test('title only', () => {
-    expect(
-      stripTitleFromElementProperties({ title: '"Hello', 'World"': true })
-    ).to.eql({});
-  });
-
-  test('collapsible only', () => {
-    expect(stripTitleFromElementProperties({ collapsible: true })).to.eql({
-      collapsible: true
-    });
-  });
-
-  test('title and collapsible', () => {
-    expect(
-      stripTitleFromElementProperties({
-        title: '"Hello',
-        'World"': true,
-        collapsible: true
-      })
-    ).to.eql({ collapsible: true });
-
-    // Swap the positions.
-    expect(
-      stripTitleFromElementProperties({
-        collapsible: true,
-        title: '"Hello',
-        'World"': true
-      })
-    ).to.eql({ collapsible: true });
   });
 });
 
