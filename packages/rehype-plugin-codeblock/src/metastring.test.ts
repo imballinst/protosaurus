@@ -179,3 +179,41 @@ describe('stripTitleFromElementProperties', () => {
     ).to.eql({ collapsible: true });
   });
 });
+
+describe('stripTitleFromElementProperties', () => {
+  test('none', () => {
+    expect(stripTitleFromElementProperties({})).to.eql({});
+    expect(stripTitleFromElementProperties(undefined)).to.eql(undefined);
+  });
+
+  test('title only', () => {
+    expect(
+      stripTitleFromElementProperties({ title: '"Hello', 'World"': true })
+    ).to.eql({});
+  });
+
+  test('collapsible only', () => {
+    expect(stripTitleFromElementProperties({ collapsible: true })).to.eql({
+      collapsible: true
+    });
+  });
+
+  test('title and collapsible', () => {
+    expect(
+      stripTitleFromElementProperties({
+        title: '"Hello',
+        'World"': true,
+        collapsible: true
+      })
+    ).to.eql({ collapsible: true });
+
+    // Swap the positions.
+    expect(
+      stripTitleFromElementProperties({
+        collapsible: true,
+        title: '"Hello',
+        'World"': true
+      })
+    ).to.eql({ collapsible: true });
+  });
+});
