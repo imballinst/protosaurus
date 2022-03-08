@@ -139,8 +139,13 @@ prettier-check: $(yarn)
 	@$(yarn) prettier packages website -c
 
 license_files := website packages testdata .github Makefile *.mk buf.*.yaml
+license_ignore := packages/**/node_modules/*.{ts,js}
+
 license: $(addlicense) ## Add license to files
-	@$(addlicense) $(license_ignore) -c "Protosaurus Authors"  $(license_files) 1>/dev/null 2>&1
+	@$(addlicense) -ignore $(license_ignore) -c "Protosaurus Authors"  $(license_files) 1>/dev/null 2>&1
+
+license-check: $(addlicense) ## Check license existence
+	@$(addlicense) -check -ignore $(license_ignore) $(license_files)
 
 test:
 	@WORK_DIR=$(root_dir) $(yarn) --cwd $(mdx_generator) test
