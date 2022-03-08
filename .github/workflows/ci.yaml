@@ -57,6 +57,8 @@ jobs:
           key: protosaurus-${{ runner.os }}-buf-${{ hashFiles('testdata/buf.lock') }}
           restore-keys: protosaurus-${{ runner.os }}-buf-
 
+      # First and foremost, check if there are files without license.
+      - run: make license-check
       - run: make gen
 
       # Check for code formatting.
