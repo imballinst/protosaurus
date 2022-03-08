@@ -190,6 +190,7 @@ const docusaurusPlugin: any = (opts: RehypePluginCodeblockOptions) => {
         const children: (Element | Text)[] = [];
         let highlightState:
           | 'highlight-next-line'
+          | 'highlight-current-line'
           | 'highlight-until'
           | undefined = undefined;
 
@@ -208,6 +209,8 @@ const docusaurusPlugin: any = (opts: RehypePluginCodeblockOptions) => {
           } else if (trimmed === '// highlight-end') {
             highlightState = undefined;
             continue;
+          } else if (metastringInfo.highlightedLines.includes(i)) {
+            highlightState = 'highlight-current-line';
           }
 
           let type = getFieldInformation({
@@ -543,7 +546,10 @@ const docusaurusPlugin: any = (opts: RehypePluginCodeblockOptions) => {
             };
           }
 
-          if (highlightState === 'highlight-next-line') {
+          if (
+            highlightState === 'highlight-next-line' ||
+            highlightState === 'highlight-current-line'
+          ) {
             highlightState = undefined;
           }
 
