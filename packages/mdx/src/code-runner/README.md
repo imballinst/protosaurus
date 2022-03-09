@@ -8,7 +8,7 @@ This document was last updated on March 9, 2022.
 
 Test the commands and make sure they output the correct result (if any). If there is no result specified, ensure that they do not run into exit codes other than 1.
 
-### Similar implementations
+## Similar implementations
 
 Similar implementations can be found, for example, the [Istio documentations](https://github.com/istio/istio.io/tree/master/content/en/docs/examples/bookinfo). It uses test file(s) per Markdown file.
 
