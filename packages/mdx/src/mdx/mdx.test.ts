@@ -16,13 +16,14 @@
 
 import path from 'path';
 import { expect } from 'chai';
-import { readFile } from 'fs-extra';
+import fs from 'fs-extra';
 
 import { convertProtoArrayToRecord } from './record';
 import { readPackageData } from './packages';
 import { getServiceString } from './services';
 
-const ROOT_PATH = process.env.WORK_DIR || path.join(__dirname, '../../../..');
+const CURRENT_DIR = path.join(new URL(import.meta.url).pathname, '..');
+const ROOT_PATH = process.env.WORK_DIR || path.join(CURRENT_DIR, '../../../..');
 
 describe('readPackageData', () => {
   // Test messages.
@@ -31,7 +32,7 @@ describe('readPackageData', () => {
     'website/.protosaurus/generated/booking/v1/doc.json'
   );
   const BOOKING_MDX_EXPECTED_MESSAGES_PATH = path.join(
-    __dirname,
+    CURRENT_DIR,
     'test-resources/booking-messages.mdx'
   );
 
@@ -48,7 +49,7 @@ describe('readPackageData', () => {
     }
 
     const msgResult = allMessages.join('\n\n');
-    const expectedMsg = await readFile(
+    const expectedMsg = await fs.readFile(
       BOOKING_MDX_EXPECTED_MESSAGES_PATH,
       'utf-8'
     );
@@ -62,7 +63,7 @@ describe('readPackageData', () => {
     'website/.protosaurus/generated/location/v1/doc.json'
   );
   const LOCATION_MDX_EXPECTED_MESSAGES_PATH = path.join(
-    __dirname,
+    CURRENT_DIR,
     'test-resources/location-messages.mdx'
   );
 
@@ -79,7 +80,7 @@ describe('readPackageData', () => {
     }
 
     const msgResult = allMessages.join('\n\n');
-    const expectedMsg = await readFile(
+    const expectedMsg = await fs.readFile(
       LOCATION_MDX_EXPECTED_MESSAGES_PATH,
       'utf-8'
     );
@@ -89,7 +90,7 @@ describe('readPackageData', () => {
 
   // Test enums.
   const BOOKING_MDX_EXPECTED_ENUMS_PATH = path.join(
-    __dirname,
+    CURRENT_DIR,
     'test-resources/booking-enums.mdx'
   );
 
@@ -106,7 +107,7 @@ describe('readPackageData', () => {
     }
 
     const enumsResult = allEnums.join('\n\n');
-    const expectedEnum = await readFile(
+    const expectedEnum = await fs.readFile(
       BOOKING_MDX_EXPECTED_ENUMS_PATH,
       'utf-8'
     );
@@ -116,7 +117,7 @@ describe('readPackageData', () => {
 
   // Test services.
   const BOOKING_MDX_EXPECTED_SERVICES_PATH = path.join(
-    __dirname,
+    CURRENT_DIR,
     'test-resources/booking-services.mdx'
   );
 
@@ -148,7 +149,7 @@ describe('readPackageData', () => {
 
     // Services.
     const svcResult = allServices.join('\n\n');
-    const expectedSvc = await readFile(
+    const expectedSvc = await fs.readFile(
       BOOKING_MDX_EXPECTED_SERVICES_PATH,
       'utf-8'
     );

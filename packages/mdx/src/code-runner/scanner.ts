@@ -1,32 +1,22 @@
-import { readdir, readFile } from 'fs-extra';
-import { MetastringInfo, parseMetastring } from './parser';
-
-interface StoredValue {
-  content: string;
-  output: string;
-}
-
-// The first key is the path to file.
-// The second key is the code block validation ID.
-// The value is the code block contents.
-// For example:
-//
-// {
-//   "path/to/file": {
-//     "hello-world": "echo \"Hello world!\""
-//   }
-// }
-export type PathAndCodeBlocksRecord = Record<string, StoredValue>;
+import fs from 'fs-extra';
+import { MetastringInfo, parseMetastring } from './parser.js';
+import { PathAndCodeBlocksRecord, StoredValue } from './types';
 
 const COMMENT_LINE_PREFIX: Record<string, string> = {
   js: '//'
+};
+const DEFAULT_STORED_VALUE = {
+  isValid: false,
+  language: '',
+  content: '',
+  output: ''
 };
 
 export async function getAllValidatedCodeBlocks(
   directory: string
 ): Promise<PathAndCodeBlocksRecord> {
   const record: PathAndCodeBlocksRecord = {};
-  const entries = await readdir(directory, {
+  const entries = await fs.readdir(directory, {
     encoding: 'utf-8',
     withFileTypes: true
   });
@@ -41,13 +31,9 @@ export async function getAllValidatedCodeBlocks(
         record[key] = filesRecord[key];
       }
     } else {
-      const file = await readFile(name, 'utf-8');
+      const file = await fs.readFile(name, 'utf-8');
       const lineArray = file.split('\n');
-      let currentBlockValue: StoredValue = {
-        content: '',
-        output: ''
-      };
-      let language = '';
+      let currentBlockValue: StoredValue = { ...DEFAULT_STORED_VALUE };
       let currentLine = 0;
       let currentMetastringInfo: MetastringInfo | undefined;
 
@@ -57,13 +43,13 @@ export async function getAllValidatedCodeBlocks(
             // Store into the record.
             record[currentMetastringInfo.validationId] = currentBlockValue;
             currentMetastringInfo = undefined;
-            currentBlockValue = { content: '', output: '' };
+            currentBlockValue = { ...DEFAULT_STORED_VALUE };
           } else {
             currentLine = 0;
             currentMetastringInfo = parseMetastring(line, '');
 
             const array = line.split(' ');
-            language = array[0].replace(/\`/g, '');
+            currentBlockValue.language = array[0].replace(/\`/g, '');
           }
 
           continue;
@@ -72,7 +58,7 @@ export async function getAllValidatedCodeBlocks(
         if (currentMetastringInfo?.validationId) {
           if (currentMetastringInfo.outputLines.includes(currentLine)) {
             const trimmed = line
-              .replace(COMMENT_LINE_PREFIX[language], '')
+              .replace(COMMENT_LINE_PREFIX[currentBlockValue.language], '')
               .trim();
             currentBlockValue.output += `${trimmed}\n`;
           } else {

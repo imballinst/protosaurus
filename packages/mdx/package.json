@@ -1,15 +1,18 @@
 {
   "name": "@protosaurus/mdx",
   "version": "0.0.3",
+  "type": "module",
   "main": "lib/index.js",
   "types": "lib/index.d.ts",
   "dependencies": {
+    "execa": "6.1.0",
     "fs-extra": "10.0.0"
   },
   "scripts": {
     "build": "rm -rf lib && tsc --project tsconfig.build.json",
     "test": "mocha",
     "emit": "node lib/emit.js",
-    "emit:test": "ts-node test-emit.ts"
+    "mdx:emit": "ts-node test-emit.ts",
+    "runner:emit": "ts-node --esm test-runner.ts"
   }
 }

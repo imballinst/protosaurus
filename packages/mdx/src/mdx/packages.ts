@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import { readFile } from 'fs-extra';
+import fs from 'fs-extra';
 import {
   Protofile,
   PackageData,
@@ -35,7 +35,7 @@ import {
 import { getEnumFieldsBlock, getEnumProtosaurusBlock } from './enum';
 
 export async function readPackageData(packagePath: string) {
-  const content = await readFile(packagePath, 'utf-8');
+  const content = await fs.readFile(packagePath, 'utf-8');
   const json: {
     files: Protofile[];
   } = JSON.parse(content);

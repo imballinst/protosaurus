@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import { readdir, rm, mkdirp, writeFile } from 'fs-extra';
+import fs from 'fs-extra';
 import path from 'path';
 
 import { emitMdx } from './mdx/mdx';
@@ -47,14 +47,14 @@ export async function emitJsonAndMdx(siteDir: string) {
   // Use `allSettled` so that if the file doesn't exist, it won't throw
   // an error.
   await Promise.allSettled(
-    deletedFilesAndFolders.map((entry) => rm(entry, { recursive: true }))
+    deletedFilesAndFolders.map((entry) => fs.rm(entry, { recursive: true }))
   );
 
   // Re-create the folders.
   await Promise.all([
-    mkdirp(pathToPluginDictionary),
-    mkdirp(pathToMdx),
-    mkdirp(pathToMdxWkt)
+    fs.mkdirp(pathToPluginDictionary),
+    fs.mkdirp(pathToMdx),
+    fs.mkdirp(pathToMdxWkt)
   ]);
 
   // Generate MDX and dictionary for local types.
@@ -233,7 +233,7 @@ async function recursivelyReadDirectory({
     return { allPackages, allProtoMessages, allProtoEnums };
   }
 
-  const entries = await readdir(pathToDirectory, {
+  const entries = await fs.readdir(pathToDirectory, {
     encoding: 'utf-8',
     withFileTypes: true
   });
@@ -293,7 +293,9 @@ async function getDeletedFilesAndFolderNames(
   pathToMdx: string
 ) {
   try {
-    const entries = await readdir(pluginDictionaryDir, { withFileTypes: true });
+    const entries = await fs.readdir(pluginDictionaryDir, {
+      withFileTypes: true
+    });
     const filesAndFolderNames: string[] = [];
 
     for (const entry of entries) {

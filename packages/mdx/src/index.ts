@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import { readFile } from 'fs-extra';
+import fs from 'fs-extra';
 
 export { emitJsonAndMdx } from './emit';
 export function getPathsToCache(siteDir: string) {
@@ -31,7 +31,7 @@ export async function isCacheInvalid({
   currentListOfFiles: string;
 }) {
   try {
-    const bufLsFileCache = await readFile(pathToCache, 'utf-8');
+    const bufLsFileCache = await fs.readFile(pathToCache, 'utf-8');
 
     // Should emit only if the compared files aren't the same.
     return bufLsFileCache !== currentListOfFiles;

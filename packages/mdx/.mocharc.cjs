@@ -29,5 +29,8 @@ module.exports = {
   // TODO(imballinst): uncomment this for a more specified (and faster) tests.
   spec: ['src/code-runner/**/*.test.ts'],
   // spec: ['src/**/*.test.ts'],
-  require: 'ts-node/register'
+  'node-option': [
+    'experimental-specifier-resolution=node',
+    'loader=ts-node/esm'
+  ]
 };
