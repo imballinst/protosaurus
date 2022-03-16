@@ -14,8 +14,8 @@
  * limitations under the License.
  */
 
-import { writeFile } from 'fs-extra';
-import { ObjectData } from './types';
+import fs from 'fs-extra';
+import { ObjectData } from './types.js';
 
 export async function emitMessagesJson({
   filePath,
@@ -28,7 +28,7 @@ export async function emitMessagesJson({
 }) {
   const map = getMessagesJsonDictionary({ messages, isWkt });
 
-  return writeFile(`${filePath}.json`, JSON.stringify(map));
+  return fs.writeFile(`${filePath}.json`, JSON.stringify(map));
 }
 
 export function getMessagesJsonDictionary({

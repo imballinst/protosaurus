@@ -6,7 +6,10 @@
 # All docs are generated, so we don't need to store them.
 docs/*
 !docs/intro.mdx
+!docs/annotations.mdx
+!docs/metastring.mdx
 !docs/test.mdx
+!docs/test-2.mdx
 
 # Generated files
 .docusaurus

@@ -14,14 +14,14 @@
  * limitations under the License.
  */
 
-import { getIndentation } from './comment';
+import { getIndentation } from './comment.js';
 import {
   MessagesRecord,
   Field,
   InnerObjectsRecord,
   ProtoMessage,
   EnumsRecord
-} from './types';
+} from './types.js';
 
 export function getMessageDefinition({
   header,

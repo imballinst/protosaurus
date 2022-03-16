@@ -14,7 +14,8 @@
  * limitations under the License.
  */
 
-import { Element } from 'hast-format';
+// TODO(imballinst): this is copy-pasted from packages/rehype-plugin-codeblock/src/hast/parser.ts.
+// Next, we need to create a common package that can be referenced via TypeScript tsconfig.json.
 
 const TITLE_TOKEN = 'title="';
 const COLLAPSIBLE_TOKEN = 'collapsible';
@@ -27,10 +28,6 @@ export interface MetastringInfo {
   outputLines: number[];
   isCollapsible: boolean;
   highlightedLines: number[];
-  // This value is derived from code-block records.
-  // Since not all code blocks have `validationId` metastring,
-  // then this is optional.
-  isValid?: boolean;
 }
 
 // The reason this function is made is because,
@@ -150,46 +147,6 @@ export function parseMetastring(
     isCollapsible,
     highlightedLines
   };
-}
-
-export function stripTitleFromElementProperties(
-  properties: Element['properties']
-) {
-  if (properties === undefined) {
-    // Exit early.
-    return undefined;
-  }
-
-  const keys = Object.keys(properties);
-  const titleKeyStartIdx = keys.indexOf('title');
-  if (titleKeyStartIdx === -1) {
-    // Exit early when no title key is found.
-    return properties;
-  }
-
-  // Here, we need to do 2 things.
-  // The first one is, we need to delete the title-related keys.
-  // It is contained in `metastring`, `title`, and one key after `title`.
-  // For more information, please see the properties example in the test file.
-  const newProperties = { ...properties };
-  const titleKeyEndIdx = titleKeyStartIdx + 1;
-  // Delete the title-related keys.
-  delete newProperties[keys[titleKeyStartIdx]];
-  delete newProperties[keys[titleKeyEndIdx]];
-
-  // Also trim it from the metastring.
-  const metastring = newProperties.metastring || '';
-  const titleIndices = getTitleIndicesFromMetastring(metastring);
-
-  if (titleIndices.start > -1) {
-    newProperties.metastring = removeStringMarkedByIndices(
-      metastring,
-      titleIndices.start,
-      titleIndices.end
-    );
-  }
-
-  return newProperties;
 }
 
 // Helper functions.

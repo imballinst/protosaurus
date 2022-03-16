@@ -15,7 +15,7 @@
  */
 
 import { expect } from 'chai';
-import { getFieldComment } from './messages';
+import { getFieldComment } from './messages.js';
 
 describe('getFieldComment', () => {
   test('without link', () => {

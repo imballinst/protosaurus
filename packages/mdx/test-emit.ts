@@ -14,9 +14,11 @@
  * limitations under the License.
  */
 
-import { emitJsonAndMdx } from './src/emit';
+import { emitJsonAndMdx } from './src/emit.js';
 import path from 'path';
 
+const CURRENT_DIR = path.join(new URL(import.meta.url).pathname, '..');
+
 (() => {
-  emitJsonAndMdx(path.join(__dirname, '../../website'));
+  emitJsonAndMdx(path.join(CURRENT_DIR, '../../website'));
 })();

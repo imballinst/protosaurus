@@ -14,9 +14,9 @@
  * limitations under the License.
  */
 
-import { getIndentation } from './comment';
-import { getFieldComment } from './messages';
-import { ProtoEnum, ProtoEnumValue } from './types';
+import { getIndentation } from './comment.js';
+import { getFieldComment } from './messages.js';
+import { ProtoEnum, ProtoEnumValue } from './types.js';
 
 export function getEnumProtosaurusBlock({
   packageName,
