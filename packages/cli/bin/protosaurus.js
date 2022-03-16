@@ -17,7 +17,6 @@
  */
 
 const generator = require('@protosaurus/generator');
-const mdx = require('@protosaurus/mdx');
 const path = require('path');
 
 // The process is based on the `package.json` that calls this.
@@ -42,6 +41,7 @@ const AVAILABLE_COMMANDS = ['start', 'build', 'clean', 'generate'];
 
   const fs = await import('fs-extra');
   const { execa } = await import('execa');
+
   const relativePathToBufGenYaml = relativePathArgs || '../';
   const pathToBufGenYaml = path.join(WORK_DIR, relativePathToBufGenYaml);
 
@@ -75,6 +75,8 @@ const AVAILABLE_COMMANDS = ['start', 'build', 'clean', 'generate'];
 })();
 
 async function generate(pathToBufGenYaml) {
+  const mdx = await import('@protosaurus/mdx');
+
   // TODO(imballinst): identify cache by content.
   const currentListOfFiles = await generator.getListOfProtoFiles({
     workDir: pathToBufGenYaml

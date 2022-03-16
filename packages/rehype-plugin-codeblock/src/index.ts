@@ -141,7 +141,6 @@ const docusaurusPlugin: any = (opts: RehypePluginCodeblockOptions) => {
 
         if (!matchingLanguage) {
           if (recordValue[metastringInfo.validationId]) {
-            console.log(recordValue[metastringInfo.validationId]);
             metastringInfo.isValid =
               recordValue[metastringInfo.validationId].isValid === true;
           }
