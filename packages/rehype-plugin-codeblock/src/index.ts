@@ -140,15 +140,18 @@ const docusaurusPlugin: any = (opts: RehypePluginCodeblockOptions) => {
         );
 
         if (!matchingLanguage) {
+          let validationClassName = '';
+
           if (recordValue[metastringInfo.validationId]) {
             metastringInfo.isValid =
               recordValue[metastringInfo.validationId].isValid === true;
+            validationClassName = 'has-validation';
           }
 
           // Languages other than protosaurus.
           pre.children = wrapWithMetastringElements(metastringInfo, { ...pre });
           pre.properties = {
-            className: 'protosaurus-code-container'
+            className: `protosaurus-code-container ${validationClassName}`
           };
           pre.tagName = 'div';
           // Strip the title from the metastring, so that Prism.js will not

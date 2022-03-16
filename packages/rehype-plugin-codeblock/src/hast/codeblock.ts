@@ -85,6 +85,9 @@ export function wrapWithMetastringElements(
     effectiveElements.unshift({
       type: 'element',
       tagName: 'div',
+      properties: {
+        className: 'protosaurus-code-validation'
+      },
       children: [
         {
           type: 'text',
