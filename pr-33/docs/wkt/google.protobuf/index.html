@@ -1,0 +1,958 @@
+<!doctype html>
+<html class="docs-version-current" lang="en" dir="ltr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="generator" content="Docusaurus v2.0.0-beta.15">
+<title data-react-helmet="true">google.protobuf | My Site (pr-33)</title><meta data-react-helmet="true" name="twitter:card" content="summary_large_image"><meta data-react-helmet="true" property="og:url" content="https://your-docusaurus-test-site.com/protosaurus/pr-33/docs/wkt/google.protobuf"><meta data-react-helmet="true" name="docusaurus_locale" content="en"><meta data-react-helmet="true" name="docusaurus_version" content="current"><meta data-react-helmet="true" name="docusaurus_tag" content="docs-default-current"><meta data-react-helmet="true" property="og:title" content="google.protobuf | My Site (pr-33)"><meta data-react-helmet="true" name="description" content="Messages"><meta data-react-helmet="true" property="og:description" content="Messages"><link data-react-helmet="true" rel="icon" href="/protosaurus/pr-33/img/favicon.ico"><link data-react-helmet="true" rel="canonical" href="https://your-docusaurus-test-site.com/protosaurus/pr-33/docs/wkt/google.protobuf"><link data-react-helmet="true" rel="alternate" href="https://your-docusaurus-test-site.com/protosaurus/pr-33/docs/wkt/google.protobuf" hreflang="en"><link data-react-helmet="true" rel="alternate" href="https://your-docusaurus-test-site.com/protosaurus/pr-33/docs/wkt/google.protobuf" hreflang="x-default"><link rel="stylesheet" href="/protosaurus/pr-33/assets/css/styles.e077687a.css">
+<link rel="preload" href="/protosaurus/pr-33/assets/js/runtime~main.369db437.js" as="script">
+<link rel="preload" href="/protosaurus/pr-33/assets/js/main.88bb848d.js" as="script">
+</head>
+<body>
+<script>!function(){function t(t){document.documentElement.setAttribute("data-theme",t)}var e=function(){var t=null;try{t=localStorage.getItem("theme")}catch(t){}return t}();t(null!==e?e:"light")}()</script><div id="__docusaurus">
+<div role="region"><a href="#" class="skipToContent_BxGa">Skip to main content</a></div><nav class="navbar navbar--fixed-top"><div class="navbar__inner"><div class="navbar__items"><button aria-label="Navigation bar toggle" class="navbar__toggle clean-btn" type="button" tabindex="0"><svg width="30" height="30" viewBox="0 0 30 30" aria-hidden="true"><path stroke="currentColor" stroke-linecap="round" stroke-miterlimit="10" stroke-width="2" d="M4 7h22M4 15h22M4 23h22"></path></svg></button><a class="navbar__brand" href="/protosaurus/pr-33/"><div class="navbar__logo"><img src="/protosaurus/pr-33/img/logo.svg" alt="My Site Logo" class="themedImage_aIr_ themedImage--light_DGIu"><img src="/protosaurus/pr-33/img/logo.svg" alt="My Site Logo" class="themedImage_aIr_ themedImage--dark_RoHN"></div><b class="navbar__title">My Site</b></a><a class="navbar__item navbar__link navbar__link--active" href="/protosaurus/pr-33/docs/intro">Tutorial</a></div><div class="navbar__items navbar__items--right"><a href="https://github.com/facebook/docusaurus" target="_blank" rel="noopener noreferrer" class="navbar__item navbar__link"><span>GitHub<svg width="13.5" height="13.5" aria-hidden="true" viewBox="0 0 24 24" class="iconExternalLink_GWqj"><path fill="currentColor" d="M21 13v10h-21v-19h12v2h-10v15h17v-8h2zm3-12h-10.988l4.035 4-6.977 7.07 2.828 2.828 6.977-7.07 4.125 4.172v-11z"></path></svg></span></a><div class="toggle_AsT0 toggle_XAIj toggleDisabled_DYX9"><div class="toggleTrack_Hdkt" role="button" tabindex="-1"><div class="toggleTrackCheck_deSq"><span class="toggleIcon_wvDe">🌜</span></div><div class="toggleTrackX_tVFs"><span class="toggleIcon_wvDe">🌞</span></div><div class="toggleTrackThumb_HkL9"></div></div><input type="checkbox" class="toggleScreenReader_Pu7z" aria-label="Switch between dark and light mode"></div></div></div><div role="presentation" class="navbar-sidebar__backdrop"></div></nav><div class="main-wrapper docs-wrapper docs-doc-page"><div class="docPage_zNSk"><button aria-label="Scroll back to top" class="clean-btn theme-back-to-top-button backToTopButton_ecpa" type="button"></button><aside class="theme-doc-sidebar-container docSidebarContainer_NEdF"><div class="sidebar_hzbe"><nav class="menu thin-scrollbar menu_kHpq"><ul class="theme-doc-sidebar-menu menu__list"><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-1 menu__list-item"><a class="menu__link" href="/protosaurus/pr-33/docs/intro">Tutorial Intro</a></li><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-1 menu__list-item"><a class="menu__link" href="/protosaurus/pr-33/docs/booking.v1">booking.v1</a></li><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-1 menu__list-item"><a class="menu__link" href="/protosaurus/pr-33/docs/location.v1">location.v1</a></li><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-1 menu__list-item"><a class="menu__link" href="/protosaurus/pr-33/docs/test">Test Protosaurus</a></li><li class="theme-doc-sidebar-item-category theme-doc-sidebar-item-category-level-1 menu__list-item"><div class="menu__list-item-collapsible"><a class="menu__link menu__link--sublist menu__link--active hasHref_rMs5" aria-current="page" href="/protosaurus/pr-33/docs/wkt/google.protobuf.compiler">Well Known Types</a></div><ul style="display:block;overflow:visible;height:auto" class="menu__list"><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-2 menu__list-item"><a class="menu__link" tabindex="0" href="/protosaurus/pr-33/docs/wkt/google.protobuf.compiler">google.protobuf.compiler</a></li><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-2 menu__list-item"><a class="menu__link menu__link--active" aria-current="page" tabindex="0" href="/protosaurus/pr-33/docs/wkt/google.protobuf">google.protobuf</a></li></ul></li></ul></nav></div></aside><main class="docMainContainer_vJqy"><div class="container padding-top--md padding-bottom--lg"><div class="row"><div class="col docItemCol_ygLL"><div class="docItemContainer_yJzi"><article><div class="tocCollapsible_aX8Q theme-doc-toc-mobile tocMobile_By44"><button type="button" class="clean-btn tocCollapsibleButton_Va7b">On this page</button></div><div class="theme-doc-markdown markdown"><header><h1>google.protobuf</h1></header><h2 class="anchor anchorWithStickyNavbar_YDjN" id="messages">Messages<a class="hash-link" href="#messages" title="Direct link to heading">​</a></h2><div class="definition_r3VA"><div class="definition-title_x0IZ"><span>message</span><h3 class="anchor anchorWithStickyNavbar_YDjN" id="any">Any<a class="hash-link" href="#any" title="Direct link to heading">​</a></h3></div><p><code>Any</code> contains an arbitrary serialized protocol buffer message along with a
+URL that describes the type of the serialized message.</p><p>Protobuf library provides support to pack/unpack Any values in the form
+of utility functions or additional generated methods of the Any type.</p><p>Example 1: Pack and unpack a message in C++.</p><div class="codeBlockContainer_CBWl theme-code-block"><div class="codeBlockContent_vhl8"><pre tabindex="0" class="prism-code language-text codeBlock_w2AC thin-scrollbar" style="color:#393A34;background-color:#f6f8fa"><code class="codeBlockLines_OfWd"><span class="token-line" style="color:#393A34"><span class="token plain">Foo foo = ...;</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">Any any;</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">any.PackFrom(foo);</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">...</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">if (any.UnpackTo(&amp;foo)) {</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">  ...</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">}</span><br></span></code></pre><button type="button" aria-label="Copy code to clipboard" class="copyButton_BbpX clean-btn">Copy</button></div></div><p>Example 2: Pack and unpack a message in Java.</p><div class="codeBlockContainer_CBWl theme-code-block"><div class="codeBlockContent_vhl8"><pre tabindex="0" class="prism-code language-text codeBlock_w2AC thin-scrollbar" style="color:#393A34;background-color:#f6f8fa"><code class="codeBlockLines_OfWd"><span class="token-line" style="color:#393A34"><span class="token plain">Foo foo = ...;</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">Any any = Any.pack(foo);</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">...</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">if (any.is(Foo.class)) {</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">  foo = any.unpack(Foo.class);</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">}</span><br></span></code></pre><button type="button" aria-label="Copy code to clipboard" class="copyButton_BbpX clean-btn">Copy</button></div></div><p> Example 3: Pack and unpack a message in Python.</p><div class="codeBlockContainer_CBWl theme-code-block"><div class="codeBlockContent_vhl8"><pre tabindex="0" class="prism-code language-text codeBlock_w2AC thin-scrollbar" style="color:#393A34;background-color:#f6f8fa"><code class="codeBlockLines_OfWd"><span class="token-line" style="color:#393A34"><span class="token plain">foo = Foo(...)</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">any = Any()</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">any.Pack(foo)</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">...</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">if any.Is(Foo.DESCRIPTOR):</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">  any.Unpack(foo)</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">  ...</span><br></span></code></pre><button type="button" aria-label="Copy code to clipboard" class="copyButton_BbpX clean-btn">Copy</button></div></div><p> Example 4: Pack and unpack a message in Go</p><div class="codeBlockContainer_CBWl theme-code-block"><div class="codeBlockContent_vhl8"><pre tabindex="0" class="prism-code language-text codeBlock_w2AC thin-scrollbar" style="color:#393A34;background-color:#f6f8fa"><code class="codeBlockLines_OfWd"><span class="token-line" style="color:#393A34"><span class="token plain"> foo := &amp;pb.Foo{...}</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain"> any, err := ptypes.MarshalAny(foo)</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain"> ...</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain"> foo := &amp;pb.Foo{}</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain"> if err := ptypes.UnmarshalAny(any, foo); err != nil {</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">   ...</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain"> }</span><br></span></code></pre><button type="button" aria-label="Copy code to clipboard" class="copyButton_BbpX clean-btn">Copy</button></div></div><p>The pack methods provided by protobuf library will by default use
+&#x27;type.googleapis.com/full.type.name&#x27; as the type URL and the unpack
+methods only use the fully qualified type name after the last &#x27;/&#x27;
+in the type URL, for example &quot;foo.bar.com/x/y.z&quot; will yield type
+name &quot;y.z&quot;.</p><h1>JSON</h1><p>The JSON representation of an <code>Any</code> value uses the regular
+representation of the deserialized, embedded message, with an
+additional field <code>@type</code> which contains the type URL. Example:</p><div class="codeBlockContainer_CBWl theme-code-block"><div class="codeBlockContent_vhl8"><pre tabindex="0" class="prism-code language-text codeBlock_w2AC thin-scrollbar" style="color:#393A34;background-color:#f6f8fa"><code class="codeBlockLines_OfWd"><span class="token-line" style="color:#393A34"><span class="token plain">package google.profile;</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">message Person {</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">  string first_name = 1;</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">  string last_name = 2;</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">}</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain" style="display:inline-block"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">{</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">  &quot;@type&quot;: &quot;type.googleapis.com/google.profile.Person&quot;,</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">  &quot;firstName&quot;: &lt;string&gt;,</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">  &quot;lastName&quot;: &lt;string&gt;</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">}</span><br></span></code></pre><button type="button" aria-label="Copy code to clipboard" class="copyButton_BbpX clean-btn">Copy</button></div></div><p>If the embedded message type is well-known and has a custom JSON
+representation, that representation will be embedded adding a field
+<code>value</code> which holds the custom JSON in addition to the <code>@type</code>
+field. Example (for message <!-- -->[google.protobuf.Duration][]<!-- -->):</p><div class="codeBlockContainer_CBWl theme-code-block"><div class="codeBlockContent_vhl8"><pre tabindex="0" class="prism-code language-text codeBlock_w2AC thin-scrollbar" style="color:#393A34;background-color:#f6f8fa"><code class="codeBlockLines_OfWd"><span class="token-line" style="color:#393A34"><span class="token plain">{</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">  &quot;@type&quot;: &quot;type.googleapis.com/google.protobuf.Duration&quot;,</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">  &quot;value&quot;: &quot;1.212s&quot;</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">}</span><br></span></code></pre><button type="button" aria-label="Copy code to clipboard" class="copyButton_BbpX clean-btn">Copy</button></div></div><div class="precustom-container"><precustom><div><span></span><span class="type">message</span> Any {</div><div class="comment">  // A URL/resource name that uniquely identifies the type of the serialized
+</div><div class="comment">  // protocol buffer message. This string must contain at least
+</div><div class="comment">  // one &quot;/&quot; character. The last segment of the URL&#x27;s path must represent
+</div><div class="comment">  // the fully qualified name of the type (as in
+</div><div class="comment">  // `path/google.protobuf.Duration`). The name should be in a canonical form
+</div><div class="comment">  // (e.g., leading &quot;.&quot; is not accepted).
+</div><div class="comment">  // 
+</div><div class="comment">  // In practice, teams usually precompile into the binary all types that they
+</div><div class="comment">  // expect it to use in the context of Any. However, for URLs which use the
+</div><div class="comment">  // scheme `http`, `https`, or no scheme, one can optionally set up a type
+</div><div class="comment">  // server that maps type URLs to message definitions as follows:
+</div><div class="comment">  // 
+</div><div class="comment">  // * If no scheme is provided, `https` is assumed.
+</div><div class="comment">  // * An HTTP GET on the URL must yield a [google.protobuf.Type][]
+</div><div class="comment">  //   value in binary format, or produce an error.
+</div><div class="comment">  // * Applications are allowed to cache lookup results based on the
+</div><div class="comment">  //   URL, or have them precompiled into a binary to avoid any
+</div><div class="comment">  //   lookup. Therefore, binary compatibility needs to be preserved
+</div><div class="comment">  //   on changes to types. (Use versioned type names to manage
+</div><div class="comment">  //   breaking changes.)
+</div><div class="comment">  // 
+</div><div class="comment">  // Note: this functionality is not currently available in the official
+</div><div class="comment">  // protobuf release, and it is not used for type URLs beginning with
+</div><div class="comment">  // type.googleapis.com.
+</div><div class="comment">  // 
+</div><div class="comment">  // Schemes other than `http`, `https` (or the empty scheme) might be
+</div><div class="comment">  // used with implementation specific semantics.
+</div><div><span>  </span><span class="type">string</span> type_url = 1;</div><div>​
+</div><div class="comment">  // Must be a valid serialized protocol buffer of the above specified type.
+</div><div><span>  </span><span class="type">bytes</span> value = 2;</div><div>}</div></precustom></div></div><div class="definition_r3VA"><div class="definition-title_x0IZ"><span>message</span><h3 class="anchor anchorWithStickyNavbar_YDjN" id="api">Api<a class="hash-link" href="#api" title="Direct link to heading">​</a></h3></div><p>Api is a light-weight descriptor for an API Interface.</p><p>Interfaces are also described as &quot;protocol buffer services&quot; in some contexts,
+such as by the &quot;service&quot; keyword in a .proto file, but they are different
+from API Services, which represent a concrete implementation of an interface
+as opposed to simply a description of methods and bindings. They are also
+sometimes simply referred to as &quot;APIs&quot; in other contexts, such as the name of
+this message itself. See <a href="https://cloud.google.com/apis/design/glossary" target="_blank" rel="noopener noreferrer">https://cloud.google.com/apis/design/glossary</a> for
+detailed terminology.</p><div class="precustom-container"><precustom><div><span></span><span class="type">message</span> Api {</div><div class="comment">  // The fully qualified name of this interface, including package name
+</div><div class="comment">  // followed by the interface&#x27;s simple name.
+</div><div><span>  </span><span class="type">string</span> name = 1;</div><div>​
+</div><div class="comment">  // The methods of this interface, in unspecified order.
+</div><div><span>  </span><span class="type">repeated </span><a href="/protosaurus/pr-33/docs/wkt/google.protobuf#method">Method</a> methods = 2;</div><div>​
+</div><div class="comment">  // Any metadata attached to the interface.
+</div><div><span>  </span><span class="type">repeated </span><a href="/protosaurus/pr-33/docs/wkt/google.protobuf#option">Option</a> options = 3;</div><div>​
+</div><div class="comment">  // A version string for this interface. If specified, must have the form
+</div><div class="comment">  // `major-version.minor-version`, as in `1.10`. If the minor version is
+</div><div class="comment">  // omitted, it defaults to zero. If the entire version field is empty, the
+</div><div class="comment">  // major version is derived from the package name, as outlined below. If the
+</div><div class="comment">  // field is not empty, the version in the package name will be verified to be
+</div><div class="comment">  // consistent with what is provided here.
+</div><div class="comment">  // 
+</div><div class="comment">  // The versioning schema uses <a href="http://semver.org" target="_blank" rel="noopener noreferrer">semantic versioning</a></div><div class="comment">  // where the major version number
+</div><div class="comment">  // indicates a breaking change and the minor version an additive,
+</div><div class="comment">  // non-breaking change. Both version numbers are signals to users
+</div><div class="comment">  // what to expect from different versions, and should be carefully
+</div><div class="comment">  // chosen based on the product plan.
+</div><div class="comment">  // 
+</div><div class="comment">  // The major version is also reflected in the package name of the
+</div><div class="comment">  // interface, which must end in `v&lt;major-version&gt;`, as in
+</div><div class="comment">  // `google.feature.v1`. For major versions 0 and 1, the suffix can
+</div><div class="comment">  // be omitted. Zero major versions must only be used for
+</div><div class="comment">  // experimental, non-GA interfaces.
+</div><div><span>  </span><span class="type">string</span> version = 4;</div><div>​
+</div><div class="comment">  // Source context for the protocol buffer service represented by this
+</div><div class="comment">  // message.
+</div><div><span>  </span><a href="/protosaurus/pr-33/docs/wkt/google.protobuf#sourcecontext">SourceContext</a> source_context = 5;</div><div>​
+</div><div class="comment">  // Included interfaces. See [Mixin][].
+</div><div><span>  </span><span class="type">repeated </span><a href="/protosaurus/pr-33/docs/wkt/google.protobuf#mixin">Mixin</a> mixins = 6;</div><div>​
+</div><div class="comment">  // The source syntax of the service.
+</div><div>  Syntax syntax = 7;
+</div><div>}</div></precustom></div></div><div class="definition_r3VA"><div class="definition-title_x0IZ"><span>message</span><h3 class="anchor anchorWithStickyNavbar_YDjN" id="method">Method<a class="hash-link" href="#method" title="Direct link to heading">​</a></h3></div><p>Method represents a method of an API interface.</p><div class="precustom-container"><precustom><div><span></span><span class="type">message</span> Method {</div><div class="comment">  // The simple name of this method.
+</div><div><span>  </span><span class="type">string</span> name = 1;</div><div>​
+</div><div class="comment">  // A URL of the input message type.
+</div><div><span>  </span><span class="type">string</span> request_type_url = 2;</div><div>​
+</div><div class="comment">  // If true, the request is streamed.
+</div><div><span>  </span><span class="type">bool</span> request_streaming = 3;</div><div>​
+</div><div class="comment">  // The URL of the output message type.
+</div><div><span>  </span><span class="type">string</span> response_type_url = 4;</div><div>​
+</div><div class="comment">  // If true, the response is streamed.
+</div><div><span>  </span><span class="type">bool</span> response_streaming = 5;</div><div>​
+</div><div class="comment">  // Any metadata attached to the method.
+</div><div><span>  </span><span class="type">repeated </span><a href="/protosaurus/pr-33/docs/wkt/google.protobuf#option">Option</a> options = 6;</div><div>​
+</div><div class="comment">  // The source syntax of this method.
+</div><div>  Syntax syntax = 7;
+</div><div>}</div></precustom></div></div><div class="definition_r3VA"><div class="definition-title_x0IZ"><span>message</span><h3 class="anchor anchorWithStickyNavbar_YDjN" id="mixin">Mixin<a class="hash-link" href="#mixin" title="Direct link to heading">​</a></h3></div><p>Declares an API Interface to be included in this interface. The including
+interface must redeclare all the methods from the included interface, but
+documentation and options are inherited as follows:</p><ul><li><p>If after comment and whitespace stripping, the documentation
+string of the redeclared method is empty, it will be inherited
+from the original method.</p></li><li><p>Each annotation belonging to the service config (http,
+visibility) which is not set in the redeclared method will be
+inherited.</p></li><li><p>If an http annotation is inherited, the path pattern will be
+modified as follows. Any version prefix will be replaced by the
+version of the including interface plus the <!-- -->[root][]<!-- --> path if
+specified.</p></li></ul><p>Example of a simple mixin:</p><div class="codeBlockContainer_CBWl theme-code-block"><div class="codeBlockContent_vhl8"><pre tabindex="0" class="prism-code language-text codeBlock_w2AC thin-scrollbar" style="color:#393A34;background-color:#f6f8fa"><code class="codeBlockLines_OfWd"><span class="token-line" style="color:#393A34"><span class="token plain">package google.acl.v1;</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">service AccessControl {</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">  // Get the underlying ACL object.</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">  rpc GetAcl(GetAclRequest) returns (Acl) {</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">    option (google.api.http).get = &quot;/v1/{resource=**}:getAcl&quot;;</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">  }</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">}</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain" style="display:inline-block"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">package google.storage.v2;</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">service Storage {</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">  rpc GetAcl(GetAclRequest) returns (Acl);</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain" style="display:inline-block"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">  // Get a data record.</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">  rpc GetData(GetDataRequest) returns (Data) {</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">    option (google.api.http).get = &quot;/v2/{resource=**}&quot;;</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">  }</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">}</span><br></span></code></pre><button type="button" aria-label="Copy code to clipboard" class="copyButton_BbpX clean-btn">Copy</button></div></div><p>Example of a mixin configuration:</p><div class="codeBlockContainer_CBWl theme-code-block"><div class="codeBlockContent_vhl8"><pre tabindex="0" class="prism-code language-text codeBlock_w2AC thin-scrollbar" style="color:#393A34;background-color:#f6f8fa"><code class="codeBlockLines_OfWd"><span class="token-line" style="color:#393A34"><span class="token plain">apis:</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">- name: google.storage.v2.Storage</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">  mixins:</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">  - name: google.acl.v1.AccessControl</span><br></span></code></pre><button type="button" aria-label="Copy code to clipboard" class="copyButton_BbpX clean-btn">Copy</button></div></div><p>The mixin construct implies that all methods in <code>AccessControl</code> are
+also declared with same name and request/response types in
+<code>Storage</code>. A documentation generator or annotation processor will
+see the effective <code>Storage.GetAcl</code> method after inherting
+documentation and annotations as follows:</p><div class="codeBlockContainer_CBWl theme-code-block"><div class="codeBlockContent_vhl8"><pre tabindex="0" class="prism-code language-text codeBlock_w2AC thin-scrollbar" style="color:#393A34;background-color:#f6f8fa"><code class="codeBlockLines_OfWd"><span class="token-line" style="color:#393A34"><span class="token plain">service Storage {</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">  // Get the underlying ACL object.</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">  rpc GetAcl(GetAclRequest) returns (Acl) {</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">    option (google.api.http).get = &quot;/v2/{resource=**}:getAcl&quot;;</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">  }</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">  ...</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">}</span><br></span></code></pre><button type="button" aria-label="Copy code to clipboard" class="copyButton_BbpX clean-btn">Copy</button></div></div><p>Note how the version in the path pattern changed from <code>v1</code> to <code>v2</code>.</p><p>If the <code>root</code> field in the mixin is specified, it should be a
+relative path under which inherited HTTP paths are placed. Example:</p><div class="codeBlockContainer_CBWl theme-code-block"><div class="codeBlockContent_vhl8"><pre tabindex="0" class="prism-code language-text codeBlock_w2AC thin-scrollbar" style="color:#393A34;background-color:#f6f8fa"><code class="codeBlockLines_OfWd"><span class="token-line" style="color:#393A34"><span class="token plain">apis:</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">- name: google.storage.v2.Storage</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">  mixins:</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">  - name: google.acl.v1.AccessControl</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">    root: acls</span><br></span></code></pre><button type="button" aria-label="Copy code to clipboard" class="copyButton_BbpX clean-btn">Copy</button></div></div><p>This implies the following inherited HTTP annotation:</p><div class="codeBlockContainer_CBWl theme-code-block"><div class="codeBlockContent_vhl8"><pre tabindex="0" class="prism-code language-text codeBlock_w2AC thin-scrollbar" style="color:#393A34;background-color:#f6f8fa"><code class="codeBlockLines_OfWd"><span class="token-line" style="color:#393A34"><span class="token plain">service Storage {</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">  // Get the underlying ACL object.</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">  rpc GetAcl(GetAclRequest) returns (Acl) {</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">    option (google.api.http).get = &quot;/v2/acls/{resource=**}:getAcl&quot;;</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">  }</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">  ...</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">}</span><br></span></code></pre><button type="button" aria-label="Copy code to clipboard" class="copyButton_BbpX clean-btn">Copy</button></div></div><div class="precustom-container"><precustom><div><span></span><span class="type">message</span> Mixin {</div><div class="comment">  // The fully qualified name of the interface which is included.
+</div><div><span>  </span><span class="type">string</span> name = 1;</div><div>​
+</div><div class="comment">  // If non-empty specifies a path under which inherited HTTP paths
+</div><div class="comment">  // are rooted.
+</div><div><span>  </span><span class="type">string</span> root = 2;</div><div>}</div></precustom></div></div><div class="definition_r3VA"><div class="definition-title_x0IZ"><span>message</span><h3 class="anchor anchorWithStickyNavbar_YDjN" id="descriptorproto">DescriptorProto<a class="hash-link" href="#descriptorproto" title="Direct link to heading">​</a></h3></div><p>Describes a message type.</p><div class="precustom-container"><precustom><div><span></span><span class="type">message</span> DescriptorProto {</div><div><span>  </span><span class="type">string</span> name = 1;</div><div>​
+</div><div><span>  </span><span class="type">repeated </span><a href="/protosaurus/pr-33/docs/wkt/google.protobuf#fielddescriptorproto">FieldDescriptorProto</a> field = 2;</div><div>​
+</div><div><span>  </span><span class="type">repeated </span><a href="/protosaurus/pr-33/docs/wkt/google.protobuf#fielddescriptorproto">FieldDescriptorProto</a> extension = 3;</div><div>​
+</div><div><span>  </span><span class="type">repeated </span><a href="/protosaurus/pr-33/docs/wkt/google.protobuf#descriptorproto">DescriptorProto</a> nested_type = 4;</div><div>​
+</div><div><span>  </span><span class="type">repeated </span><a href="/protosaurus/pr-33/docs/wkt/google.protobuf#enumdescriptorproto">EnumDescriptorProto</a> enum_type = 5;</div><div>​
+</div><div><span>  </span><span class="type">message</span> ExtensionRange {</div><div class="comment">    // Inclusive.
+</div><div><span>    </span><span class="type">int32</span> start = 1;</div><div>​
+</div><div class="comment">    // Exclusive.
+</div><div><span>    </span><span class="type">int32</span> end = 2;</div><div>​
+</div><div><span>    </span><a href="/protosaurus/pr-33/docs/wkt/google.protobuf#extensionrangeoptions">ExtensionRangeOptions</a> options = 3;</div><div>  }
+</div><div>​
+</div><div>  repeated ExtensionRange extension_range = 6;
+</div><div>​
+</div><div><span>  </span><span class="type">repeated </span><a href="/protosaurus/pr-33/docs/wkt/google.protobuf#oneofdescriptorproto">OneofDescriptorProto</a> oneof_decl = 7;</div><div>​
+</div><div><span>  </span><a href="/protosaurus/pr-33/docs/wkt/google.protobuf#messageoptions">MessageOptions</a> options = 8;</div><div>​
+</div><div><span>  </span><span class="type">message</span> ReservedRange {</div><div class="comment">    // Inclusive.
+</div><div><span>    </span><span class="type">int32</span> start = 1;</div><div>​
+</div><div class="comment">    // Exclusive.
+</div><div><span>    </span><span class="type">int32</span> end = 2;</div><div>  }
+</div><div>​
+</div><div>  repeated ReservedRange reserved_range = 9;
+</div><div>​
+</div><div class="comment">  // Reserved field names, which may not be used by fields in the same message.
+</div><div class="comment">  // A given name may only be reserved once.
+</div><div>  repeated string reserved_name = 10;
+</div><div>}</div></precustom></div></div><div class="definition_r3VA"><div class="definition-title_x0IZ"><span>message</span><h3 class="anchor anchorWithStickyNavbar_YDjN" id="enumdescriptorproto">EnumDescriptorProto<a class="hash-link" href="#enumdescriptorproto" title="Direct link to heading">​</a></h3></div><p>Describes an enum type.</p><div class="precustom-container"><precustom><div><span></span><span class="type">message</span> EnumDescriptorProto {</div><div><span>  </span><span class="type">string</span> name = 1;</div><div>​
+</div><div><span>  </span><span class="type">repeated </span><a href="/protosaurus/pr-33/docs/wkt/google.protobuf#enumvaluedescriptorproto">EnumValueDescriptorProto</a> value = 2;</div><div>​
+</div><div><span>  </span><a href="/protosaurus/pr-33/docs/wkt/google.protobuf#enumoptions">EnumOptions</a> options = 3;</div><div>​
+</div><div><span>  </span><span class="type">message</span> EnumReservedRange {</div><div class="comment">    // Inclusive.
+</div><div><span>    </span><span class="type">int32</span> start = 1;</div><div>​
+</div><div class="comment">    // Inclusive.
+</div><div><span>    </span><span class="type">int32</span> end = 2;</div><div>  }
+</div><div>​
+</div><div class="comment">  // Range of reserved numeric values. Reserved numeric values may not be used
+</div><div class="comment">  // by enum values in the same enum declaration. Reserved ranges may not
+</div><div class="comment">  // overlap.
+</div><div>  repeated EnumReservedRange reserved_range = 4;
+</div><div>​
+</div><div class="comment">  // Reserved enum value names, which may not be reused. A given name may only
+</div><div class="comment">  // be reserved once.
+</div><div>  repeated string reserved_name = 5;
+</div><div>}</div></precustom></div></div><div class="definition_r3VA"><div class="definition-title_x0IZ"><span>message</span><h3 class="anchor anchorWithStickyNavbar_YDjN" id="enumoptions">EnumOptions<a class="hash-link" href="#enumoptions" title="Direct link to heading">​</a></h3></div><div class="precustom-container"><precustom><div><span></span><span class="type">message</span> EnumOptions {</div><div class="comment">  // Set this option to true to allow mapping different tag names to the same
+</div><div class="comment">  // value.
+</div><div><span>  </span><span class="type">bool</span> allow_alias = 1;</div><div>​
+</div><div class="comment">  // Is this enum deprecated?
+</div><div class="comment">  // Depending on the target platform, this can emit Deprecated annotations
+</div><div class="comment">  // for the enum, or it will be completely ignored; in the very least, this
+</div><div class="comment">  // is a formalization for deprecating enums.
+</div><div><span>  </span><span class="type">bool</span> deprecated = 2;</div><div>​
+</div><div class="comment">  // The parser stores options it doesn&#x27;t recognize here. See above.
+</div><div><span>  </span><span class="type">repeated </span><a href="/protosaurus/pr-33/docs/wkt/google.protobuf#uninterpretedoption">UninterpretedOption</a> uninterpreted_option = 3;</div><div>}</div></precustom></div></div><div class="definition_r3VA"><div class="definition-title_x0IZ"><span>message</span><h3 class="anchor anchorWithStickyNavbar_YDjN" id="enumvaluedescriptorproto">EnumValueDescriptorProto<a class="hash-link" href="#enumvaluedescriptorproto" title="Direct link to heading">​</a></h3></div><p>Describes a value within an enum.</p><div class="precustom-container"><precustom><div><span></span><span class="type">message</span> EnumValueDescriptorProto {</div><div><span>  </span><span class="type">string</span> name = 1;</div><div>​
+</div><div><span>  </span><span class="type">int32</span> number = 2;</div><div>​
+</div><div><span>  </span><a href="/protosaurus/pr-33/docs/wkt/google.protobuf#enumvalueoptions">EnumValueOptions</a> options = 3;</div><div>}</div></precustom></div></div><div class="definition_r3VA"><div class="definition-title_x0IZ"><span>message</span><h3 class="anchor anchorWithStickyNavbar_YDjN" id="enumvalueoptions">EnumValueOptions<a class="hash-link" href="#enumvalueoptions" title="Direct link to heading">​</a></h3></div><div class="precustom-container"><precustom><div><span></span><span class="type">message</span> EnumValueOptions {</div><div class="comment">  // Is this enum value deprecated?
+</div><div class="comment">  // Depending on the target platform, this can emit Deprecated annotations
+</div><div class="comment">  // for the enum value, or it will be completely ignored; in the very least,
+</div><div class="comment">  // this is a formalization for deprecating enum values.
+</div><div><span>  </span><span class="type">bool</span> deprecated = 1;</div><div>​
+</div><div class="comment">  // The parser stores options it doesn&#x27;t recognize here. See above.
+</div><div><span>  </span><span class="type">repeated </span><a href="/protosaurus/pr-33/docs/wkt/google.protobuf#uninterpretedoption">UninterpretedOption</a> uninterpreted_option = 2;</div><div>}</div></precustom></div></div><div class="definition_r3VA"><div class="definition-title_x0IZ"><span>message</span><h3 class="anchor anchorWithStickyNavbar_YDjN" id="extensionrangeoptions">ExtensionRangeOptions<a class="hash-link" href="#extensionrangeoptions" title="Direct link to heading">​</a></h3></div><div class="precustom-container"><precustom><div><span></span><span class="type">message</span> ExtensionRangeOptions {</div><div class="comment">  // The parser stores options it doesn&#x27;t recognize here. See above.
+</div><div><span>  </span><span class="type">repeated </span><a href="/protosaurus/pr-33/docs/wkt/google.protobuf#uninterpretedoption">UninterpretedOption</a> uninterpreted_option = 1;</div><div>}</div></precustom></div></div><div class="definition_r3VA"><div class="definition-title_x0IZ"><span>message</span><h3 class="anchor anchorWithStickyNavbar_YDjN" id="fielddescriptorproto">FieldDescriptorProto<a class="hash-link" href="#fielddescriptorproto" title="Direct link to heading">​</a></h3></div><p>Describes a field within a message.</p><div class="precustom-container"><precustom><div><span></span><span class="type">message</span> FieldDescriptorProto {</div><div><span>  </span><span class="type">string</span> name = 1;</div><div>​
+</div><div><span>  </span><span class="type">int32</span> number = 2;</div><div>​
+</div><div><span>  </span><span class="type">enum</span> Label {</div><div class="comment">    // 0 is reserved for errors
+</div><div>    LABEL_OPTIONAL = 1;
+</div><div>    LABEL_REQUIRED = 2;
+</div><div>    LABEL_REPEATED = 3;
+</div><div>  }
+</div><div>​
+</div><div>  Label label = 3;
+</div><div>​
+</div><div><span>  </span><span class="type">enum</span> Type {</div><div class="comment">    // 0 is reserved for errors.
+</div><div class="comment">    // Order is weird for historical reasons.
+</div><div>    TYPE_DOUBLE = 1;
+</div><div>    TYPE_FLOAT = 2;
+</div><div class="comment">    // Not ZigZag encoded.  Negative numbers take 10 bytes.  Use TYPE_SINT64 if
+</div><div class="comment">    // negative values are likely.
+</div><div>    TYPE_INT64 = 3;
+</div><div>    TYPE_UINT64 = 4;
+</div><div class="comment">    // Not ZigZag encoded.  Negative numbers take 10 bytes.  Use TYPE_SINT32 if
+</div><div class="comment">    // negative values are likely.
+</div><div>    TYPE_INT32 = 5;
+</div><div>    TYPE_FIXED64 = 6;
+</div><div>    TYPE_FIXED32 = 7;
+</div><div>    TYPE_BOOL = 8;
+</div><div>    TYPE_STRING = 9;
+</div><div class="comment">    // Tag-delimited aggregate.
+</div><div class="comment">    // Group type is deprecated and not supported in proto3. However, Proto3
+</div><div class="comment">    // implementations should still be able to parse the group wire format and
+</div><div class="comment">    // treat group fields as unknown fields.
+</div><div>    TYPE_GROUP = 10;
+</div><div class="comment">    // Length-delimited aggregate.
+</div><div>    TYPE_MESSAGE = 11;
+</div><div class="comment">    // New in version 2.
+</div><div>    TYPE_BYTES = 12;
+</div><div>    TYPE_UINT32 = 13;
+</div><div>    TYPE_ENUM = 14;
+</div><div>    TYPE_SFIXED32 = 15;
+</div><div>    TYPE_SFIXED64 = 16;
+</div><div class="comment">    // Uses ZigZag encoding.
+</div><div>    TYPE_SINT32 = 17;
+</div><div class="comment">    // Uses ZigZag encoding.
+</div><div>    TYPE_SINT64 = 18;
+</div><div>  }
+</div><div>​
+</div><div class="comment">  // If type_name is set, this need not be set.  If both this and type_name
+</div><div class="comment">  // are set, this must be one of TYPE_ENUM, TYPE_MESSAGE or TYPE_GROUP.
+</div><div><span>  </span><a href="/protosaurus/pr-33/docs/wkt/google.protobuf#type">Type</a> type = 4;</div><div>​
+</div><div class="comment">  // For message and enum types, this is the name of the type.  If the name
+</div><div class="comment">  // starts with a &#x27;.&#x27;, it is fully-qualified.  Otherwise, C++-like scoping
+</div><div class="comment">  // rules are used to find the type (i.e. first the nested types within this
+</div><div class="comment">  // message are searched, then within the parent, on up to the root
+</div><div class="comment">  // namespace).
+</div><div><span>  </span><span class="type">string</span> type_name = 5;</div><div>​
+</div><div class="comment">  // For extensions, this is the name of the type being extended.  It is
+</div><div class="comment">  // resolved in the same manner as type_name.
+</div><div><span>  </span><span class="type">string</span> extendee = 6;</div><div>​
+</div><div class="comment">  // For numeric types, contains the original text representation of the value.
+</div><div class="comment">  // For booleans, &quot;true&quot; or &quot;false&quot;.
+</div><div class="comment">  // For strings, contains the default text contents (not escaped in any way).
+</div><div class="comment">  // For bytes, contains the C escaped value.  All bytes &gt;= 128 are escaped.
+</div><div class="comment">  // TODO(kenton):  Base-64 encode?
+</div><div><span>  </span><span class="type">string</span> default_value = 7;</div><div>​
+</div><div class="comment">  // If set, gives the index of a oneof in the containing type&#x27;s oneof_decl
+</div><div class="comment">  // list.  This field is a member of that oneof.
+</div><div><span>  </span><span class="type">int32</span> oneof_index = 8;</div><div>​
+</div><div class="comment">  // JSON name of this field. The value is set by protocol compiler. If the
+</div><div class="comment">  // user has set a &quot;json_name&quot; option on this field, that option&#x27;s value
+</div><div class="comment">  // will be used. Otherwise, it&#x27;s deduced from the field&#x27;s name by converting
+</div><div class="comment">  // it to camelCase.
+</div><div><span>  </span><span class="type">string</span> json_name = 9;</div><div>​
+</div><div><span>  </span><a href="/protosaurus/pr-33/docs/wkt/google.protobuf#fieldoptions">FieldOptions</a> options = 10;</div><div>}</div></precustom></div></div><div class="definition_r3VA"><div class="definition-title_x0IZ"><span>message</span><h3 class="anchor anchorWithStickyNavbar_YDjN" id="fieldoptions">FieldOptions<a class="hash-link" href="#fieldoptions" title="Direct link to heading">​</a></h3></div><div class="precustom-container"><precustom><div><span></span><span class="type">message</span> FieldOptions {</div><div><span>  </span><span class="type">enum</span> CType {</div><div class="comment">    // Default mode.
+</div><div>    STRING = 0;
+</div><div>    CORD = 1;
+</div><div>    STRING_PIECE = 2;
+</div><div>  }
+</div><div>​
+</div><div class="comment">  // The ctype option instructs the C++ code generator to use a different
+</div><div class="comment">  // representation of the field than it normally would.  See the specific
+</div><div class="comment">  // options below.  This option is not yet implemented in the open source
+</div><div class="comment">  // release -- sorry, we&#x27;ll try to include it in a future version!
+</div><div>  CType ctype = 1;
+</div><div>​
+</div><div class="comment">  // The packed option can be enabled for repeated primitive fields to enable
+</div><div class="comment">  // a more efficient representation on the wire. Rather than repeatedly
+</div><div class="comment">  // writing the tag and type for each element, the entire array is encoded as
+</div><div class="comment">  // a single length-delimited blob. In proto3, only explicit setting it to
+</div><div class="comment">  // false will avoid using packed encoding.
+</div><div><span>  </span><span class="type">bool</span> packed = 2;</div><div>​
+</div><div><span>  </span><span class="type">enum</span> JSType {</div><div class="comment">    // Use the default type.
+</div><div>    JS_NORMAL = 0;
+</div><div class="comment">    // Use JavaScript strings.
+</div><div>    JS_STRING = 1;
+</div><div class="comment">    // Use JavaScript numbers.
+</div><div>    JS_NUMBER = 2;
+</div><div>  }
+</div><div>​
+</div><div class="comment">  // The jstype option determines the JavaScript type used for values of the
+</div><div class="comment">  // field.  The option is permitted only for 64 bit integral and fixed types
+</div><div class="comment">  // (int64, uint64, sint64, fixed64, sfixed64).  A field with jstype JS_STRING
+</div><div class="comment">  // is represented as JavaScript string, which avoids loss of precision that
+</div><div class="comment">  // can happen when a large value is converted to a floating point JavaScript.
+</div><div class="comment">  // Specifying JS_NUMBER for the jstype causes the generated JavaScript code to
+</div><div class="comment">  // use the JavaScript &quot;number&quot; type.  The behavior of the default option
+</div><div class="comment">  // JS_NORMAL is implementation dependent.
+</div><div class="comment">  // 
+</div><div class="comment">  // This option is an enum to permit additional types to be added, e.g.
+</div><div class="comment">  // goog.math.Integer.
+</div><div>  JSType jstype = 3;
+</div><div>​
+</div><div class="comment">  // Should this field be parsed lazily?  Lazy applies only to message-type
+</div><div class="comment">  // fields.  It means that when the outer message is initially parsed, the
+</div><div class="comment">  // inner message&#x27;s contents will not be parsed but instead stored in encoded
+</div><div class="comment">  // form.  The inner message will actually be parsed when it is first accessed.
+</div><div class="comment">  // 
+</div><div class="comment">  // This is only a hint.  Implementations are free to choose whether to use
+</div><div class="comment">  // eager or lazy parsing regardless of the value of this option.  However,
+</div><div class="comment">  // setting this option true suggests that the protocol author believes that
+</div><div class="comment">  // using lazy parsing on this field is worth the additional bookkeeping
+</div><div class="comment">  // overhead typically needed to implement it.
+</div><div class="comment">  // 
+</div><div class="comment">  // This option does not affect the public interface of any generated code;
+</div><div class="comment">  // all method signatures remain the same.  Furthermore, thread-safety of the
+</div><div class="comment">  // interface is not affected by this option; const methods remain safe to
+</div><div class="comment">  // call from multiple threads concurrently, while non-const methods continue
+</div><div class="comment">  // to require exclusive access.
+</div><div class="comment">  // 
+</div><div class="comment">  // 
+</div><div class="comment">  // Note that implementations may choose not to check required fields within
+</div><div class="comment">  // a lazy sub-message.  That is, calling IsInitialized() on the outer message
+</div><div class="comment">  // may return true even if the inner message has missing required fields.
+</div><div class="comment">  // This is necessary because otherwise the inner message would have to be
+</div><div class="comment">  // parsed in order to perform the check, defeating the purpose of lazy
+</div><div class="comment">  // parsing.  An implementation which chooses not to check required fields
+</div><div class="comment">  // must be consistent about it.  That is, for any particular sub-message, the
+</div><div class="comment">  // implementation must either *always* check its required fields, or *never*
+</div><div class="comment">  // check its required fields, regardless of whether or not the message has
+</div><div class="comment">  // been parsed.
+</div><div><span>  </span><span class="type">bool</span> lazy = 4;</div><div>​
+</div><div class="comment">  // Is this field deprecated?
+</div><div class="comment">  // Depending on the target platform, this can emit Deprecated annotations
+</div><div class="comment">  // for accessors, or it will be completely ignored; in the very least, this
+</div><div class="comment">  // is a formalization for deprecating fields.
+</div><div><span>  </span><span class="type">bool</span> deprecated = 5;</div><div>​
+</div><div class="comment">  // For Google-internal migration only. Do not use.
+</div><div><span>  </span><span class="type">bool</span> weak = 6;</div><div>​
+</div><div class="comment">  // The parser stores options it doesn&#x27;t recognize here. See above.
+</div><div><span>  </span><span class="type">repeated </span><a href="/protosaurus/pr-33/docs/wkt/google.protobuf#uninterpretedoption">UninterpretedOption</a> uninterpreted_option = 7;</div><div>}</div></precustom></div></div><div class="definition_r3VA"><div class="definition-title_x0IZ"><span>message</span><h3 class="anchor anchorWithStickyNavbar_YDjN" id="filedescriptorproto">FileDescriptorProto<a class="hash-link" href="#filedescriptorproto" title="Direct link to heading">​</a></h3></div><p>Describes a complete .proto file.</p><div class="precustom-container"><precustom><div><span></span><span class="type">message</span> FileDescriptorProto {</div><div class="comment">  // file name, relative to root of source tree
+</div><div><span>  </span><span class="type">string</span> name = 1;</div><div>​
+</div><div class="comment">  // e.g. &quot;foo&quot;, &quot;foo.bar&quot;, etc.
+</div><div><span>  </span><span class="type">string</span> package = 2;</div><div>​
+</div><div class="comment">  // Names of files imported by this file.
+</div><div>  repeated string dependency = 3;
+</div><div>​
+</div><div class="comment">  // Indexes of the public imported files in the dependency list above.
+</div><div>  repeated int32 public_dependency = 4;
+</div><div>​
+</div><div class="comment">  // Indexes of the weak imported files in the dependency list.
+</div><div class="comment">  // For Google-internal migration only. Do not use.
+</div><div>  repeated int32 weak_dependency = 5;
+</div><div>​
+</div><div class="comment">  // All top-level definitions in this file.
+</div><div><span>  </span><span class="type">repeated </span><a href="/protosaurus/pr-33/docs/wkt/google.protobuf#descriptorproto">DescriptorProto</a> message_type = 6;</div><div>​
+</div><div><span>  </span><span class="type">repeated </span><a href="/protosaurus/pr-33/docs/wkt/google.protobuf#enumdescriptorproto">EnumDescriptorProto</a> enum_type = 7;</div><div>​
+</div><div><span>  </span><span class="type">repeated </span><a href="/protosaurus/pr-33/docs/wkt/google.protobuf#servicedescriptorproto">ServiceDescriptorProto</a> service = 8;</div><div>​
+</div><div><span>  </span><span class="type">repeated </span><a href="/protosaurus/pr-33/docs/wkt/google.protobuf#fielddescriptorproto">FieldDescriptorProto</a> extension = 9;</div><div>​
+</div><div><span>  </span><a href="/protosaurus/pr-33/docs/wkt/google.protobuf#fileoptions">FileOptions</a> options = 10;</div><div>​
+</div><div class="comment">  // This field contains optional information about the original source code.
+</div><div class="comment">  // You may safely remove this entire field without harming runtime
+</div><div class="comment">  // functionality of the descriptors -- the information is needed only by
+</div><div class="comment">  // development tools.
+</div><div><span>  </span><a href="/protosaurus/pr-33/docs/wkt/google.protobuf#sourcecodeinfo">SourceCodeInfo</a> source_code_info = 11;</div><div>​
+</div><div class="comment">  // The syntax of the proto file.
+</div><div class="comment">  // The supported values are &quot;proto2&quot; and &quot;proto3&quot;.
+</div><div><span>  </span><span class="type">string</span> syntax = 12;</div><div>}</div></precustom></div></div><div class="definition_r3VA"><div class="definition-title_x0IZ"><span>message</span><h3 class="anchor anchorWithStickyNavbar_YDjN" id="filedescriptorset">FileDescriptorSet<a class="hash-link" href="#filedescriptorset" title="Direct link to heading">​</a></h3></div><p>The protocol compiler can output a FileDescriptorSet containing the .proto
+files it parses.</p><div class="precustom-container"><precustom><div><span></span><span class="type">message</span> FileDescriptorSet {</div><div><span>  </span><span class="type">repeated </span><a href="/protosaurus/pr-33/docs/wkt/google.protobuf#filedescriptorproto">FileDescriptorProto</a> file = 1;</div><div>}</div></precustom></div></div><div class="definition_r3VA"><div class="definition-title_x0IZ"><span>message</span><h3 class="anchor anchorWithStickyNavbar_YDjN" id="fileoptions">FileOptions<a class="hash-link" href="#fileoptions" title="Direct link to heading">​</a></h3></div><div class="precustom-container"><precustom><div><span></span><span class="type">message</span> FileOptions {</div><div class="comment">  // Sets the Java package where classes generated from this .proto will be
+</div><div class="comment">  // placed.  By default, the proto package is used, but this is often
+</div><div class="comment">  // inappropriate because proto packages do not normally start with backwards
+</div><div class="comment">  // domain names.
+</div><div><span>  </span><span class="type">string</span> java_package = 1;</div><div>​
+</div><div class="comment">  // If set, all the classes from the .proto file are wrapped in a single
+</div><div class="comment">  // outer class with the given name.  This applies to both Proto1
+</div><div class="comment">  // (equivalent to the old &quot;--one_java_file&quot; option) and Proto2 (where
+</div><div class="comment">  // a .proto always translates to a single class, but you may want to
+</div><div class="comment">  // explicitly choose the class name).
+</div><div><span>  </span><span class="type">string</span> java_outer_classname = 2;</div><div>​
+</div><div class="comment">  // If set true, then the Java code generator will generate a separate .java
+</div><div class="comment">  // file for each top-level message, enum, and service defined in the .proto
+</div><div class="comment">  // file.  Thus, these types will *not* be nested inside the outer class
+</div><div class="comment">  // named by java_outer_classname.  However, the outer class will still be
+</div><div class="comment">  // generated to contain the file&#x27;s getDescriptor() method as well as any
+</div><div class="comment">  // top-level extensions defined in the file.
+</div><div><span>  </span><span class="type">bool</span> java_multiple_files = 3;</div><div>​
+</div><div class="comment">  // This option does nothing.
+</div><div><span>  </span><span class="type">bool</span> java_generate_equals_and_hash = 4;</div><div>​
+</div><div class="comment">  // If set true, then the Java2 code generator will generate code that
+</div><div class="comment">  // throws an exception whenever an attempt is made to assign a non-UTF-8
+</div><div class="comment">  // byte sequence to a string field.
+</div><div class="comment">  // Message reflection will do the same.
+</div><div class="comment">  // However, an extension field still accepts non-UTF-8 byte sequences.
+</div><div class="comment">  // This option has no effect on when used with the lite runtime.
+</div><div><span>  </span><span class="type">bool</span> java_string_check_utf8 = 5;</div><div>​
+</div><div><span>  </span><span class="type">enum</span> OptimizeMode {</div><div class="comment">    // Generate complete code for parsing, serialization,
+</div><div>    SPEED = 1;
+</div><div class="comment">    // etc.
+</div><div class="comment">    // 
+</div><div class="comment">    // Use ReflectionOps to implement these methods.
+</div><div>    CODE_SIZE = 2;
+</div><div class="comment">    // Generate code using MessageLite and the lite runtime.
+</div><div>    LITE_RUNTIME = 3;
+</div><div>  }
+</div><div>​
+</div><div>  OptimizeMode optimize_for = 6;
+</div><div>​
+</div><div class="comment">  // Sets the Go package where structs generated from this .proto will be
+</div><div class="comment">  // placed. If omitted, the Go package will be derived from the following:
+</div><div class="comment">  //   - The basename of the package import path, if provided.
+</div><div class="comment">  //   - Otherwise, the package statement in the .proto file, if present.
+</div><div class="comment">  //   - Otherwise, the basename of the .proto file, without extension.
+</div><div><span>  </span><span class="type">string</span> go_package = 7;</div><div>​
+</div><div class="comment">  // Should generic services be generated in each language?  &quot;Generic&quot; services
+</div><div class="comment">  // are not specific to any particular RPC system.  They are generated by the
+</div><div class="comment">  // main code generators in each language (without additional plugins).
+</div><div class="comment">  // Generic services were the only kind of service generation supported by
+</div><div class="comment">  // early versions of google.protobuf.
+</div><div class="comment">  // 
+</div><div class="comment">  // Generic services are now considered deprecated in favor of using plugins
+</div><div class="comment">  // that generate code specific to your particular RPC system.  Therefore,
+</div><div class="comment">  // these default to false.  Old code which depends on generic services should
+</div><div class="comment">  // explicitly set them to true.
+</div><div><span>  </span><span class="type">bool</span> cc_generic_services = 8;</div><div>​
+</div><div><span>  </span><span class="type">bool</span> java_generic_services = 9;</div><div>​
+</div><div><span>  </span><span class="type">bool</span> py_generic_services = 10;</div><div>​
+</div><div><span>  </span><span class="type">bool</span> php_generic_services = 11;</div><div>​
+</div><div class="comment">  // Is this file deprecated?
+</div><div class="comment">  // Depending on the target platform, this can emit Deprecated annotations
+</div><div class="comment">  // for everything in the file, or it will be completely ignored; in the very
+</div><div class="comment">  // least, this is a formalization for deprecating files.
+</div><div><span>  </span><span class="type">bool</span> deprecated = 12;</div><div>​
+</div><div class="comment">  // Enables the use of arenas for the proto messages in this file. This applies
+</div><div class="comment">  // only to generated classes for C++.
+</div><div><span>  </span><span class="type">bool</span> cc_enable_arenas = 13;</div><div>​
+</div><div class="comment">  // Sets the objective c class prefix which is prepended to all objective c
+</div><div class="comment">  // generated classes from this .proto. There is no default.
+</div><div><span>  </span><span class="type">string</span> objc_class_prefix = 14;</div><div>​
+</div><div class="comment">  // Namespace for generated classes; defaults to the package.
+</div><div><span>  </span><span class="type">string</span> csharp_namespace = 15;</div><div>​
+</div><div class="comment">  // By default Swift generators will take the proto package and CamelCase it
+</div><div class="comment">  // replacing &#x27;.&#x27; with underscore and use that to prefix the types/symbols
+</div><div class="comment">  // defined. When this options is provided, they will use this value instead
+</div><div class="comment">  // to prefix the types/symbols defined.
+</div><div><span>  </span><span class="type">string</span> swift_prefix = 16;</div><div>​
+</div><div class="comment">  // Sets the php class prefix which is prepended to all php generated classes
+</div><div class="comment">  // from this .proto. Default is empty.
+</div><div><span>  </span><span class="type">string</span> php_class_prefix = 17;</div><div>​
+</div><div class="comment">  // Use this option to change the namespace of php generated classes. Default
+</div><div class="comment">  // is empty. When this option is empty, the package name will be used for
+</div><div class="comment">  // determining the namespace.
+</div><div><span>  </span><span class="type">string</span> php_namespace = 18;</div><div>​
+</div><div class="comment">  // Use this option to change the namespace of php generated metadata classes.
+</div><div class="comment">  // Default is empty. When this option is empty, the proto file name will be
+</div><div class="comment">  // used for determining the namespace.
+</div><div><span>  </span><span class="type">string</span> php_metadata_namespace = 19;</div><div>​
+</div><div class="comment">  // Use this option to change the package of ruby generated classes. Default
+</div><div class="comment">  // is empty. When this option is not set, the package name will be used for
+</div><div class="comment">  // determining the ruby package.
+</div><div><span>  </span><span class="type">string</span> ruby_package = 20;</div><div>​
+</div><div class="comment">  // The parser stores options it doesn&#x27;t recognize here.
+</div><div class="comment">  // See the documentation for the &quot;Options&quot; section above.
+</div><div><span>  </span><span class="type">repeated </span><a href="/protosaurus/pr-33/docs/wkt/google.protobuf#uninterpretedoption">UninterpretedOption</a> uninterpreted_option = 21;</div><div>}</div></precustom></div></div><div class="definition_r3VA"><div class="definition-title_x0IZ"><span>message</span><h3 class="anchor anchorWithStickyNavbar_YDjN" id="generatedcodeinfo">GeneratedCodeInfo<a class="hash-link" href="#generatedcodeinfo" title="Direct link to heading">​</a></h3></div><p>Describes the relationship between generated code and its original source
+file. A GeneratedCodeInfo message is associated with only one generated
+source file, but may contain references to different source .proto files.</p><div class="precustom-container"><precustom><div><span></span><span class="type">message</span> GeneratedCodeInfo {</div><div><span>  </span><span class="type">message</span> Annotation {</div><div class="comment">    // Identifies the element in the original source .proto file. This field
+</div><div class="comment">    // is formatted the same as SourceCodeInfo.Location.path.
+</div><div>    repeated int32 path = 1;
+</div><div>​
+</div><div class="comment">    // Identifies the filesystem path to the original source .proto.
+</div><div><span>    </span><span class="type">string</span> source_file = 2;</div><div>​
+</div><div class="comment">    // Identifies the starting offset in bytes in the generated code
+</div><div class="comment">    // that relates to the identified object.
+</div><div><span>    </span><span class="type">int32</span> begin = 3;</div><div>​
+</div><div class="comment">    // Identifies the ending offset in bytes in the generated code that
+</div><div class="comment">    // relates to the identified offset. The end offset should be one past
+</div><div class="comment">    // the last relevant byte (so the length of the text = end - begin).
+</div><div><span>    </span><span class="type">int32</span> end = 4;</div><div>  }
+</div><div>​
+</div><div class="comment">  // An Annotation connects some span of text in generated code to an element
+</div><div class="comment">  // of its generating .proto file.
+</div><div>  repeated Annotation annotation = 1;
+</div><div>}</div></precustom></div></div><div class="definition_r3VA"><div class="definition-title_x0IZ"><span>message</span><h3 class="anchor anchorWithStickyNavbar_YDjN" id="messageoptions">MessageOptions<a class="hash-link" href="#messageoptions" title="Direct link to heading">​</a></h3></div><div class="precustom-container"><precustom><div><span></span><span class="type">message</span> MessageOptions {</div><div class="comment">  // Set true to use the old proto1 MessageSet wire format for extensions.
+</div><div class="comment">  // This is provided for backwards-compatibility with the MessageSet wire
+</div><div class="comment">  // format.  You should not use this for any other reason:  It&#x27;s less
+</div><div class="comment">  // efficient, has fewer features, and is more complicated.
+</div><div class="comment">  // 
+</div><div class="comment">  // The message must be defined exactly as follows:
+</div><div class="comment">  //   message Foo {
+</div><div class="comment">  //     option message_set_wire_format = true;
+</div><div class="comment">  //     extensions 4 to max;
+</div><div class="comment">  //   }
+</div><div class="comment">  // Note that the message cannot have any defined fields; MessageSets only
+</div><div class="comment">  // have extensions.
+</div><div class="comment">  // 
+</div><div class="comment">  // All extensions of your type must be singular messages; e.g. they cannot
+</div><div class="comment">  // be int32s, enums, or repeated messages.
+</div><div class="comment">  // 
+</div><div class="comment">  // Because this is an option, the above two restrictions are not enforced by
+</div><div class="comment">  // the protocol compiler.
+</div><div><span>  </span><span class="type">bool</span> message_set_wire_format = 1;</div><div>​
+</div><div class="comment">  // Disables the generation of the standard &quot;descriptor()&quot; accessor, which can
+</div><div class="comment">  // conflict with a field of the same name.  This is meant to make migration
+</div><div class="comment">  // from proto1 easier; new code should avoid fields named &quot;descriptor&quot;.
+</div><div><span>  </span><span class="type">bool</span> no_standard_descriptor_accessor = 2;</div><div>​
+</div><div class="comment">  // Is this message deprecated?
+</div><div class="comment">  // Depending on the target platform, this can emit Deprecated annotations
+</div><div class="comment">  // for the message, or it will be completely ignored; in the very least,
+</div><div class="comment">  // this is a formalization for deprecating messages.
+</div><div><span>  </span><span class="type">bool</span> deprecated = 3;</div><div>​
+</div><div class="comment">  // Whether the message is an automatically generated map entry type for the
+</div><div class="comment">  // maps field.
+</div><div class="comment">  // 
+</div><div class="comment">  // For maps fields:
+</div><div class="comment">  //     map&lt;KeyType, ValueType&gt; map_field = 1;
+</div><div class="comment">  // The parsed descriptor looks like:
+</div><div class="comment">  //     message MapFieldEntry {
+</div><div class="comment">  //         option map_entry = true;
+</div><div class="comment">  //         optional KeyType key = 1;
+</div><div class="comment">  //         optional ValueType value = 2;
+</div><div class="comment">  //     }
+</div><div class="comment">  //     repeated MapFieldEntry map_field = 1;
+</div><div class="comment">  // 
+</div><div class="comment">  // Implementations may choose not to generate the map_entry=true message, but
+</div><div class="comment">  // use a native map in the target language to hold the keys and values.
+</div><div class="comment">  // The reflection APIs in such implementations still need to work as
+</div><div class="comment">  // if the field is a repeated message field.
+</div><div class="comment">  // 
+</div><div class="comment">  // NOTE: Do not set the option in .proto files. Always use the maps syntax
+</div><div class="comment">  // instead. The option should only be implicitly set by the proto compiler
+</div><div class="comment">  // parser.
+</div><div><span>  </span><span class="type">bool</span> map_entry = 4;</div><div>​
+</div><div class="comment">  // The parser stores options it doesn&#x27;t recognize here. See above.
+</div><div><span>  </span><span class="type">repeated </span><a href="/protosaurus/pr-33/docs/wkt/google.protobuf#uninterpretedoption">UninterpretedOption</a> uninterpreted_option = 5;</div><div>}</div></precustom></div></div><div class="definition_r3VA"><div class="definition-title_x0IZ"><span>message</span><h3 class="anchor anchorWithStickyNavbar_YDjN" id="methoddescriptorproto">MethodDescriptorProto<a class="hash-link" href="#methoddescriptorproto" title="Direct link to heading">​</a></h3></div><p>Describes a method of a service.</p><div class="precustom-container"><precustom><div><span></span><span class="type">message</span> MethodDescriptorProto {</div><div><span>  </span><span class="type">string</span> name = 1;</div><div>​
+</div><div class="comment">  // Input and output type names.  These are resolved in the same way as
+</div><div class="comment">  // FieldDescriptorProto.type_name, but must refer to a message type.
+</div><div><span>  </span><span class="type">string</span> input_type = 2;</div><div>​
+</div><div><span>  </span><span class="type">string</span> output_type = 3;</div><div>​
+</div><div><span>  </span><a href="/protosaurus/pr-33/docs/wkt/google.protobuf#methodoptions">MethodOptions</a> options = 4;</div><div>​
+</div><div class="comment">  // Identifies if client streams multiple client messages
+</div><div><span>  </span><span class="type">bool</span> client_streaming = 5;</div><div>​
+</div><div class="comment">  // Identifies if server streams multiple server messages
+</div><div><span>  </span><span class="type">bool</span> server_streaming = 6;</div><div>}</div></precustom></div></div><div class="definition_r3VA"><div class="definition-title_x0IZ"><span>message</span><h3 class="anchor anchorWithStickyNavbar_YDjN" id="methodoptions">MethodOptions<a class="hash-link" href="#methodoptions" title="Direct link to heading">​</a></h3></div><div class="precustom-container"><precustom><div><span></span><span class="type">message</span> MethodOptions {</div><div class="comment">  // Is this method deprecated?
+</div><div class="comment">  // Depending on the target platform, this can emit Deprecated annotations
+</div><div class="comment">  // for the method, or it will be completely ignored; in the very least,
+</div><div class="comment">  // this is a formalization for deprecating methods.
+</div><div><span>  </span><span class="type">bool</span> deprecated = 1;</div><div>​
+</div><div><span>  </span><span class="type">enum</span> IdempotencyLevel {</div><div>    IDEMPOTENCY_UNKNOWN = 0;
+</div><div class="comment">    // implies idempotent
+</div><div>    NO_SIDE_EFFECTS = 1;
+</div><div class="comment">    // idempotent, but may have side effects
+</div><div>    IDEMPOTENT = 2;
+</div><div>  }
+</div><div>​
+</div><div>  IdempotencyLevel idempotency_level = 2;
+</div><div>​
+</div><div class="comment">  // The parser stores options it doesn&#x27;t recognize here. See above.
+</div><div><span>  </span><span class="type">repeated </span><a href="/protosaurus/pr-33/docs/wkt/google.protobuf#uninterpretedoption">UninterpretedOption</a> uninterpreted_option = 3;</div><div>}</div></precustom></div></div><div class="definition_r3VA"><div class="definition-title_x0IZ"><span>message</span><h3 class="anchor anchorWithStickyNavbar_YDjN" id="oneofdescriptorproto">OneofDescriptorProto<a class="hash-link" href="#oneofdescriptorproto" title="Direct link to heading">​</a></h3></div><p>Describes a oneof.</p><div class="precustom-container"><precustom><div><span></span><span class="type">message</span> OneofDescriptorProto {</div><div><span>  </span><span class="type">string</span> name = 1;</div><div>​
+</div><div><span>  </span><a href="/protosaurus/pr-33/docs/wkt/google.protobuf#oneofoptions">OneofOptions</a> options = 2;</div><div>}</div></precustom></div></div><div class="definition_r3VA"><div class="definition-title_x0IZ"><span>message</span><h3 class="anchor anchorWithStickyNavbar_YDjN" id="oneofoptions">OneofOptions<a class="hash-link" href="#oneofoptions" title="Direct link to heading">​</a></h3></div><div class="precustom-container"><precustom><div><span></span><span class="type">message</span> OneofOptions {</div><div class="comment">  // The parser stores options it doesn&#x27;t recognize here. See above.
+</div><div><span>  </span><span class="type">repeated </span><a href="/protosaurus/pr-33/docs/wkt/google.protobuf#uninterpretedoption">UninterpretedOption</a> uninterpreted_option = 1;</div><div>}</div></precustom></div></div><div class="definition_r3VA"><div class="definition-title_x0IZ"><span>message</span><h3 class="anchor anchorWithStickyNavbar_YDjN" id="servicedescriptorproto">ServiceDescriptorProto<a class="hash-link" href="#servicedescriptorproto" title="Direct link to heading">​</a></h3></div><p>Describes a service.</p><div class="precustom-container"><precustom><div><span></span><span class="type">message</span> ServiceDescriptorProto {</div><div><span>  </span><span class="type">string</span> name = 1;</div><div>​
+</div><div><span>  </span><span class="type">repeated </span><a href="/protosaurus/pr-33/docs/wkt/google.protobuf#methoddescriptorproto">MethodDescriptorProto</a> method = 2;</div><div>​
+</div><div><span>  </span><a href="/protosaurus/pr-33/docs/wkt/google.protobuf#serviceoptions">ServiceOptions</a> options = 3;</div><div>}</div></precustom></div></div><div class="definition_r3VA"><div class="definition-title_x0IZ"><span>message</span><h3 class="anchor anchorWithStickyNavbar_YDjN" id="serviceoptions">ServiceOptions<a class="hash-link" href="#serviceoptions" title="Direct link to heading">​</a></h3></div><div class="precustom-container"><precustom><div><span></span><span class="type">message</span> ServiceOptions {</div><div class="comment">  // Is this service deprecated?
+</div><div class="comment">  // Depending on the target platform, this can emit Deprecated annotations
+</div><div class="comment">  // for the service, or it will be completely ignored; in the very least,
+</div><div class="comment">  // this is a formalization for deprecating services.
+</div><div><span>  </span><span class="type">bool</span> deprecated = 1;</div><div>​
+</div><div class="comment">  // The parser stores options it doesn&#x27;t recognize here. See above.
+</div><div><span>  </span><span class="type">repeated </span><a href="/protosaurus/pr-33/docs/wkt/google.protobuf#uninterpretedoption">UninterpretedOption</a> uninterpreted_option = 2;</div><div>}</div></precustom></div></div><div class="definition_r3VA"><div class="definition-title_x0IZ"><span>message</span><h3 class="anchor anchorWithStickyNavbar_YDjN" id="sourcecodeinfo">SourceCodeInfo<a class="hash-link" href="#sourcecodeinfo" title="Direct link to heading">​</a></h3></div><p>Encapsulates information about the original source file from which a
+FileDescriptorProto was generated.</p><div class="precustom-container"><precustom><div><span></span><span class="type">message</span> SourceCodeInfo {</div><div><span>  </span><span class="type">message</span> Location {</div><div class="comment">    // Identifies which part of the FileDescriptorProto was defined at this
+</div><div class="comment">    // location.
+</div><div class="comment">    // 
+</div><div class="comment">    // Each element is a field number or an index.  They form a path from
+</div><div class="comment">    // the root FileDescriptorProto to the place where the definition.  For
+</div><div class="comment">    // example, this path:
+</div><div class="comment">    //   [ 4, 3, 2, 7, 1 ]
+</div><div class="comment">    // refers to:
+</div><div class="comment">    //   file.message_type(3)  // 4, 3
+</div><div class="comment">    //       .field(7)         // 2, 7
+</div><div class="comment">    //       .name()           // 1
+</div><div class="comment">    // This is because FileDescriptorProto.message_type has field number 4:
+</div><div class="comment">    //   repeated DescriptorProto message_type = 4;
+</div><div class="comment">    // and DescriptorProto.field has field number 2:
+</div><div class="comment">    //   repeated FieldDescriptorProto field = 2;
+</div><div class="comment">    // and FieldDescriptorProto.name has field number 1:
+</div><div class="comment">    //   optional string name = 1;
+</div><div class="comment">    // 
+</div><div class="comment">    // Thus, the above path gives the location of a field name.  If we removed
+</div><div class="comment">    // the last element:
+</div><div class="comment">    //   [ 4, 3, 2, 7 ]
+</div><div class="comment">    // this path refers to the whole field declaration (from the beginning
+</div><div class="comment">    // of the label to the terminating semicolon).
+</div><div>    repeated int32 path = 1;
+</div><div>​
+</div><div class="comment">    // Always has exactly three or four elements: start line, start column,
+</div><div class="comment">    // end line (optional, otherwise assumed same as start line), end column.
+</div><div class="comment">    // These are packed into a single field for efficiency.  Note that line
+</div><div class="comment">    // and column numbers are zero-based -- typically you will want to add
+</div><div class="comment">    // 1 to each before displaying to a user.
+</div><div>    repeated int32 span = 2;
+</div><div>​
+</div><div class="comment">    // If this SourceCodeInfo represents a complete declaration, these are any
+</div><div class="comment">    // comments appearing before and after the declaration which appear to be
+</div><div class="comment">    // attached to the declaration.
+</div><div class="comment">    // 
+</div><div class="comment">    // A series of line comments appearing on consecutive lines, with no other
+</div><div class="comment">    // tokens appearing on those lines, will be treated as a single comment.
+</div><div class="comment">    // 
+</div><div class="comment">    // leading_detached_comments will keep paragraphs of comments that appear
+</div><div class="comment">    // before (but not connected to) the current element. Each paragraph,
+</div><div class="comment">    // separated by empty lines, will be one comment element in the repeated
+</div><div class="comment">    // field.
+</div><div class="comment">    // 
+</div><div class="comment">    // Only the comment content is provided; comment markers (e.g. //) are
+</div><div class="comment">    // stripped out.  For block comments, leading whitespace and an asterisk
+</div><div class="comment">    // will be stripped from the beginning of each line other than the first.
+</div><div class="comment">    // Newlines are included in the output.
+</div><div class="comment">    // 
+</div><div class="comment">    // Examples:
+</div><div class="comment">    // 
+</div><div class="comment">    //   optional int32 foo = 1;  // Comment attached to foo.
+</div><div class="comment">    //   // Comment attached to bar.
+</div><div class="comment">    //   optional int32 bar = 2;
+</div><div class="comment">    // 
+</div><div class="comment">    //   optional string baz = 3;
+</div><div class="comment">    //   // Comment attached to baz.
+</div><div class="comment">    //   // Another line attached to baz.
+</div><div class="comment">    // 
+</div><div class="comment">    //   // Comment attached to qux.
+</div><div class="comment">    //   //
+</div><div class="comment">    //   // Another line attached to qux.
+</div><div class="comment">    //   optional double qux = 4;
+</div><div class="comment">    // 
+</div><div class="comment">    //   // Detached comment for corge. This is not leading or trailing comments
+</div><div class="comment">    //   // to qux or corge because there are blank lines separating it from
+</div><div class="comment">    //   // both.
+</div><div class="comment">    // 
+</div><div class="comment">    //   // Detached comment for corge paragraph 2.
+</div><div class="comment">    // 
+</div><div class="comment">    //   optional string corge = 5;
+</div><div class="comment">    //   /* Block comment attached
+</div><div class="comment">    //    * to corge.  Leading asterisks
+</div><div class="comment">    //    * will be removed. */
+</div><div class="comment">    //   /* Block comment attached to
+</div><div class="comment">    //    * grault. */
+</div><div class="comment">    //   optional int32 grault = 6;
+</div><div class="comment">    // 
+</div><div class="comment">    //   // ignored detached comments.
+</div><div><span>    </span><span class="type">string</span> leading_comments = 3;</div><div>​
+</div><div><span>    </span><span class="type">string</span> trailing_comments = 4;</div><div>​
+</div><div>    repeated string leading_detached_comments = 5;
+</div><div>  }
+</div><div>​
+</div><div class="comment">  // A Location identifies a piece of source code in a .proto file which
+</div><div class="comment">  // corresponds to a particular definition.  This information is intended
+</div><div class="comment">  // to be useful to IDEs, code indexers, documentation generators, and similar
+</div><div class="comment">  // tools.
+</div><div class="comment">  // 
+</div><div class="comment">  // For example, say we have a file like:
+</div><div class="comment">  //   message Foo {
+</div><div class="comment">  //     optional string foo = 1;
+</div><div class="comment">  //   }
+</div><div class="comment">  // Let&#x27;s look at just the field definition:
+</div><div class="comment">  //   optional string foo = 1;
+</div><div class="comment">  //   ^       ^^     ^^  ^  ^^^
+</div><div class="comment">  //   a       bc     de  f  ghi
+</div><div class="comment">  // We have the following locations:
+</div><div class="comment">  //   span   path               represents
+</div><div class="comment">  //   [a,i)  [ 4, 0, 2, 0 ]     The whole field definition.
+</div><div class="comment">  //   [a,b)  [ 4, 0, 2, 0, 4 ]  The label (optional).
+</div><div class="comment">  //   [c,d)  [ 4, 0, 2, 0, 5 ]  The type (string).
+</div><div class="comment">  //   [e,f)  [ 4, 0, 2, 0, 1 ]  The name (foo).
+</div><div class="comment">  //   [g,h)  [ 4, 0, 2, 0, 3 ]  The number (1).
+</div><div class="comment">  // 
+</div><div class="comment">  // Notes:
+</div><div class="comment">  // - A location may refer to a repeated field itself (i.e. not to any
+</div><div class="comment">  //   particular index within it).  This is used whenever a set of elements are
+</div><div class="comment">  //   logically enclosed in a single code segment.  For example, an entire
+</div><div class="comment">  //   extend block (possibly containing multiple extension definitions) will
+</div><div class="comment">  //   have an outer location whose path refers to the &quot;extensions&quot; repeated
+</div><div class="comment">  //   field without an index.
+</div><div class="comment">  // - Multiple locations may have the same path.  This happens when a single
+</div><div class="comment">  //   logical declaration is spread out across multiple places.  The most
+</div><div class="comment">  //   obvious example is the &quot;extend&quot; block again -- there may be multiple
+</div><div class="comment">  //   extend blocks in the same scope, each of which will have the same path.
+</div><div class="comment">  // - A location&#x27;s span is not always a subset of its parent&#x27;s span.  For
+</div><div class="comment">  //   example, the &quot;extendee&quot; of an extension declaration appears at the
+</div><div class="comment">  //   beginning of the &quot;extend&quot; block and is shared by all extensions within
+</div><div class="comment">  //   the block.
+</div><div class="comment">  // - Just because a location&#x27;s span is a subset of some other location&#x27;s span
+</div><div class="comment">  //   does not mean that it is a descendant.  For example, a &quot;group&quot; defines
+</div><div class="comment">  //   both a type and a field in a single declaration.  Thus, the locations
+</div><div class="comment">  //   corresponding to the type and field and their components will overlap.
+</div><div class="comment">  // - Code which tries to interpret locations should probably be designed to
+</div><div class="comment">  //   ignore those that it doesn&#x27;t understand, as more types of locations could
+</div><div class="comment">  //   be recorded in the future.
+</div><div><span>  </span><span class="type">repeated </span><a href="/protosaurus/pr-33/docs/location.v1#location">Location</a> location = 1;</div><div>}</div></precustom></div></div><div class="definition_r3VA"><div class="definition-title_x0IZ"><span>message</span><h3 class="anchor anchorWithStickyNavbar_YDjN" id="uninterpretedoption">UninterpretedOption<a class="hash-link" href="#uninterpretedoption" title="Direct link to heading">​</a></h3></div><p>A message representing a option the parser does not recognize. This only
+appears in options protos created by the compiler::Parser class.
+DescriptorPool resolves these when building Descriptor objects. Therefore,
+options protos in descriptor objects (e.g. returned by Descriptor::options(),
+or produced by Descriptor::CopyTo()) will never have UninterpretedOptions
+in them.</p><div class="precustom-container"><precustom><div><span></span><span class="type">message</span> UninterpretedOption {</div><div><span>  </span><span class="type">message</span> NamePart {</div><div><span>    </span><span class="type">string</span> name_part = 1;</div><div>​
+</div><div><span>    </span><span class="type">bool</span> is_extension = 2;</div><div>  }
+</div><div>​
+</div><div>  repeated NamePart name = 1;
+</div><div>​
+</div><div class="comment">  // The value of the uninterpreted option, in whatever type the tokenizer
+</div><div class="comment">  // identified it as during parsing. Exactly one of these should be set.
+</div><div><span>  </span><span class="type">string</span> identifier_value = 2;</div><div>​
+</div><div><span>  </span><span class="type">uint64</span> positive_int_value = 3;</div><div>​
+</div><div><span>  </span><span class="type">int64</span> negative_int_value = 4;</div><div>​
+</div><div><span>  </span><span class="type">double</span> double_value = 5;</div><div>​
+</div><div><span>  </span><span class="type">bytes</span> string_value = 6;</div><div>​
+</div><div><span>  </span><span class="type">string</span> aggregate_value = 7;</div><div>}</div></precustom></div></div><div class="definition_r3VA"><div class="definition-title_x0IZ"><span>message</span><h3 class="anchor anchorWithStickyNavbar_YDjN" id="duration">Duration<a class="hash-link" href="#duration" title="Direct link to heading">​</a></h3></div><p>A Duration represents a signed, fixed-length span of time represented
+as a count of seconds and fractions of seconds at nanosecond
+resolution. It is independent of any calendar and concepts like &quot;day&quot;
+or &quot;month&quot;. It is related to Timestamp in that the difference between
+two Timestamp values is a Duration and it can be added or subtracted
+from a Timestamp. Range is approximately +-10,000 years.</p><h1>Examples</h1><p>Example 1: Compute Duration from two Timestamps in pseudo code.</p><div class="codeBlockContainer_CBWl theme-code-block"><div class="codeBlockContent_vhl8"><pre tabindex="0" class="prism-code language-text codeBlock_w2AC thin-scrollbar" style="color:#393A34;background-color:#f6f8fa"><code class="codeBlockLines_OfWd"><span class="token-line" style="color:#393A34"><span class="token plain">Timestamp start = ...;</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">Timestamp end = ...;</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">Duration duration = ...;</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain" style="display:inline-block"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">duration.seconds = end.seconds - start.seconds;</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">duration.nanos = end.nanos - start.nanos;</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain" style="display:inline-block"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">if (duration.seconds &lt; 0 &amp;&amp; duration.nanos &gt; 0) {</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">  duration.seconds += 1;</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">  duration.nanos -= 1000000000;</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">} else if (durations.seconds &gt; 0 &amp;&amp; duration.nanos &lt; 0) {</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">  duration.seconds -= 1;</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">  duration.nanos += 1000000000;</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">}</span><br></span></code></pre><button type="button" aria-label="Copy code to clipboard" class="copyButton_BbpX clean-btn">Copy</button></div></div><p>Example 2: Compute Timestamp from Timestamp + Duration in pseudo code.</p><div class="codeBlockContainer_CBWl theme-code-block"><div class="codeBlockContent_vhl8"><pre tabindex="0" class="prism-code language-text codeBlock_w2AC thin-scrollbar" style="color:#393A34;background-color:#f6f8fa"><code class="codeBlockLines_OfWd"><span class="token-line" style="color:#393A34"><span class="token plain">Timestamp start = ...;</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">Duration duration = ...;</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">Timestamp end = ...;</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain" style="display:inline-block"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">end.seconds = start.seconds + duration.seconds;</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">end.nanos = start.nanos + duration.nanos;</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain" style="display:inline-block"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">if (end.nanos &lt; 0) {</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">  end.seconds -= 1;</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">  end.nanos += 1000000000;</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">} else if (end.nanos &gt;= 1000000000) {</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">  end.seconds += 1;</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">  end.nanos -= 1000000000;</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">}</span><br></span></code></pre><button type="button" aria-label="Copy code to clipboard" class="copyButton_BbpX clean-btn">Copy</button></div></div><p>Example 3: Compute Duration from datetime.timedelta in Python.</p><div class="codeBlockContainer_CBWl theme-code-block"><div class="codeBlockContent_vhl8"><pre tabindex="0" class="prism-code language-text codeBlock_w2AC thin-scrollbar" style="color:#393A34;background-color:#f6f8fa"><code class="codeBlockLines_OfWd"><span class="token-line" style="color:#393A34"><span class="token plain">td = datetime.timedelta(days=3, minutes=10)</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">duration = Duration()</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">duration.FromTimedelta(td)</span><br></span></code></pre><button type="button" aria-label="Copy code to clipboard" class="copyButton_BbpX clean-btn">Copy</button></div></div><h1>JSON Mapping</h1><p>In JSON format, the Duration type is encoded as a string rather than an
+object, where the string ends in the suffix &quot;s&quot; (indicating seconds) and
+is preceded by the number of seconds, with nanoseconds expressed as
+fractional seconds. For example, 3 seconds with 0 nanoseconds should be
+encoded in JSON format as &quot;3s&quot;, while 3 seconds and 1 nanosecond should
+be expressed in JSON format as &quot;3.000000001s&quot;, and 3 seconds and 1
+microsecond should be expressed in JSON format as &quot;3.000001s&quot;.</p><div class="precustom-container"><precustom><div><span></span><span class="type">message</span> Duration {</div><div class="comment">  // Signed seconds of the span of time. Must be from -315,576,000,000
+</div><div class="comment">  // to +315,576,000,000 inclusive. Note: these bounds are computed from:
+</div><div class="comment">  // 60 sec/min * 60 min/hr * 24 hr/day * 365.25 days/year * 10000 years
+</div><div><span>  </span><span class="type">int64</span> seconds = 1;</div><div>​
+</div><div class="comment">  // Signed fractions of a second at nanosecond resolution of the span
+</div><div class="comment">  // of time. Durations less than one second are represented with a 0
+</div><div class="comment">  // `seconds` field and a positive or negative `nanos` field. For durations
+</div><div class="comment">  // of one second or more, a non-zero value for the `nanos` field must be
+</div><div class="comment">  // of the same sign as the `seconds` field. Must be from -999,999,999
+</div><div class="comment">  // to +999,999,999 inclusive.
+</div><div><span>  </span><span class="type">int32</span> nanos = 2;</div><div>}</div></precustom></div></div><div class="definition_r3VA"><div class="definition-title_x0IZ"><span>message</span><h3 class="anchor anchorWithStickyNavbar_YDjN" id="empty">Empty<a class="hash-link" href="#empty" title="Direct link to heading">​</a></h3></div><p>A generic empty message that you can re-use to avoid defining duplicated
+empty messages in your APIs. A typical example is to use it as the request
+or the response type of an API method. For instance:</p><div class="codeBlockContainer_CBWl theme-code-block"><div class="codeBlockContent_vhl8"><pre tabindex="0" class="prism-code language-text codeBlock_w2AC thin-scrollbar" style="color:#393A34;background-color:#f6f8fa"><code class="codeBlockLines_OfWd"><span class="token-line" style="color:#393A34"><span class="token plain">service Foo {</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">  rpc Bar(google.protobuf.Empty) returns (google.protobuf.Empty);</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">}</span><br></span></code></pre><button type="button" aria-label="Copy code to clipboard" class="copyButton_BbpX clean-btn">Copy</button></div></div><p>The JSON representation for <code>Empty</code> is empty JSON object <code>{}</code>.</p><div class="precustom-container"><precustom><div><span></span><span class="type">message</span> Empty {}</div></precustom></div></div><div class="definition_r3VA"><div class="definition-title_x0IZ"><span>message</span><h3 class="anchor anchorWithStickyNavbar_YDjN" id="fieldmask">FieldMask<a class="hash-link" href="#fieldmask" title="Direct link to heading">​</a></h3></div><p><code>FieldMask</code> represents a set of symbolic field paths, for example:</p><div class="codeBlockContainer_CBWl theme-code-block"><div class="codeBlockContent_vhl8"><pre tabindex="0" class="prism-code language-text codeBlock_w2AC thin-scrollbar" style="color:#393A34;background-color:#f6f8fa"><code class="codeBlockLines_OfWd"><span class="token-line" style="color:#393A34"><span class="token plain">paths: &quot;f.a&quot;</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">paths: &quot;f.b.d&quot;</span><br></span></code></pre><button type="button" aria-label="Copy code to clipboard" class="copyButton_BbpX clean-btn">Copy</button></div></div><p>Here <code>f</code> represents a field in some root message, <code>a</code> and <code>b</code>
+fields in the message found in <code>f</code>, and <code>d</code> a field found in the
+message in <code>f.b</code>.</p><p>Field masks are used to specify a subset of fields that should be
+returned by a get operation or modified by an update operation.
+Field masks also have a custom JSON encoding (see below).</p><h1>Field Masks in Projections</h1><p>When used in the context of a projection, a response message or
+sub-message is filtered by the API to only contain those fields as
+specified in the mask. For example, if the mask in the previous
+example is applied to a response message as follows:</p><div class="codeBlockContainer_CBWl theme-code-block"><div class="codeBlockContent_vhl8"><pre tabindex="0" class="prism-code language-text codeBlock_w2AC thin-scrollbar" style="color:#393A34;background-color:#f6f8fa"><code class="codeBlockLines_OfWd"><span class="token-line" style="color:#393A34"><span class="token plain">f {</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">  a : 22</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">  b {</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">    d : 1</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">    x : 2</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">  }</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">  y : 13</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">}</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">z: 8</span><br></span></code></pre><button type="button" aria-label="Copy code to clipboard" class="copyButton_BbpX clean-btn">Copy</button></div></div><p>The result will not contain specific values for fields x,y and z
+(their value will be set to the default, and omitted in proto text
+output):</p><div class="codeBlockContainer_CBWl theme-code-block"><div class="codeBlockContent_vhl8"><pre tabindex="0" class="prism-code language-text codeBlock_w2AC thin-scrollbar" style="color:#393A34;background-color:#f6f8fa"><code class="codeBlockLines_OfWd"><span class="token-line" style="color:#393A34"><span class="token plain">f {</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">  a : 22</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">  b {</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">    d : 1</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">  }</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">}</span><br></span></code></pre><button type="button" aria-label="Copy code to clipboard" class="copyButton_BbpX clean-btn">Copy</button></div></div><p>A repeated field is not allowed except at the last position of a
+paths string.</p><p>If a FieldMask object is not present in a get operation, the
+operation applies to all fields (as if a FieldMask of all fields
+had been specified).</p><p>Note that a field mask does not necessarily apply to the
+top-level response message. In case of a REST get operation, the
+field mask applies directly to the response, but in case of a REST
+list operation, the mask instead applies to each individual message
+in the returned resource list. In case of a REST custom method,
+other definitions may be used. Where the mask applies will be
+clearly documented together with its declaration in the API.  In
+any case, the effect on the returned resource/resources is required
+behavior for APIs.</p><h1>Field Masks in Update Operations</h1><p>A field mask in update operations specifies which fields of the
+targeted resource are going to be updated. The API is required
+to only change the values of the fields as specified in the mask
+and leave the others untouched. If a resource is passed in to
+describe the updated values, the API ignores the values of all
+fields not covered by the mask.</p><p>If a repeated field is specified for an update operation, new values will
+be appended to the existing repeated field in the target resource. Note that
+a repeated field is only allowed in the last position of a <code>paths</code> string.</p><p>If a sub-message is specified in the last position of the field mask for an
+update operation, then new value will be merged into the existing sub-message
+in the target resource.</p><p>For example, given the target message:</p><div class="codeBlockContainer_CBWl theme-code-block"><div class="codeBlockContent_vhl8"><pre tabindex="0" class="prism-code language-text codeBlock_w2AC thin-scrollbar" style="color:#393A34;background-color:#f6f8fa"><code class="codeBlockLines_OfWd"><span class="token-line" style="color:#393A34"><span class="token plain">f {</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">  b {</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">    d: 1</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">    x: 2</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">  }</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">  c: [1]</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">}</span><br></span></code></pre><button type="button" aria-label="Copy code to clipboard" class="copyButton_BbpX clean-btn">Copy</button></div></div><p>And an update message:</p><div class="codeBlockContainer_CBWl theme-code-block"><div class="codeBlockContent_vhl8"><pre tabindex="0" class="prism-code language-text codeBlock_w2AC thin-scrollbar" style="color:#393A34;background-color:#f6f8fa"><code class="codeBlockLines_OfWd"><span class="token-line" style="color:#393A34"><span class="token plain">f {</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">  b {</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">    d: 10</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">  }</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">  c: [2]</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">}</span><br></span></code></pre><button type="button" aria-label="Copy code to clipboard" class="copyButton_BbpX clean-btn">Copy</button></div></div><p>then if the field mask is:</p><p> paths: <!-- -->[&quot;f.b&quot;, &quot;f.c&quot;]</p><p>then the result will be:</p><div class="codeBlockContainer_CBWl theme-code-block"><div class="codeBlockContent_vhl8"><pre tabindex="0" class="prism-code language-text codeBlock_w2AC thin-scrollbar" style="color:#393A34;background-color:#f6f8fa"><code class="codeBlockLines_OfWd"><span class="token-line" style="color:#393A34"><span class="token plain">f {</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">  b {</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">    d: 10</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">    x: 2</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">  }</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">  c: [1, 2]</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">}</span><br></span></code></pre><button type="button" aria-label="Copy code to clipboard" class="copyButton_BbpX clean-btn">Copy</button></div></div><p>An implementation may provide options to override this default behavior for
+repeated and message fields.</p><p>In order to reset a field&#x27;s value to the default, the field must
+be in the mask and set to the default value in the provided resource.
+Hence, in order to reset all fields of a resource, provide a default
+instance of the resource and set all fields in the mask, or do
+not provide a mask as described below.</p><p>If a field mask is not present on update, the operation applies to
+all fields (as if a field mask of all fields has been specified).
+Note that in the presence of schema evolution, this may mean that
+fields the client does not know and has therefore not filled into
+the request will be reset to their default. If this is unwanted
+behavior, a specific service may require a client to always specify
+a field mask, producing an error if not.</p><p>As with get operations, the location of the resource which
+describes the updated values in the request message depends on the
+operation kind. In any case, the effect of the field mask is
+required to be honored by the API.</p><h2 class="anchor anchorWithStickyNavbar_YDjN" id="considerations-for-http-rest">Considerations for HTTP REST<a class="hash-link" href="#considerations-for-http-rest" title="Direct link to heading">​</a></h2><p>The HTTP kind of an update operation which uses a field mask must
+be set to PATCH instead of PUT in order to satisfy HTTP semantics
+(PUT must only be used for full updates).</p><h1>JSON Encoding of Field Masks</h1><p>In JSON, a field mask is encoded as a single string where paths are
+separated by a comma. Fields name in each path are converted
+to/from lower-camel naming conventions.</p><p>As an example, consider the following message declarations:</p><div class="codeBlockContainer_CBWl theme-code-block"><div class="codeBlockContent_vhl8"><pre tabindex="0" class="prism-code language-text codeBlock_w2AC thin-scrollbar" style="color:#393A34;background-color:#f6f8fa"><code class="codeBlockLines_OfWd"><span class="token-line" style="color:#393A34"><span class="token plain">message Profile {</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">  User user = 1;</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">  Photo photo = 2;</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">}</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">message User {</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">  string display_name = 1;</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">  string address = 2;</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">}</span><br></span></code></pre><button type="button" aria-label="Copy code to clipboard" class="copyButton_BbpX clean-btn">Copy</button></div></div><p>In proto a field mask for <code>Profile</code> may look as such:</p><div class="codeBlockContainer_CBWl theme-code-block"><div class="codeBlockContent_vhl8"><pre tabindex="0" class="prism-code language-text codeBlock_w2AC thin-scrollbar" style="color:#393A34;background-color:#f6f8fa"><code class="codeBlockLines_OfWd"><span class="token-line" style="color:#393A34"><span class="token plain">mask {</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">  paths: &quot;user.display_name&quot;</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">  paths: &quot;photo&quot;</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">}</span><br></span></code></pre><button type="button" aria-label="Copy code to clipboard" class="copyButton_BbpX clean-btn">Copy</button></div></div><p>In JSON, the same mask is represented as below:</p><div class="codeBlockContainer_CBWl theme-code-block"><div class="codeBlockContent_vhl8"><pre tabindex="0" class="prism-code language-text codeBlock_w2AC thin-scrollbar" style="color:#393A34;background-color:#f6f8fa"><code class="codeBlockLines_OfWd"><span class="token-line" style="color:#393A34"><span class="token plain">{</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">  mask: &quot;user.displayName,photo&quot;</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">}</span><br></span></code></pre><button type="button" aria-label="Copy code to clipboard" class="copyButton_BbpX clean-btn">Copy</button></div></div><h1>Field Masks and Oneof Fields</h1><p>Field masks treat fields in oneofs just as regular fields. Consider the
+following message:</p><div class="codeBlockContainer_CBWl theme-code-block"><div class="codeBlockContent_vhl8"><pre tabindex="0" class="prism-code language-text codeBlock_w2AC thin-scrollbar" style="color:#393A34;background-color:#f6f8fa"><code class="codeBlockLines_OfWd"><span class="token-line" style="color:#393A34"><span class="token plain">message SampleMessage {</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">  oneof test_oneof {</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">    string name = 4;</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">    SubMessage sub_message = 9;</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">  }</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">}</span><br></span></code></pre><button type="button" aria-label="Copy code to clipboard" class="copyButton_BbpX clean-btn">Copy</button></div></div><p>The field mask can be:</p><div class="codeBlockContainer_CBWl theme-code-block"><div class="codeBlockContent_vhl8"><pre tabindex="0" class="prism-code language-text codeBlock_w2AC thin-scrollbar" style="color:#393A34;background-color:#f6f8fa"><code class="codeBlockLines_OfWd"><span class="token-line" style="color:#393A34"><span class="token plain">mask {</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">  paths: &quot;name&quot;</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">}</span><br></span></code></pre><button type="button" aria-label="Copy code to clipboard" class="copyButton_BbpX clean-btn">Copy</button></div></div><p>Or:</p><div class="codeBlockContainer_CBWl theme-code-block"><div class="codeBlockContent_vhl8"><pre tabindex="0" class="prism-code language-text codeBlock_w2AC thin-scrollbar" style="color:#393A34;background-color:#f6f8fa"><code class="codeBlockLines_OfWd"><span class="token-line" style="color:#393A34"><span class="token plain">mask {</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">  paths: &quot;sub_message&quot;</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">}</span><br></span></code></pre><button type="button" aria-label="Copy code to clipboard" class="copyButton_BbpX clean-btn">Copy</button></div></div><p>Note that oneof type names (&quot;test_oneof&quot; in this case) cannot be used in
+paths.</p><h2 class="anchor anchorWithStickyNavbar_YDjN" id="field-mask-verification">Field Mask Verification<a class="hash-link" href="#field-mask-verification" title="Direct link to heading">​</a></h2><p>The implementation of any API method which has a FieldMask type field in the
+request should verify the included field paths, and return an
+<code>INVALID_ARGUMENT</code> error if any path is duplicated or unmappable.</p><div class="precustom-container"><precustom><div><span></span><span class="type">message</span> FieldMask {</div><div class="comment">  // The set of field mask paths.
+</div><div>  repeated string paths = 1;
+</div><div>}</div></precustom></div></div><div class="definition_r3VA"><div class="definition-title_x0IZ"><span>message</span><h3 class="anchor anchorWithStickyNavbar_YDjN" id="sourcecontext">SourceContext<a class="hash-link" href="#sourcecontext" title="Direct link to heading">​</a></h3></div><p><code>SourceContext</code> represents information about the source of a
+protobuf element, like the file in which it is defined.</p><div class="precustom-container"><precustom><div><span></span><span class="type">message</span> SourceContext {</div><div class="comment">  // The path-qualified name of the .proto file that contained the associated
+</div><div class="comment">  // protobuf element.  For example: `&quot;google/protobuf/source_context.proto&quot;`.
+</div><div><span>  </span><span class="type">string</span> file_name = 1;</div><div>}</div></precustom></div></div><div class="definition_r3VA"><div class="definition-title_x0IZ"><span>message</span><h3 class="anchor anchorWithStickyNavbar_YDjN" id="listvalue">ListValue<a class="hash-link" href="#listvalue" title="Direct link to heading">​</a></h3></div><p><code>ListValue</code> is a wrapper around a repeated field of values.</p><p>The JSON representation for <code>ListValue</code> is JSON array.</p><div class="precustom-container"><precustom><div><span></span><span class="type">message</span> ListValue {</div><div class="comment">  // Repeated field of dynamically typed values.
+</div><div><span>  </span><span class="type">repeated </span><a href="/protosaurus/pr-33/docs/wkt/google.protobuf#value">Value</a> values = 1;</div><div>}</div></precustom></div></div><div class="definition_r3VA"><div class="definition-title_x0IZ"><span>message</span><h3 class="anchor anchorWithStickyNavbar_YDjN" id="struct">Struct<a class="hash-link" href="#struct" title="Direct link to heading">​</a></h3></div><p><code>Struct</code> represents a structured data value, consisting of fields
+which map to dynamically typed values. In some languages, <code>Struct</code>
+might be supported by a native representation. For example, in
+scripting languages like JS a struct is represented as an
+object. The details of that representation are described together
+with the proto support for the language.</p><p>The JSON representation for <code>Struct</code> is JSON object.</p><div class="precustom-container"><precustom><div><span></span><span class="type">message</span> Struct {</div><div class="comment">  // Unordered map of dynamically typed values.
+</div><div><span>  map&lt;</span><span class="type">string</span>, <a href="/protosaurus/pr-33/docs/wkt/google.protobuf#value">Value</a>&gt;<!-- --> fields = 1;</div><div>}</div></precustom></div></div><div class="definition_r3VA"><div class="definition-title_x0IZ"><span>message</span><h3 class="anchor anchorWithStickyNavbar_YDjN" id="value">Value<a class="hash-link" href="#value" title="Direct link to heading">​</a></h3></div><p><code>Value</code> represents a dynamically typed value which can be either
+null, a number, a string, a boolean, a recursive struct value, or a
+list of values. A producer of value is expected to set one of that
+variants, absence of any variant indicates an error.</p><p>The JSON representation for <code>Value</code> is JSON value.</p><div class="precustom-container"><precustom><div><span></span><span class="type">message</span> Value {</div><div class="comment">  // Represents a null value.
+</div><div>  NullValue null_value = 1;
+</div><div>​
+</div><div class="comment">  // Represents a double value.
+</div><div><span>  </span><span class="type">double</span> number_value = 2;</div><div>​
+</div><div class="comment">  // Represents a string value.
+</div><div><span>  </span><span class="type">string</span> string_value = 3;</div><div>​
+</div><div class="comment">  // Represents a boolean value.
+</div><div><span>  </span><span class="type">bool</span> bool_value = 4;</div><div>​
+</div><div class="comment">  // Represents a structured value.
+</div><div><span>  </span><a href="/protosaurus/pr-33/docs/wkt/google.protobuf#struct">Struct</a> struct_value = 5;</div><div>​
+</div><div class="comment">  // Represents a repeated `Value`.
+</div><div><span>  </span><a href="/protosaurus/pr-33/docs/wkt/google.protobuf#listvalue">ListValue</a> list_value = 6;</div><div>}</div></precustom></div></div><div class="definition_r3VA"><div class="definition-title_x0IZ"><span>message</span><h3 class="anchor anchorWithStickyNavbar_YDjN" id="timestamp">Timestamp<a class="hash-link" href="#timestamp" title="Direct link to heading">​</a></h3></div><p>A Timestamp represents a point in time independent of any time zone or local
+calendar, encoded as a count of seconds and fractions of seconds at
+nanosecond resolution. The count is relative to an epoch at UTC midnight on
+January 1, 1970, in the proleptic Gregorian calendar which extends the
+Gregorian calendar backwards to year one.</p><p>All minutes are 60 seconds long. Leap seconds are &quot;smeared&quot; so that no leap
+second table is needed for interpretation, using a <a href="https://developers.google.com/time/smear" target="_blank" rel="noopener noreferrer">24-hour linear
+smear</a>.</p><p>The range is from 0001-01-01T00:00:00Z to 9999-12-31T23:59:59.999999999Z. By
+restricting to that range, we ensure that we can convert to and from <a href="https://www.ietf.org/rfc/rfc3339.txt" target="_blank" rel="noopener noreferrer">RFC
+3339</a> date strings.</p><h1>Examples</h1><p>Example 1: Compute Timestamp from POSIX <code>time()</code>.</p><div class="codeBlockContainer_CBWl theme-code-block"><div class="codeBlockContent_vhl8"><pre tabindex="0" class="prism-code language-text codeBlock_w2AC thin-scrollbar" style="color:#393A34;background-color:#f6f8fa"><code class="codeBlockLines_OfWd"><span class="token-line" style="color:#393A34"><span class="token plain">Timestamp timestamp;</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">timestamp.set_seconds(time(NULL));</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">timestamp.set_nanos(0);</span><br></span></code></pre><button type="button" aria-label="Copy code to clipboard" class="copyButton_BbpX clean-btn">Copy</button></div></div><p>Example 2: Compute Timestamp from POSIX <code>gettimeofday()</code>.</p><div class="codeBlockContainer_CBWl theme-code-block"><div class="codeBlockContent_vhl8"><pre tabindex="0" class="prism-code language-text codeBlock_w2AC thin-scrollbar" style="color:#393A34;background-color:#f6f8fa"><code class="codeBlockLines_OfWd"><span class="token-line" style="color:#393A34"><span class="token plain">struct timeval tv;</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">gettimeofday(&amp;tv, NULL);</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain" style="display:inline-block"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">Timestamp timestamp;</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">timestamp.set_seconds(tv.tv_sec);</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">timestamp.set_nanos(tv.tv_usec * 1000);</span><br></span></code></pre><button type="button" aria-label="Copy code to clipboard" class="copyButton_BbpX clean-btn">Copy</button></div></div><p>Example 3: Compute Timestamp from Win32 <code>GetSystemTimeAsFileTime()</code>.</p><div class="codeBlockContainer_CBWl theme-code-block"><div class="codeBlockContent_vhl8"><pre tabindex="0" class="prism-code language-text codeBlock_w2AC thin-scrollbar" style="color:#393A34;background-color:#f6f8fa"><code class="codeBlockLines_OfWd"><span class="token-line" style="color:#393A34"><span class="token plain">FILETIME ft;</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">GetSystemTimeAsFileTime(&amp;ft);</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">UINT64 ticks = (((UINT64)ft.dwHighDateTime) &lt;&lt; 32) | ft.dwLowDateTime;</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain" style="display:inline-block"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">// A Windows tick is 100 nanoseconds. Windows epoch 1601-01-01T00:00:00Z</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">// is 11644473600 seconds before Unix epoch 1970-01-01T00:00:00Z.</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">Timestamp timestamp;</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">timestamp.set_seconds((INT64) ((ticks / 10000000) - 11644473600LL));</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">timestamp.set_nanos((INT32) ((ticks % 10000000) * 100));</span><br></span></code></pre><button type="button" aria-label="Copy code to clipboard" class="copyButton_BbpX clean-btn">Copy</button></div></div><p>Example 4: Compute Timestamp from Java <code>System.currentTimeMillis()</code>.</p><div class="codeBlockContainer_CBWl theme-code-block"><div class="codeBlockContent_vhl8"><pre tabindex="0" class="prism-code language-text codeBlock_w2AC thin-scrollbar" style="color:#393A34;background-color:#f6f8fa"><code class="codeBlockLines_OfWd"><span class="token-line" style="color:#393A34"><span class="token plain">long millis = System.currentTimeMillis();</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain" style="display:inline-block"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">Timestamp timestamp = Timestamp.newBuilder().setSeconds(millis / 1000)</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">    .setNanos((int) ((millis % 1000) * 1000000)).build();</span><br></span></code></pre><button type="button" aria-label="Copy code to clipboard" class="copyButton_BbpX clean-btn">Copy</button></div></div><p>Example 5: Compute Timestamp from current time in Python.</p><div class="codeBlockContainer_CBWl theme-code-block"><div class="codeBlockContent_vhl8"><pre tabindex="0" class="prism-code language-text codeBlock_w2AC thin-scrollbar" style="color:#393A34;background-color:#f6f8fa"><code class="codeBlockLines_OfWd"><span class="token-line" style="color:#393A34"><span class="token plain">timestamp = Timestamp()</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">timestamp.GetCurrentTime()</span><br></span></code></pre><button type="button" aria-label="Copy code to clipboard" class="copyButton_BbpX clean-btn">Copy</button></div></div><h1>JSON Mapping</h1><p>In JSON format, the Timestamp type is encoded as a string in the
+<a href="https://www.ietf.org/rfc/rfc3339.txt" target="_blank" rel="noopener noreferrer">RFC 3339</a> format. That is, the
+format is &quot;{year}-{month}-{day}T{hour}:{min}:{sec}<!-- -->[.{frac_sec}]<!-- -->Z&quot;
+where {year} is always expressed using four digits while {month}, {day},
+{hour}, {min}, and {sec} are zero-padded to two digits each. The fractional
+seconds, which can go up to 9 digits (i.e. up to 1 nanosecond resolution),
+are optional. The &quot;Z&quot; suffix indicates the timezone (&quot;UTC&quot;); the timezone
+is required. A proto3 JSON serializer should always use UTC (as indicated by
+&quot;Z&quot;) when printing the Timestamp type and a proto3 JSON parser should be
+able to accept both UTC and other timezones (as indicated by an offset).</p><p>For example, &quot;2017-01-15T01:30:15.01Z&quot; encodes 15.01 seconds past
+01:30 UTC on January 15, 2017.</p><p>In JavaScript, one can convert a Date object to this format using the
+standard
+<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Date/toISOString" target="_blank" rel="noopener noreferrer">toISOString()</a>
+method. In Python, a standard <code>datetime.datetime</code> object can be converted
+to this format using
+<a href="https://docs.python.org/2/library/time.html#time.strftime" target="_blank" rel="noopener noreferrer"><code>strftime</code></a> with
+the time format spec &#x27;%Y-%m-%dT%H:%M:%S.%fZ&#x27;. Likewise, in Java, one can use
+the Joda Time&#x27;s <a href="http://www.joda.org/joda-time/apidocs/org/joda/time/format/ISODateTimeFormat.html#dateTime%2D%2D" target="_blank" rel="noopener noreferrer"><code>ISODateTimeFormat.dateTime()</code></a> to obtain a formatter capable of generating timestamps in this format.</p><div class="precustom-container"><precustom><div><span></span><span class="type">message</span> Timestamp {</div><div class="comment">  // Represents seconds of UTC time since Unix epoch
+</div><div class="comment">  // 1970-01-01T00:00:00Z. Must be from 0001-01-01T00:00:00Z to
+</div><div class="comment">  // 9999-12-31T23:59:59Z inclusive.
+</div><div><span>  </span><span class="type">int64</span> seconds = 1;</div><div>​
+</div><div class="comment">  // Non-negative fractions of a second at nanosecond resolution. Negative
+</div><div class="comment">  // second values with fractions must still have non-negative nanos values
+</div><div class="comment">  // that count forward in time. Must be from 0 to 999,999,999
+</div><div class="comment">  // inclusive.
+</div><div><span>  </span><span class="type">int32</span> nanos = 2;</div><div>}</div></precustom></div></div><div class="definition_r3VA"><div class="definition-title_x0IZ"><span>message</span><h3 class="anchor anchorWithStickyNavbar_YDjN" id="enum">Enum<a class="hash-link" href="#enum" title="Direct link to heading">​</a></h3></div><p>Enum type definition.</p><div class="precustom-container"><precustom><div><span></span><span class="type">message</span> Enum {</div><div class="comment">  // Enum type name.
+</div><div><span>  </span><span class="type">string</span> name = 1;</div><div>​
+</div><div class="comment">  // Enum value definitions.
+</div><div><span>  </span><span class="type">repeated </span><a href="/protosaurus/pr-33/docs/wkt/google.protobuf#enumvalue">EnumValue</a> enumvalue = 2;</div><div>​
+</div><div class="comment">  // Protocol buffer options.
+</div><div><span>  </span><span class="type">repeated </span><a href="/protosaurus/pr-33/docs/wkt/google.protobuf#option">Option</a> options = 3;</div><div>​
+</div><div class="comment">  // The source context.
+</div><div><span>  </span><a href="/protosaurus/pr-33/docs/wkt/google.protobuf#sourcecontext">SourceContext</a> source_context = 4;</div><div>​
+</div><div class="comment">  // The source syntax.
+</div><div>  Syntax syntax = 5;
+</div><div>}</div></precustom></div></div><div class="definition_r3VA"><div class="definition-title_x0IZ"><span>message</span><h3 class="anchor anchorWithStickyNavbar_YDjN" id="enumvalue">EnumValue<a class="hash-link" href="#enumvalue" title="Direct link to heading">​</a></h3></div><p>Enum value definition.</p><div class="precustom-container"><precustom><div><span></span><span class="type">message</span> EnumValue {</div><div class="comment">  // Enum value name.
+</div><div><span>  </span><span class="type">string</span> name = 1;</div><div>​
+</div><div class="comment">  // Enum value number.
+</div><div><span>  </span><span class="type">int32</span> number = 2;</div><div>​
+</div><div class="comment">  // Protocol buffer options.
+</div><div><span>  </span><span class="type">repeated </span><a href="/protosaurus/pr-33/docs/wkt/google.protobuf#option">Option</a> options = 3;</div><div>}</div></precustom></div></div><div class="definition_r3VA"><div class="definition-title_x0IZ"><span>message</span><h3 class="anchor anchorWithStickyNavbar_YDjN" id="field">Field<a class="hash-link" href="#field" title="Direct link to heading">​</a></h3></div><p>A single field of a message type.</p><div class="precustom-container"><precustom><div><span></span><span class="type">message</span> Field {</div><div><span>  </span><span class="type">enum</span> Kind {</div><div class="comment">    // Field type unknown.
+</div><div>    TYPE_UNKNOWN = 0;
+</div><div class="comment">    // Field type double.
+</div><div>    TYPE_DOUBLE = 1;
+</div><div class="comment">    // Field type float.
+</div><div>    TYPE_FLOAT = 2;
+</div><div class="comment">    // Field type int64.
+</div><div>    TYPE_INT64 = 3;
+</div><div class="comment">    // Field type uint64.
+</div><div>    TYPE_UINT64 = 4;
+</div><div class="comment">    // Field type int32.
+</div><div>    TYPE_INT32 = 5;
+</div><div class="comment">    // Field type fixed64.
+</div><div>    TYPE_FIXED64 = 6;
+</div><div class="comment">    // Field type fixed32.
+</div><div>    TYPE_FIXED32 = 7;
+</div><div class="comment">    // Field type bool.
+</div><div>    TYPE_BOOL = 8;
+</div><div class="comment">    // Field type string.
+</div><div>    TYPE_STRING = 9;
+</div><div class="comment">    // Field type group. Proto2 syntax only, and deprecated.
+</div><div>    TYPE_GROUP = 10;
+</div><div class="comment">    // Field type message.
+</div><div>    TYPE_MESSAGE = 11;
+</div><div class="comment">    // Field type bytes.
+</div><div>    TYPE_BYTES = 12;
+</div><div class="comment">    // Field type uint32.
+</div><div>    TYPE_UINT32 = 13;
+</div><div class="comment">    // Field type enum.
+</div><div>    TYPE_ENUM = 14;
+</div><div class="comment">    // Field type sfixed32.
+</div><div>    TYPE_SFIXED32 = 15;
+</div><div class="comment">    // Field type sfixed64.
+</div><div>    TYPE_SFIXED64 = 16;
+</div><div class="comment">    // Field type sint32.
+</div><div>    TYPE_SINT32 = 17;
+</div><div class="comment">    // Field type sint64.
+</div><div>    TYPE_SINT64 = 18;
+</div><div>  }
+</div><div>​
+</div><div class="comment">  // The field type.
+</div><div>  Kind kind = 1;
+</div><div>​
+</div><div><span>  </span><span class="type">enum</span> Cardinality {</div><div class="comment">    // For fields with unknown cardinality.
+</div><div>    CARDINALITY_UNKNOWN = 0;
+</div><div class="comment">    // For optional fields.
+</div><div>    CARDINALITY_OPTIONAL = 1;
+</div><div class="comment">    // For required fields. Proto2 syntax only.
+</div><div>    CARDINALITY_REQUIRED = 2;
+</div><div class="comment">    // For repeated fields.
+</div><div>    CARDINALITY_REPEATED = 3;
+</div><div>  }
+</div><div>​
+</div><div class="comment">  // The field cardinality.
+</div><div>  Cardinality cardinality = 2;
+</div><div>​
+</div><div class="comment">  // The field number.
+</div><div><span>  </span><span class="type">int32</span> number = 3;</div><div>​
+</div><div class="comment">  // The field name.
+</div><div><span>  </span><span class="type">string</span> name = 4;</div><div>​
+</div><div class="comment">  // The field type URL, without the scheme, for message or enumeration
+</div><div class="comment">  // types. Example: `&quot;type.googleapis.com/google.protobuf.Timestamp&quot;`.
+</div><div><span>  </span><span class="type">string</span> type_url = 5;</div><div>​
+</div><div class="comment">  // The index of the field type in `Type.oneofs`, for message or enumeration
+</div><div class="comment">  // types. The first type has index 1; zero means the type is not in the list.
+</div><div><span>  </span><span class="type">int32</span> oneof_index = 6;</div><div>​
+</div><div class="comment">  // Whether to use alternative packed wire representation.
+</div><div><span>  </span><span class="type">bool</span> packed = 7;</div><div>​
+</div><div class="comment">  // The protocol buffer options.
+</div><div><span>  </span><span class="type">repeated </span><a href="/protosaurus/pr-33/docs/wkt/google.protobuf#option">Option</a> options = 8;</div><div>​
+</div><div class="comment">  // The field JSON name.
+</div><div><span>  </span><span class="type">string</span> json_name = 9;</div><div>​
+</div><div class="comment">  // The string value of the default value of this field. Proto2 syntax only.
+</div><div><span>  </span><span class="type">string</span> default_value = 10;</div><div>}</div></precustom></div></div><div class="definition_r3VA"><div class="definition-title_x0IZ"><span>message</span><h3 class="anchor anchorWithStickyNavbar_YDjN" id="option">Option<a class="hash-link" href="#option" title="Direct link to heading">​</a></h3></div><p>A protocol buffer option, which can be attached to a message, field,
+enumeration, etc.</p><div class="precustom-container"><precustom><div><span></span><span class="type">message</span> Option {</div><div class="comment">  // The option&#x27;s name. For protobuf built-in options (options defined in
+</div><div class="comment">  // descriptor.proto), this is the short name. For example, `&quot;map_entry&quot;`.
+</div><div class="comment">  // For custom options, it should be the fully-qualified name. For example,
+</div><div class="comment">  // `&quot;google.api.http&quot;`.
+</div><div><span>  </span><span class="type">string</span> name = 1;</div><div>​
+</div><div class="comment">  // The option&#x27;s value packed in an Any message. If the value is a primitive,
+</div><div class="comment">  // the corresponding wrapper type defined in google/protobuf/wrappers.proto
+</div><div class="comment">  // should be used. If the value is an enum, it should be stored as an int32
+</div><div class="comment">  // value using the google.protobuf.Int32Value type.
+</div><div><span>  </span><a href="/protosaurus/pr-33/docs/wkt/google.protobuf#any">Any</a> value = 2;</div><div>}</div></precustom></div></div><div class="definition_r3VA"><div class="definition-title_x0IZ"><span>message</span><h3 class="anchor anchorWithStickyNavbar_YDjN" id="type">Type<a class="hash-link" href="#type" title="Direct link to heading">​</a></h3></div><p>A protocol buffer message type.</p><div class="precustom-container"><precustom><div><span></span><span class="type">message</span> Type {</div><div class="comment">  // The fully qualified message name.
+</div><div><span>  </span><span class="type">string</span> name = 1;</div><div>​
+</div><div class="comment">  // The list of fields.
+</div><div><span>  </span><span class="type">repeated </span><a href="/protosaurus/pr-33/docs/wkt/google.protobuf#field">Field</a> fields = 2;</div><div>​
+</div><div class="comment">  // The list of types appearing in `oneof` definitions in this type.
+</div><div>  repeated string oneofs = 3;
+</div><div>​
+</div><div class="comment">  // The protocol buffer options.
+</div><div><span>  </span><span class="type">repeated </span><a href="/protosaurus/pr-33/docs/wkt/google.protobuf#option">Option</a> options = 4;</div><div>​
+</div><div class="comment">  // The source context.
+</div><div><span>  </span><a href="/protosaurus/pr-33/docs/wkt/google.protobuf#sourcecontext">SourceContext</a> source_context = 5;</div><div>​
+</div><div class="comment">  // The source syntax.
+</div><div>  Syntax syntax = 6;
+</div><div>}</div></precustom></div></div><div class="definition_r3VA"><div class="definition-title_x0IZ"><span>message</span><h3 class="anchor anchorWithStickyNavbar_YDjN" id="boolvalue">BoolValue<a class="hash-link" href="#boolvalue" title="Direct link to heading">​</a></h3></div><p>Wrapper message for <code>bool</code>.</p><p>The JSON representation for <code>BoolValue</code> is JSON <code>true</code> and <code>false</code>.</p><div class="precustom-container"><precustom><div><span></span><span class="type">message</span> BoolValue {</div><div class="comment">  // The bool value.
+</div><div><span>  </span><span class="type">bool</span> value = 1;</div><div>}</div></precustom></div></div><div class="definition_r3VA"><div class="definition-title_x0IZ"><span>message</span><h3 class="anchor anchorWithStickyNavbar_YDjN" id="bytesvalue">BytesValue<a class="hash-link" href="#bytesvalue" title="Direct link to heading">​</a></h3></div><p>Wrapper message for <code>bytes</code>.</p><p>The JSON representation for <code>BytesValue</code> is JSON string.</p><div class="precustom-container"><precustom><div><span></span><span class="type">message</span> BytesValue {</div><div class="comment">  // The bytes value.
+</div><div><span>  </span><span class="type">bytes</span> value = 1;</div><div>}</div></precustom></div></div><div class="definition_r3VA"><div class="definition-title_x0IZ"><span>message</span><h3 class="anchor anchorWithStickyNavbar_YDjN" id="doublevalue">DoubleValue<a class="hash-link" href="#doublevalue" title="Direct link to heading">​</a></h3></div><p>Wrapper message for <code>double</code>.</p><p>The JSON representation for <code>DoubleValue</code> is JSON number.</p><div class="precustom-container"><precustom><div><span></span><span class="type">message</span> DoubleValue {</div><div class="comment">  // The double value.
+</div><div><span>  </span><span class="type">double</span> value = 1;</div><div>}</div></precustom></div></div><div class="definition_r3VA"><div class="definition-title_x0IZ"><span>message</span><h3 class="anchor anchorWithStickyNavbar_YDjN" id="floatvalue">FloatValue<a class="hash-link" href="#floatvalue" title="Direct link to heading">​</a></h3></div><p>Wrapper message for <code>float</code>.</p><p>The JSON representation for <code>FloatValue</code> is JSON number.</p><div class="precustom-container"><precustom><div><span></span><span class="type">message</span> FloatValue {</div><div class="comment">  // The float value.
+</div><div><span>  </span><span class="type">float</span> value = 1;</div><div>}</div></precustom></div></div><div class="definition_r3VA"><div class="definition-title_x0IZ"><span>message</span><h3 class="anchor anchorWithStickyNavbar_YDjN" id="int32value">Int32Value<a class="hash-link" href="#int32value" title="Direct link to heading">​</a></h3></div><p>Wrapper message for <code>int32</code>.</p><p>The JSON representation for <code>Int32Value</code> is JSON number.</p><div class="precustom-container"><precustom><div><span></span><span class="type">message</span> Int32Value {</div><div class="comment">  // The int32 value.
+</div><div><span>  </span><span class="type">int32</span> value = 1;</div><div>}</div></precustom></div></div><div class="definition_r3VA"><div class="definition-title_x0IZ"><span>message</span><h3 class="anchor anchorWithStickyNavbar_YDjN" id="int64value">Int64Value<a class="hash-link" href="#int64value" title="Direct link to heading">​</a></h3></div><p>Wrapper message for <code>int64</code>.</p><p>The JSON representation for <code>Int64Value</code> is JSON string.</p><div class="precustom-container"><precustom><div><span></span><span class="type">message</span> Int64Value {</div><div class="comment">  // The int64 value.
+</div><div><span>  </span><span class="type">int64</span> value = 1;</div><div>}</div></precustom></div></div><div class="definition_r3VA"><div class="definition-title_x0IZ"><span>message</span><h3 class="anchor anchorWithStickyNavbar_YDjN" id="stringvalue">StringValue<a class="hash-link" href="#stringvalue" title="Direct link to heading">​</a></h3></div><p>Wrapper message for <code>string</code>.</p><p>The JSON representation for <code>StringValue</code> is JSON string.</p><div class="precustom-container"><precustom><div><span></span><span class="type">message</span> StringValue {</div><div class="comment">  // The string value.
+</div><div><span>  </span><span class="type">string</span> value = 1;</div><div>}</div></precustom></div></div><div class="definition_r3VA"><div class="definition-title_x0IZ"><span>message</span><h3 class="anchor anchorWithStickyNavbar_YDjN" id="uint32value">UInt32Value<a class="hash-link" href="#uint32value" title="Direct link to heading">​</a></h3></div><p>Wrapper message for <code>uint32</code>.</p><p>The JSON representation for <code>UInt32Value</code> is JSON number.</p><div class="precustom-container"><precustom><div><span></span><span class="type">message</span> UInt32Value {</div><div class="comment">  // The uint32 value.
+</div><div><span>  </span><span class="type">uint32</span> value = 1;</div><div>}</div></precustom></div></div><div class="definition_r3VA"><div class="definition-title_x0IZ"><span>message</span><h3 class="anchor anchorWithStickyNavbar_YDjN" id="uint64value">UInt64Value<a class="hash-link" href="#uint64value" title="Direct link to heading">​</a></h3></div><p>Wrapper message for <code>uint64</code>.</p><p>The JSON representation for <code>UInt64Value</code> is JSON string.</p><div class="precustom-container"><precustom><div><span></span><span class="type">message</span> UInt64Value {</div><div class="comment">  // The uint64 value.
+</div><div><span>  </span><span class="type">uint64</span> value = 1;</div><div>}</div></precustom></div></div></div><footer class="theme-doc-footer docusaurus-mt-lg"><div class="theme-doc-footer-edit-meta-row row"><div class="col"><a href="https://github.com/facebook/docusaurus/tree/main/packages/create-docusaurus/templates/shared/docs/wkt/google.protobuf.mdx" target="_blank" rel="noreferrer noopener" class="theme-edit-this-page"><svg fill="currentColor" height="20" width="20" viewBox="0 0 40 40" class="iconEdit_OMbO" aria-hidden="true"><g><path d="m34.5 11.7l-3 3.1-6.3-6.3 3.1-3q0.5-0.5 1.2-0.5t1.1 0.5l3.9 3.9q0.5 0.4 0.5 1.1t-0.5 1.2z m-29.5 17.1l18.4-18.5 6.3 6.3-18.4 18.4h-6.3v-6.2z"></path></g></svg>Edit this page</a></div><div class="col lastUpdated_vA0S"></div></div></footer></article><nav class="pagination-nav docusaurus-mt-lg" aria-label="Docs pages navigation"><div class="pagination-nav__item"><a class="pagination-nav__link" href="/protosaurus/pr-33/docs/wkt/google.protobuf.compiler"><div class="pagination-nav__sublabel">Previous</div><div class="pagination-nav__label">google.protobuf.compiler</div></a></div><div class="pagination-nav__item pagination-nav__item--next"></div></nav></div></div><div class="col col--3"><div class="tableOfContents_jWtb thin-scrollbar theme-doc-toc-desktop"><ul class="table-of-contents table-of-contents__left-border"><li><a href="#messages" class="table-of-contents__link toc-highlight">Messages</a><ul><li><a href="#any" class="table-of-contents__link toc-highlight">Any</a></li><li><a href="#api" class="table-of-contents__link toc-highlight">Api</a></li><li><a href="#method" class="table-of-contents__link toc-highlight">Method</a></li><li><a href="#mixin" class="table-of-contents__link toc-highlight">Mixin</a></li><li><a href="#descriptorproto" class="table-of-contents__link toc-highlight">DescriptorProto</a></li><li><a href="#enumdescriptorproto" class="table-of-contents__link toc-highlight">EnumDescriptorProto</a></li><li><a href="#enumoptions" class="table-of-contents__link toc-highlight">EnumOptions</a></li><li><a href="#enumvaluedescriptorproto" class="table-of-contents__link toc-highlight">EnumValueDescriptorProto</a></li><li><a href="#enumvalueoptions" class="table-of-contents__link toc-highlight">EnumValueOptions</a></li><li><a href="#extensionrangeoptions" class="table-of-contents__link toc-highlight">ExtensionRangeOptions</a></li><li><a href="#fielddescriptorproto" class="table-of-contents__link toc-highlight">FieldDescriptorProto</a></li><li><a href="#fieldoptions" class="table-of-contents__link toc-highlight">FieldOptions</a></li><li><a href="#filedescriptorproto" class="table-of-contents__link toc-highlight">FileDescriptorProto</a></li><li><a href="#filedescriptorset" class="table-of-contents__link toc-highlight">FileDescriptorSet</a></li><li><a href="#fileoptions" class="table-of-contents__link toc-highlight">FileOptions</a></li><li><a href="#generatedcodeinfo" class="table-of-contents__link toc-highlight">GeneratedCodeInfo</a></li><li><a href="#messageoptions" class="table-of-contents__link toc-highlight">MessageOptions</a></li><li><a href="#methoddescriptorproto" class="table-of-contents__link toc-highlight">MethodDescriptorProto</a></li><li><a href="#methodoptions" class="table-of-contents__link toc-highlight">MethodOptions</a></li><li><a href="#oneofdescriptorproto" class="table-of-contents__link toc-highlight">OneofDescriptorProto</a></li><li><a href="#oneofoptions" class="table-of-contents__link toc-highlight">OneofOptions</a></li><li><a href="#servicedescriptorproto" class="table-of-contents__link toc-highlight">ServiceDescriptorProto</a></li><li><a href="#serviceoptions" class="table-of-contents__link toc-highlight">ServiceOptions</a></li><li><a href="#sourcecodeinfo" class="table-of-contents__link toc-highlight">SourceCodeInfo</a></li><li><a href="#uninterpretedoption" class="table-of-contents__link toc-highlight">UninterpretedOption</a></li><li><a href="#duration" class="table-of-contents__link toc-highlight">Duration</a></li><li><a href="#empty" class="table-of-contents__link toc-highlight">Empty</a></li><li><a href="#fieldmask" class="table-of-contents__link toc-highlight">FieldMask</a></li></ul></li><li><a href="#considerations-for-http-rest" class="table-of-contents__link toc-highlight">Considerations for HTTP REST</a></li><li><a href="#field-mask-verification" class="table-of-contents__link toc-highlight">Field Mask Verification</a><ul><li><a href="#sourcecontext" class="table-of-contents__link toc-highlight">SourceContext</a></li><li><a href="#listvalue" class="table-of-contents__link toc-highlight">ListValue</a></li><li><a href="#struct" class="table-of-contents__link toc-highlight">Struct</a></li><li><a href="#value" class="table-of-contents__link toc-highlight">Value</a></li><li><a href="#timestamp" class="table-of-contents__link toc-highlight">Timestamp</a></li><li><a href="#enum" class="table-of-contents__link toc-highlight">Enum</a></li><li><a href="#enumvalue" class="table-of-contents__link toc-highlight">EnumValue</a></li><li><a href="#field" class="table-of-contents__link toc-highlight">Field</a></li><li><a href="#option" class="table-of-contents__link toc-highlight">Option</a></li><li><a href="#type" class="table-of-contents__link toc-highlight">Type</a></li><li><a href="#boolvalue" class="table-of-contents__link toc-highlight">BoolValue</a></li><li><a href="#bytesvalue" class="table-of-contents__link toc-highlight">BytesValue</a></li><li><a href="#doublevalue" class="table-of-contents__link toc-highlight">DoubleValue</a></li><li><a href="#floatvalue" class="table-of-contents__link toc-highlight">FloatValue</a></li><li><a href="#int32value" class="table-of-contents__link toc-highlight">Int32Value</a></li><li><a href="#int64value" class="table-of-contents__link toc-highlight">Int64Value</a></li><li><a href="#stringvalue" class="table-of-contents__link toc-highlight">StringValue</a></li><li><a href="#uint32value" class="table-of-contents__link toc-highlight">UInt32Value</a></li><li><a href="#uint64value" class="table-of-contents__link toc-highlight">UInt64Value</a></li></ul></li></ul></div></div></div></div></main></div></div><footer class="footer footer--dark"><div class="container container-fluid"><div class="row footer__links"><div class="col footer__col"><div class="footer__title">Docs</div><ul class="footer__items"><li class="footer__item"><a class="footer__link-item" href="/protosaurus/pr-33/docs/intro">Tutorial</a></li></ul></div><div class="col footer__col"><div class="footer__title">Community</div><ul class="footer__items"><li class="footer__item"><a href="https://stackoverflow.com/questions/tagged/docusaurus" target="_blank" rel="noopener noreferrer" class="footer__link-item"><span>Stack Overflow<svg width="13.5" height="13.5" aria-hidden="true" viewBox="0 0 24 24" class="iconExternalLink_GWqj"><path fill="currentColor" d="M21 13v10h-21v-19h12v2h-10v15h17v-8h2zm3-12h-10.988l4.035 4-6.977 7.07 2.828 2.828 6.977-7.07 4.125 4.172v-11z"></path></svg></span></a></li><li class="footer__item"><a href="https://discordapp.com/invite/docusaurus" target="_blank" rel="noopener noreferrer" class="footer__link-item"><span>Discord<svg width="13.5" height="13.5" aria-hidden="true" viewBox="0 0 24 24" class="iconExternalLink_GWqj"><path fill="currentColor" d="M21 13v10h-21v-19h12v2h-10v15h17v-8h2zm3-12h-10.988l4.035 4-6.977 7.07 2.828 2.828 6.977-7.07 4.125 4.172v-11z"></path></svg></span></a></li><li class="footer__item"><a href="https://twitter.com/docusaurus" target="_blank" rel="noopener noreferrer" class="footer__link-item"><span>Twitter<svg width="13.5" height="13.5" aria-hidden="true" viewBox="0 0 24 24" class="iconExternalLink_GWqj"><path fill="currentColor" d="M21 13v10h-21v-19h12v2h-10v15h17v-8h2zm3-12h-10.988l4.035 4-6.977 7.07 2.828 2.828 6.977-7.07 4.125 4.172v-11z"></path></svg></span></a></li></ul></div><div class="col footer__col"><div class="footer__title">More</div><ul class="footer__items"><li class="footer__item"><a href="https://github.com/facebook/docusaurus" target="_blank" rel="noopener noreferrer" class="footer__link-item"><span>GitHub<svg width="13.5" height="13.5" aria-hidden="true" viewBox="0 0 24 24" class="iconExternalLink_GWqj"><path fill="currentColor" d="M21 13v10h-21v-19h12v2h-10v15h17v-8h2zm3-12h-10.988l4.035 4-6.977 7.07 2.828 2.828 6.977-7.07 4.125 4.172v-11z"></path></svg></span></a></li></ul></div></div><div class="footer__bottom text--center"><div class="footer__copyright">Copyright © 2022 My Project, Inc. Built with Docusaurus.</div></div></div></footer></div>
+<script src="/protosaurus/pr-33/assets/js/runtime~main.369db437.js"></script>
+<script src="/protosaurus/pr-33/assets/js/main.88bb848d.js"></script>
+</body>
+</html>
