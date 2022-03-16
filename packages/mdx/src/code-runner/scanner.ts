@@ -60,7 +60,7 @@ export async function getAllValidatedCodeBlocks(
             const trimmed = line
               .replace(COMMENT_LINE_PREFIX[currentBlockValue.language], '')
               .trim();
-            currentBlockValue.output += `${trimmed}\n`;
+            currentBlockValue.output += trimmed;
           } else {
             currentBlockValue.content += `${line}\n`;
           }

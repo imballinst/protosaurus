@@ -24,15 +24,15 @@ import {
   MessagesRecord,
   EnumsRecord,
   ProtoEnum
-} from './types';
+} from './types.js';
 import {
   getMessageFieldsBlock,
   getMessageDescription,
   getMessageDefinition,
   getMessageHeader,
   getMessageProtosaurusBlock
-} from './messages';
-import { getEnumFieldsBlock, getEnumProtosaurusBlock } from './enum';
+} from './messages.js';
+import { getEnumFieldsBlock, getEnumProtosaurusBlock } from './enum.js';
 
 export async function readPackageData(packagePath: string) {
   const content = await fs.readFile(packagePath, 'utf-8');

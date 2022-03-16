@@ -18,9 +18,9 @@ import path from 'path';
 import { expect } from 'chai';
 import fs from 'fs-extra';
 
-import { convertProtoArrayToRecord } from './record';
-import { readPackageData } from './packages';
-import { getServiceString } from './services';
+import { convertProtoArrayToRecord } from './record.js';
+import { readPackageData } from './packages.js';
+import { getServiceString } from './services.js';
 
 const CURRENT_DIR = path.join(new URL(import.meta.url).pathname, '..');
 const ROOT_PATH = process.env.WORK_DIR || path.join(CURRENT_DIR, '../../../..');

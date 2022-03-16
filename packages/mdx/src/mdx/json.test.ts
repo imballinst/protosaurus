@@ -15,8 +15,8 @@
  */
 
 import { expect } from 'chai';
-import { getMessagesJsonDictionary } from './json';
-import { ObjectData } from './types';
+import { getMessagesJsonDictionary } from './json.js';
+import { ObjectData } from './types.js';
 
 describe('getMessagesJsonDictionary', () => {
   const MESSAGES_DATA: ObjectData[] = [

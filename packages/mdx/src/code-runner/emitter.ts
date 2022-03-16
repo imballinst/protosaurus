@@ -7,6 +7,7 @@ export async function emitScripts(
   targetDirectory: string
 ) {
   const keys = Object.keys(record);
+  await fs.mkdirp(targetDirectory);
 
   return Promise.all(
     keys.map((validationId) =>

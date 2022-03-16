@@ -16,14 +16,17 @@
 
 import fs from 'fs-extra';
 import path from 'path';
+import { execa } from 'execa';
 
-import { emitMdx } from './mdx/mdx';
-import { convertProtoArrayToRecord } from './mdx/record';
-import { PackageData, ProtoEnum, ProtoMessage } from './mdx/types';
-import { emitMessagesJson } from './mdx/json';
-import { emitCategoryMetadata } from './mdx/metadata';
-import { readPackageData } from './mdx/packages';
-import { getServiceString } from './mdx/services';
+import { emitMdx } from './mdx/mdx.js';
+import { convertProtoArrayToRecord } from './mdx/record.js';
+import { PackageData, ProtoEnum, ProtoMessage } from './mdx/types.js';
+import { emitMessagesJson } from './mdx/json.js';
+import { emitCategoryMetadata } from './mdx/metadata.js';
+import { readPackageData } from './mdx/packages.js';
+import { getServiceString } from './mdx/services.js';
+import { getAllValidatedCodeBlocks } from './code-runner/scanner.js';
+import { emitScripts } from './code-runner/emitter.js';
 
 // Labels for the local types and the well-known types.
 const CATEGORY_LABELS = {
@@ -36,10 +39,11 @@ export async function emitJsonAndMdx(siteDir: string) {
     pathToGeneratedWkt,
     pathToMdx,
     pathToMdxWkt,
-    pathToPluginDictionary
+    pathToPluginCache,
+    pathToPluginCacheDictionary
   } = getPaths(siteDir);
   const deletedFilesAndFolders = await getDeletedFilesAndFolderNames(
-    pathToPluginDictionary,
+    pathToPluginCacheDictionary,
     pathToMdx
   );
 
@@ -50,9 +54,32 @@ export async function emitJsonAndMdx(siteDir: string) {
     deletedFilesAndFolders.map((entry) => fs.rm(entry, { recursive: true }))
   );
 
+  // Now, only self-created MDX files exist.
+  // Hence, we will process the scripts here.
+  const codeBlocksRecord = await getAllValidatedCodeBlocks(pathToMdx);
+  const scriptsDir = path.join(pathToPluginCache, 'codeblock-scripts');
+  await emitScripts(codeBlocksRecord, scriptsDir);
+
+  // Execute the scripts.
+  for (const key in codeBlocksRecord) {
+    const value = codeBlocksRecord[key];
+    const result = await execa('node', [
+      `${scriptsDir}/${key}.${value.language}`
+    ]);
+
+    if (result.stdout === value.output) {
+      value.isValid = true;
+    }
+  }
+
+  await fs.writeFile(
+    path.join(pathToPluginCache, 'code-blocks-record.json'),
+    JSON.stringify(codeBlocksRecord, null, 2)
+  );
+
   // Re-create the folders.
   await Promise.all([
-    fs.mkdirp(pathToPluginDictionary),
+    fs.mkdirp(pathToPluginCacheDictionary),
     fs.mkdirp(pathToMdx),
     fs.mkdirp(pathToMdxWkt)
   ]);
@@ -97,7 +124,7 @@ export async function emitJsonAndMdx(siteDir: string) {
     await emitMdx(pathToMessagesMdx, pkg);
 
     // Emit JSON dictionary for the plugin.
-    const pathToPlugin = `${pathToPluginDictionary}/${pkg.name}`;
+    const pathToPlugin = `${pathToPluginCacheDictionary}/${pkg.name}`;
     await emitMessagesJson({
       filePath: pathToPlugin,
       messages: pkg.messagesData.concat(pkg.enumsData).concat(
@@ -199,7 +226,7 @@ export async function emitJsonAndMdx(siteDir: string) {
   );
 
   // Render all WKT JSON in one file.
-  const pathToWktFile = `${pathToPluginDictionary}/wkt`;
+  const pathToWktFile = `${pathToPluginCacheDictionary}/wkt`;
   await emitMessagesJson({
     filePath: pathToWktFile,
     messages: allWktPackages.map((pkg) => pkg.messagesData).flat(),
@@ -274,9 +301,13 @@ function getPaths(siteDir: string) {
   const pathToGeneratedWkt = path.join(siteDir, '.protosaurus/generated/wkt');
   const pathToMdx = path.join(siteDir, 'docs');
   const pathToMdxWkt = `${pathToMdx}/wkt`;
-  const pathToPluginDictionary = path.join(
+  const pathToPluginCache = path.join(
     siteDir,
-    '.protosaurus/plugin-resources/rehype-plugin-codeblock/dictionary'
+    '.protosaurus/plugin-resources/rehype-plugin-codeblock'
+  );
+  const pathToPluginCacheDictionary = path.join(
+    pathToPluginCache,
+    'dictionary'
   );
 
   return {
@@ -284,7 +315,8 @@ function getPaths(siteDir: string) {
     pathToGeneratedWkt,
     pathToMdx,
     pathToMdxWkt,
-    pathToPluginDictionary
+    pathToPluginCache,
+    pathToPluginCacheDictionary
   };
 }
 

@@ -15,7 +15,7 @@
  */
 
 import fs from 'fs-extra';
-import { PackageData } from './types';
+import { PackageData } from './types.js';
 
 // Main exported functions.
 export async function emitMdx(filePath: string, pkg: PackageData) {

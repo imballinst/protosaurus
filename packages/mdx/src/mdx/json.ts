@@ -15,7 +15,7 @@
  */
 
 import fs from 'fs-extra';
-import { ObjectData } from './types';
+import { ObjectData } from './types.js';
 
 export async function emitMessagesJson({
   filePath,

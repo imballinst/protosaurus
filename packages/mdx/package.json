@@ -12,7 +12,7 @@
     "build": "rm -rf lib && tsc --project tsconfig.build.json",
     "test": "mocha",
     "emit": "node lib/emit.js",
-    "mdx:emit": "ts-node test-emit.ts",
+    "mdx:emit": "ts-node --esm test-emit.ts",
     "runner:emit": "ts-node --esm test-runner.ts"
   }
 }

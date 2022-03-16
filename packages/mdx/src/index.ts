@@ -16,7 +16,7 @@
 
 import fs from 'fs-extra';
 
-export { emitJsonAndMdx } from './emit';
+export { emitJsonAndMdx } from './emit.js';
 export function getPathsToCache(siteDir: string) {
   return {
     pathToCache: `${siteDir}/.protosaurus/plugin-resources/.cache/buf-ls-files.txt`
