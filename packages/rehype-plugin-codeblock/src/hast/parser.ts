@@ -27,6 +27,10 @@ export interface MetastringInfo {
   outputLines: number[];
   isCollapsible: boolean;
   highlightedLines: number[];
+  // This value is derived from code-block records.
+  // Since not all code blocks have `validationId` metastring,
+  // then this is optional.
+  isValid?: boolean;
 }
 
 // The reason this function is made is because,

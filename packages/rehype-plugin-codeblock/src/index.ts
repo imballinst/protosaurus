@@ -14,6 +14,9 @@
  * limitations under the License.
  */
 
+import fs from 'fs';
+import path from 'path';
+
 import { Comment, Element, Root, Text } from 'hast-format';
 import { getLinksFromALine, isLineAComment } from './comments';
 import { REPEATED_TEXT } from './constants';
@@ -41,6 +44,15 @@ export interface RehypePluginCodeblockOptions {
   siteDir: string;
 }
 
+// TODO(imballinst): this is duplicated from `packages/mdx/src/code-runner/types.ts`.
+// We should refactor this later.
+interface StoredValue {
+  language: string;
+  content: string;
+  output: string;
+  isValid: boolean;
+}
+
 const HIGHLIGHT_CLASSNAME = 'docusaurus-highlight-code-line';
 
 // TODO(imballinst): I tried to create a proper typing,
@@ -51,6 +63,14 @@ const HIGHLIGHT_CLASSNAME = 'docusaurus-highlight-code-line';
 const docusaurusPlugin: any = (opts: RehypePluginCodeblockOptions) => {
   const { innerMessages, localMessages, wktMessages } =
     getAllDictionaries(opts);
+  const recordContent = fs.readFileSync(
+    path.join(
+      opts.siteDir,
+      '.protosaurus/plugin-resources/rehype-plugin-codeblock/code-blocks-record.json'
+    ),
+    'utf-8'
+  );
+  const recordValue: Record<string, StoredValue> = JSON.parse(recordContent);
 
   return (tree: Root) => {
     // During build, we can use `process.env` from `docusaurus.config.js` perhaps
@@ -120,6 +140,12 @@ const docusaurusPlugin: any = (opts: RehypePluginCodeblockOptions) => {
         );
 
         if (!matchingLanguage) {
+          if (recordValue[metastringInfo.validationId]) {
+            console.log(recordValue[metastringInfo.validationId]);
+            metastringInfo.isValid =
+              recordValue[metastringInfo.validationId].isValid === true;
+          }
+
           // Languages other than protosaurus.
           pre.children = wrapWithMetastringElements(metastringInfo, { ...pre });
           pre.properties = {

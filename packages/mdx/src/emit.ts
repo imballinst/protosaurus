@@ -63,6 +63,9 @@ export async function emitJsonAndMdx(siteDir: string) {
   // Execute the scripts.
   for (const key in codeBlocksRecord) {
     const value = codeBlocksRecord[key];
+    // TODO(imballinst): derive the executed binary based on language.
+    // At the moment, it's only JS, so we use Node. We can use perhaps use something else,
+    // such as `ts-node` or `go`.
     const result = await execa('node', [
       `${scriptsDir}/${key}.${value.language}`
     ]);

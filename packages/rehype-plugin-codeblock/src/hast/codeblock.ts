@@ -79,6 +79,22 @@ export function wrapWithMetastringElements(
   element: Element
 ): Element[] {
   const children: Element[] = [];
+  let effectiveElements: Element[] = [element];
+
+  if (metastringInfo.isValid !== undefined) {
+    effectiveElements.unshift({
+      type: 'element',
+      tagName: 'div',
+      children: [
+        {
+          type: 'text',
+          value: `This code block is ${
+            metastringInfo.isValid ? 'valid' : 'invalid'
+          }.`
+        }
+      ]
+    });
+  }
 
   if (metastringInfo.isCollapsible) {
     // The resulting JSX would be something like:
@@ -106,7 +122,7 @@ export function wrapWithMetastringElements(
             }
           ]
         },
-        element
+        ...effectiveElements
       ]
     });
   } else if (metastringInfo.title) {
@@ -129,12 +145,12 @@ export function wrapWithMetastringElements(
           }
         ]
       },
-      element
+      ...effectiveElements
     );
   } else {
     // If there is no metastring modifier, then
     // we keep it as it is.
-    children.push(element);
+    children.push(...effectiveElements);
   }
 
   return children;
