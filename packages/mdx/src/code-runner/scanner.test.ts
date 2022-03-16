@@ -27,28 +27,28 @@ test('getAllValidatedCodeBlocks', async () => {
 
   expect(record['js-log']).to.eql({
     content: "console.log('Hello from js-log');\n",
-    output: 'Hello from js-log\n',
+    output: 'Hello from js-log',
     language: 'js',
     isValid: false
   });
 
   expect(record['js-log-2']).to.eql({
     content: "console.log('Hello from js-log-2');\n",
-    output: 'Hello from js-log-2\n',
+    output: 'Hello from js-log-2',
     language: 'js',
     isValid: false
   });
 
   expect(record['js-log-3']).to.eql({
     content: "console.log('Hello from js-log-3');\n",
-    output: 'Hello from js-log-3\n',
+    output: 'Hello from js-log-3',
     language: 'js',
     isValid: false
   });
 
   expect(record['js-log-4']).to.eql({
     content: "console.log('Hello from js-log-4');\n",
-    output: 'Hello from js-log-3\n',
+    output: 'Hello from js-log-3',
     language: 'js',
     isValid: false
   });
