@@ -14,29 +14,26 @@
  * limitations under the License.
  */
 
+import path from 'path';
 import fs from 'fs-extra';
+import { PathAndCodeBlocksRecord } from './types';
 
-export { emitJsonAndMdx } from './emit.js';
-export function getPathsToCache(siteDir: string) {
-  return {
-    pathToCache: `${siteDir}/.protosaurus/plugin-resources/.cache/buf-ls-files.txt`
-  };
-}
+export async function emitScripts(
+  record: PathAndCodeBlocksRecord,
+  targetDirectory: string
+) {
+  const keys = Object.keys(record);
+  await fs.mkdirp(targetDirectory);
 
-export async function isCacheInvalid({
-  pathToCache,
-  currentListOfFiles
-}: {
-  pathToCache: string;
-  currentListOfFiles: string;
-}) {
-  try {
-    const bufLsFileCache = await fs.readFile(pathToCache, 'utf-8');
-
-    // Should emit only if the compared files aren't the same.
-    return bufLsFileCache !== currentListOfFiles;
-  } catch (err) {
-    // Cache file doesn't exist.
-    return true;
-  }
+  return Promise.all(
+    keys.map((validationId) =>
+      fs.writeFile(
+        path.join(
+          targetDirectory,
+          `${validationId}.${record[validationId].language}`
+        ),
+        record[validationId].content
+      )
+    )
+  );
 }

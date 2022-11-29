@@ -22,9 +22,9 @@ import {
   InnerObjectsRecord,
   EnumsRecord,
   MessagesRecord
-} from './types';
-import { getMessageProtosaurusBlock } from './messages';
-import { getEnumProtosaurusBlock } from './enum';
+} from './types.js';
+import { getMessageProtosaurusBlock } from './messages.js';
+import { getEnumProtosaurusBlock } from './enum.js';
 
 export function getServiceString({
   service,

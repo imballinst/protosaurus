@@ -14,8 +14,8 @@
  * limitations under the License.
  */
 
-import { writeFile } from 'fs-extra';
-import { PackageData } from './types';
+import fs from 'fs-extra';
+import { PackageData } from './types.js';
 
 // Main exported functions.
 export async function emitMdx(filePath: string, pkg: PackageData) {
@@ -31,7 +31,7 @@ export async function emitMdx(filePath: string, pkg: PackageData) {
     : '';
   const enumsString = enums.length ? `## Enums\n\n${enums}` : '';
 
-  return writeFile(
+  return fs.writeFile(
     `${filePath}.mdx`,
     `
 ---

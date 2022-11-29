@@ -109,6 +109,19 @@ html[data-theme='dark'] .docusaurus-highlight-code-line {
   --ifm-leading: 0;
 }
 
+.protosaurus-code-container.has-validation pre {
+  border-top-left-radius: 0;
+  border-top-right-radius: 0;
+}
+
+.protosaurus-code-validation {
+  border: 3px solid var(--ifm-pre-background-color);
+  border-top-left-radius: var(--ifm-code-border-radius);
+  border-top-right-radius: var(--ifm-code-border-radius);
+  font-size: 0.75rem;
+  padding: 0.5rem 1rem;
+}
+
 /* Button text to enable the image gallery. */
 .button-text {
   background-color: transparent;

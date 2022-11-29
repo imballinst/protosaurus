@@ -14,18 +14,21 @@
  * limitations under the License.
  */
 
-'use strict';
+export interface StoredValue {
+  language: string;
+  content: string;
+  output: string;
+  isValid: boolean;
+}
 
-// This is a JavaScript-based config file containing every Mocha option plus others.
-// If you need conditional logic, you might want to use this type of config,
-// e.g. set options via environment variables 'process.env'.
-// Otherwise, JSON or YAML is recommended.
-
-module.exports = {
-  diff: true,
-  // For some reasons we cannot use `global` field for `test` etc.
-  // We need to add them to `global.test` in the `setup-test.js` file.
-  file: ['./setup-test.js'],
-  spec: ['src/**/*.test.ts'],
-  require: 'ts-node/register'
-};
+// The first key is the path to file.
+// The second key is the code block validation ID.
+// The value is the code block contents.
+// For example:
+//
+// {
+//   "path/to/file": {
+//     "hello-world": "echo \"Hello world!\""
+//   }
+// }
+export type PathAndCodeBlocksRecord = Record<string, StoredValue>;

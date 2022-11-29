@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import { readFile } from 'fs-extra';
+import fs from 'fs-extra';
 import {
   Protofile,
   PackageData,
@@ -24,18 +24,18 @@ import {
   MessagesRecord,
   EnumsRecord,
   ProtoEnum
-} from './types';
+} from './types.js';
 import {
   getMessageFieldsBlock,
   getMessageDescription,
   getMessageDefinition,
   getMessageHeader,
   getMessageProtosaurusBlock
-} from './messages';
-import { getEnumFieldsBlock, getEnumProtosaurusBlock } from './enum';
+} from './messages.js';
+import { getEnumFieldsBlock, getEnumProtosaurusBlock } from './enum.js';
 
 export async function readPackageData(packagePath: string) {
-  const content = await readFile(packagePath, 'utf-8');
+  const content = await fs.readFile(packagePath, 'utf-8');
   const json: {
     files: Protofile[];
   } = JSON.parse(content);
